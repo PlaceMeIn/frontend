@@ -10,11 +10,11 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     'motion-v/nuxt'
   ],
-  mazUi: {
-    composables: {
-      useToast: true,
-    },
-  },
+  // mazUi: {
+  //   composables: {
+  //     useToast: true,
+  //   },
+  // },
   devtools: {
     enabled: true
   },

@@ -1,28 +1,98 @@
 <script setup lang="ts">
-import type { PageFeatureProps, ButtonProps } from "@nuxt/ui";
+import type { PageFeatureProps } from "@nuxt/ui";
 import MazAnimatedCounter from "maz-ui/components/MazAnimatedCounter";
 
 const features = ref<PageFeatureProps[]>([
   {
-    title: "Icons",
+    title: "Community Driven",
     description:
-      "Nuxt UI integrates with Nuxt Icon to access over 200,000+ icons from Iconify.",
-    icon: "i-lucide-smile",
-    to: "/docs/getting-started/integrations/icons",
+      "Connect with like-minded developers, engineers, and innovators while building meaningful collaborations.",
+    icon: {
+      name: "i-lucide-users",
+      color: "primary",
+      variant: "soft",
+    },
+    to: "/community",
   },
   {
-    title: "Fonts",
+    title: "Excellence Focused",
     description:
-      "Nuxt UI integrates with Nuxt Fonts to provide plug-and-play font optimization.",
-    icon: "i-lucide-a-large-small",
-    to: "/docs/getting-started/integrations/fonts",
+      "Gain real-world experience through mentorship, workshops, and production-level projects.",
+    icon: {
+      name: "i-lucide-award",
+      color: "warning",
+      variant: "soft",
+    },
+    to: "/programs",
   },
   {
-    title: "Color Mode",
+    title: "Innovation First",
     description:
-      "Nuxt UI integrates with Nuxt Color Mode to switch between light and dark.",
-    icon: "i-lucide-sun-moon",
-    to: "/docs/getting-started/integrations/color-mode",
+      "Transform ideas into impactful solutions through hackathons, research, and startup collaboration.",
+    icon: {
+      name: "i-lucide-lightbulb",
+      color: "success",
+      variant: "soft",
+    },
+    to: "/projects",
+  },
+]);
+
+const focusAreas = ref<PageFeatureProps[]>([
+  {
+    title: "Artificial Intelligence",
+    description:
+      "Build intelligent systems, machine learning models, and next-generation AI applications.",
+    icon: {
+      name: "i-lucide-brain",
+      color: "primary",
+      variant: "soft",
+    },
+    to: "/focus/ai",
+  },
+  {
+    title: "Web Development",
+    description:
+      "Create modern web apps using Vue, Nuxt, Node.js, and scalable backend systems.",
+    icon: {
+      name: "i-lucide-code",
+      color: "success",
+      variant: "soft",
+    },
+    to: "/focus/web",
+  },
+  {
+    title: "Cybersecurity",
+    description:
+      "Learn ethical hacking, penetration testing, and modern defensive security practices.",
+    icon: {
+      name: "i-lucide-shield",
+      color: "error",
+      variant: "soft",
+    },
+    to: "/focus/security",
+  },
+  {
+    title: "Data Science",
+    description:
+      "Analyze data, build predictive models, and create powerful visualizations.",
+    icon: {
+      name: "i-lucide-database",
+      color: "info",
+      variant: "soft",
+    },
+    to: "/focus/data",
+  },
+  {
+    title: "Cloud Computing",
+    description:
+      "Deploy scalable applications using AWS, Azure, Docker, and DevOps workflows.",
+    icon: {
+      name: "i-lucide-cloud",
+      color: "secondary",
+      variant: "soft",
+    },
+    to: "/focus/cloud",
   },
 ]);
 
@@ -41,6 +111,15 @@ const counts = ref({
   eventsYear: 20,
 });
 
+const groupImages = ref([
+  "https://picsum.photos/640/640?random=1",
+  "https://picsum.photos/640/640?random=2",
+  "https://picsum.photos/640/640?random=3",
+  "https://picsum.photos/640/640?random=4",
+  "https://picsum.photos/640/640?random=5",
+  "https://picsum.photos/640/640?random=6",
+]);
+
 useSeoMeta({
   title: config.site.title,
   ogTitle: config.site.title,
@@ -50,92 +129,238 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="w-full h-fit overflow-hidden min-h-50">
+  <div class="w-full overflow-hidden">
     <div
-      class="relative w-full bg-linear-0 from-primary-50 via-primary-200 to bg-primary-500"
+      class="relative w-full bg-gradient-to-br from-primary-50 via-primary-200 to-primary-500"
     >
-      <div class="absolute w-full h-full overflow-hidden z-2 opacity-50">
-        <BackGround class="absolute w-3/4 z-0" />
-
+      <div class="absolute inset-0 overflow-hidden opacity-40">
+        <BackGround class="absolute w-3/4" />
         <img
-          class="w-[30%] absolute right-0 -z-1 h-full object-cover"
+          class="absolute right-0 h-full w-[30%] object-cover"
           src="/mut-image.jpg"
-          alt="MUT image"
+          alt="Murang'a University of Technology"
         />
       </div>
-      <UPageSection class="z-50">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+      <UPageSection class="relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <UBadge
-              color="primary"
+              color="success"
               variant="outline"
               icon="i-lucide-graduation-cap"
               size="lg"
-              >Murang'a University Of Technology</UBadge
             >
-            <div>
-              <h2 class="font-bold text-6xl">{{ ctaInfo.title }}</h2>
-              <h2 class="font-bold text-primary text-6xl">
+              Murang'a University of Technology
+            </UBadge>
+
+            <div class="mt-4 space-y-2">
+              <h1 class="font-bold text-5xl lg:text-6xl">
+                {{ ctaInfo.title }}
+              </h1>
+              <h1 class="font-bold text-primary text-5xl lg:text-6xl">
                 {{ ctaInfo.subtitle }}
-              </h2>
-              <p class="mt-3 text-lg">
+              </h1>
+              <p class="mt-4 text-lg text-gray-500 dark:text-gray-300">
                 {{ ctaInfo.description }}
               </p>
             </div>
 
-            <div class="flex items-center gap-5 mt-5">
-              <UButton trailing-icon="i-lucide-arrow-right" size="lg"
-                >Join Club</UButton
+            <div class="flex flex-wrap items-center gap-4 mt-6">
+              <UButton
+                to="/join"
+                size="lg"
+                trailing-icon="i-lucide-arrow-right"
               >
-              <UButton icon="i-lucide-library-big" size="lg" color="neutral"
-                >Explore Projects</UButton
+                Join Club
+              </UButton>
+
+              <UButton
+                to="/projects"
+                size="lg"
+                color="neutral"
+                variant="soft"
+                icon="i-lucide-folder-code"
               >
+                Explore Projects
+              </UButton>
             </div>
 
-            <div class="grid grid-cols-3 gap-6 mt-6">
-              <div class="flex flex-col items-start">
-                <span class="text-3xl font-bold text-primary flex items-center">
+            <div class="grid grid-cols-3 gap-8 mt-8">
+              <div>
+                <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.activeMembers" />
                   <span class="ml-1">+</span>
-                </span>
+                </div>
                 <p class="text-sm text-muted">Active Members</p>
               </div>
 
-              <div class="flex flex-col items-start">
-                <span class="text-3xl font-bold text-primary flex items-center">
+              <div>
+                <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.projects" />
                   <span class="ml-1">+</span>
-                </span>
-                <p class="text-sm text-muted">Projects</p>
+                </div>
+                <p class="text-sm text-muted">Projects Built</p>
               </div>
 
-              <div class="flex flex-col items-start">
-                <span class="text-3xl font-bold text-primary flex items-center">
+              <div>
+                <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.eventsYear" />
                   <span class="ml-1">+</span>
-                </span>
+                </div>
                 <p class="text-sm text-muted">Events / Year</p>
               </div>
             </div>
           </div>
-          <img
-            src="https://images.unsplash.com/photo-1758270705172-07b53627dfcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwc3R1ZGVudHMlMjB0ZWNobm9sb2d5JTIwY29sbGFib3JhdGlvbnxlbnwxfHx8fDE3NzE0MDQ0Nzl8MA&ixlib=rb-4.1.0&q=80&w=1080"
-            width="352"
-            height="300"
-            alt="Illustration"
-            class="w-full rounded-lg"
-          />
+
+          <div>
+            <UCarousel
+              v-slot="{ item }"
+              dots
+              :items="groupImages"
+              loop
+              :autoplay="{ delay: 4000 }"
+              wheel-gestures
+              class="w-full max-w-xs mx-auto"
+            >
+              <img
+                :src="item"
+                alt="Students collaborating"
+                class="w-full rounded-xl shadow-xl object-cover"
+              />
+            </UCarousel>
+          </div>
         </div>
       </UPageSection>
     </div>
 
+    <section class="py-20">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+        <div class="max-w-2xl text-center">
+          <h2 class="text-3xl font-bold tracking-tight">
+            What is MUT Tech Club?
+          </h2>
+          <p class="mt-3 text-lg text-muted">
+            We are a student-led innovation hub dedicated to building real-world
+            technical skills, fostering creativity, and preparing students for
+            global tech careers.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          <NuxtLink
+            v-for="feature in features"
+            :key="feature.title"
+            :to="feature.to"
+            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
+              :class="`bg-${feature.icon?.color}-500/10`"
+            >
+              <UIcon
+                :name="feature.icon?.name"
+                class="text-xl"
+                :class="`text-${feature.icon?.color}-500`"
+              />
+            </div>
+
+            <h3
+              class="font-semibold text-lg group-hover:text-primary transition"
+            >
+              {{ feature.title }}
+            </h3>
+
+            <p class="mt-2 text-sm text-muted">
+              {{ feature.description }}
+            </p>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-muted/30">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+        <div class="max-w-2xl text-center">
+          <h2 class="text-3xl font-bold tracking-tight">Our Focus Areas</h2>
+          <p class="mt-3 text-lg text-muted">
+            Develop expertise in high-impact technology fields shaping the
+            future.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          <NuxtLink
+            v-for="area in focusAreas"
+            :key="area.title"
+            :to="area.to"
+            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
+              :class="`bg-${area.icon?.color}-500/10`"
+            >
+              <UIcon
+                :name="area.icon?.name"
+                class="text-xl"
+                :class="`text-${area.icon?.color}-500`"
+              />
+            </div>
+
+            <h3
+              class="font-semibold text-lg group-hover:text-primary transition"
+            >
+              {{ area.title }}
+            </h3>
+
+            <p class="mt-2 text-sm text-muted">
+              {{ area.description }}
+            </p>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <div>
-      <UPageSection
-        title="What is MUT Tech Club?"
-        description="We are a student-led innovation hub at Murang'a University of Technology dedicated to fostering technical excellence, creativity, and entrepreneurship."
-        :features="features"
+      <UPageLogos
+        title="Trusted by the best front-end teams"
+        marquee
+        :items="[
+          'i-simple-icons-github',
+          'i-simple-icons-discord',
+          'i-simple-icons-x',
+          'i-simple-icons-instagram',
+          'i-simple-icons-linkedin',
+          'i-simple-icons-facebook',
+        ]"
+      />
+    </div>
+
+    <div class="w-full p-10 my-15">
+      <UPageCard
+        spotlight
+        spotlight-color="primary"
+        class="py-12 flex flex-col items-center text-center gap-6 w-fit m-auto"
       >
-      </UPageSection>
+        <div class="max-w-2xl">
+          <h2 class="text-3xl font-bold tracking-tight">
+            Ready to Join the Club?
+          </h2>
+          <p class="mt-3 text-lg text-muted">
+            Become part of Kenya's most innovative university tech community.
+            Transform your ideas into reality.
+          </p>
+        </div>
+
+        <UButton
+          label="Join MUT Tech Club"
+          color="primary"
+          trailing-icon="i-lucide-arrow-right"
+          size="xl"
+          to="/join"
+          class="w-fit shrink-0 m-auto"
+        />
+      </UPageCard>
     </div>
   </div>
 </template>
