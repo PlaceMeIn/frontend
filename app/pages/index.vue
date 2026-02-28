@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { PageFeatureProps } from "@nuxt/ui";
 import MazAnimatedCounter from "maz-ui/components/MazAnimatedCounter";
-
+import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
+import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
 const features = ref<PageFeatureProps[]>([
   {
     title: "Community Driven",
@@ -131,7 +132,7 @@ useSeoMeta({
 <template>
   <div class="w-full overflow-hidden">
     <div
-      class="relative w-full bg-gradient-to-br from-primary-50 via-primary-200 to-primary-500"
+      class="relative w-full bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:to-transparent"
     >
       <div class="absolute inset-0 overflow-hidden opacity-40">
         <BackGround class="absolute w-3/4" />
@@ -139,34 +140,52 @@ useSeoMeta({
           class="absolute right-0 h-full w-[30%] object-cover"
           src="/mut-image.jpg"
           alt="Murang'a University of Technology"
+          data-aos="fade-left"
         />
       </div>
 
       <UPageSection class="relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
+          <div data-aos="fade-right">
             <UBadge
               color="success"
               variant="outline"
               icon="i-lucide-graduation-cap"
               size="lg"
+              data-aos="fade-down"
             >
               Murang'a University of Technology
             </UBadge>
 
             <div class="mt-4 space-y-2">
-              <h1 class="font-bold text-5xl lg:text-6xl">
+              <h1
+                class="font-bold text-5xl lg:text-6xl"
+                data-aos="fade-up"
+                data-aos-delay="100"
+              >
                 {{ ctaInfo.title }}
               </h1>
-              <h1 class="font-bold text-primary text-5xl lg:text-6xl">
+              <h1
+                class="font-bold text-primary text-5xl lg:text-6xl"
+                data-aos="fade-up"
+                data-aos-delay="200"
+              >
                 {{ ctaInfo.subtitle }}
               </h1>
-              <p class="mt-4 text-lg text-gray-500 dark:text-gray-300">
+              <p
+                class="mt-4 text-lg text-gray-500 dark:text-gray-300"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              >
                 {{ ctaInfo.description }}
               </p>
             </div>
 
-            <div class="flex flex-wrap items-center gap-4 mt-6">
+            <div
+              class="flex flex-wrap items-center gap-4 mt-6"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            >
               <UButton
                 to="/join"
                 size="lg"
@@ -186,8 +205,12 @@ useSeoMeta({
               </UButton>
             </div>
 
-            <div class="grid grid-cols-3 gap-8 mt-8">
-              <div>
+            <div
+              class="grid grid-cols-3 gap-8 mt-8"
+              data-aos="fade-up"
+              data-aos-delay="500"
+            >
+              <div data-aos="zoom-in" data-aos-delay="100">
                 <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.activeMembers" />
                   <span class="ml-1">+</span>
@@ -195,7 +218,7 @@ useSeoMeta({
                 <p class="text-sm text-muted">Active Members</p>
               </div>
 
-              <div>
+              <div data-aos="zoom-in" data-aos-delay="200">
                 <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.projects" />
                   <span class="ml-1">+</span>
@@ -203,7 +226,7 @@ useSeoMeta({
                 <p class="text-sm text-muted">Projects Built</p>
               </div>
 
-              <div>
+              <div data-aos="zoom-in" data-aos-delay="300">
                 <div class="flex items-center text-3xl font-bold text-primary">
                   <MazAnimatedCounter :count="counts.eventsYear" />
                   <span class="ml-1">+</span>
@@ -213,7 +236,7 @@ useSeoMeta({
             </div>
           </div>
 
-          <div>
+          <div data-aos="zoom-in-left" data-aos-delay="300">
             <UCarousel
               v-slot="{ item }"
               dots
@@ -236,7 +259,7 @@ useSeoMeta({
 
     <section class="py-20">
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
-        <div class="max-w-2xl text-center">
+        <div class="max-w-2xl text-center" data-aos="fade-up">
           <h2 class="text-3xl font-bold tracking-tight">
             What is MUT Tech Club?
           </h2>
@@ -249,10 +272,12 @@ useSeoMeta({
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           <NuxtLink
-            v-for="feature in features"
+            v-for="(feature, i) in features"
             :key="feature.title"
             :to="feature.to"
             class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+            data-aos="fade-up"
+            :data-aos-delay="i * 100"
           >
             <div
               class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
@@ -265,9 +290,7 @@ useSeoMeta({
               />
             </div>
 
-            <h3
-              class="font-semibold text-lg group-hover:text-primary transition"
-            >
+            <h3 class="font-semibold text-lg group-hover:text-primary transition">
               {{ feature.title }}
             </h3>
 
@@ -281,7 +304,7 @@ useSeoMeta({
 
     <section class="py-20 bg-muted/30">
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
-        <div class="max-w-2xl text-center">
+        <div class="max-w-2xl text-center" data-aos="fade-up">
           <h2 class="text-3xl font-bold tracking-tight">Our Focus Areas</h2>
           <p class="mt-3 text-lg text-muted">
             Develop expertise in high-impact technology fields shaping the
@@ -291,10 +314,12 @@ useSeoMeta({
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           <NuxtLink
-            v-for="area in focusAreas"
+            v-for="(area, i) in focusAreas"
             :key="area.title"
             :to="area.to"
             class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+            data-aos="fade-up"
+            :data-aos-delay="i * 100"
           >
             <div
               class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
@@ -307,9 +332,7 @@ useSeoMeta({
               />
             </div>
 
-            <h3
-              class="font-semibold text-lg group-hover:text-primary transition"
-            >
+            <h3 class="font-semibold text-lg group-hover:text-primary transition">
               {{ area.title }}
             </h3>
 
@@ -321,28 +344,68 @@ useSeoMeta({
       </div>
     </section>
 
-    <div>
-      <UPageLogos
-        title="Trusted by the best front-end teams"
-        marquee
-        :items="[
-          'i-simple-icons-github',
-          'i-simple-icons-discord',
-          'i-simple-icons-x',
-          'i-simple-icons-instagram',
-          'i-simple-icons-linkedin',
-          'i-simple-icons-facebook',
-        ]"
-      />
+    <section data-aos="fade-up">
+      <HightlightFeaturedProject />
+    </section>
+
+    <section data-aos="fade-up" data-aos-delay="100">
+      <HighlightUpcomingEvent />
+    </section>
+
+    <section class="m-auto">
+      <HighlightCommunityGallery />
+    </section>
+
+    <section data-aos="fade-up" data-aos-delay="200">
+      <HighlightReviews />
+    </section>
+
+    <div class="my-20 w-full">
+      <div class="max-w-2xl text-center m-auto mb-5" data-aos="fade-up">
+        <h2 class="text-3xl font-bold tracking-tight">Our Partners</h2>
+        <p class="mt-3 text-lg text-muted">
+          Collaborating with industry leaders to provide opportunities for our
+          members
+        </p>
+      </div>
+
+      <UMarquee
+        pause-on-hover
+        :overlay="false"
+        :ui="{ root: '[--gap:--spacing(4)]', content: 'w-auto py-1' }"
+      >
+        <UPageCard
+          v-for="(patner, index) in collaborationPatners"
+          :key="index"
+          variant="subtle"
+          class="w-64"
+          data-aos="zoom-in"
+          :data-aos-delay="index * 100"
+        >
+          <div class="flex items-center flex-row gap-2">
+            <img
+              v-if="patner.image"
+              :src="patner?.image"
+              :alt="patner.label"
+              class="w-20 h-15 object-contain"
+            />
+            <p class="text-xl font-bold">{{ patner.label }}</p>
+          </div>
+        </UPageCard>
+      </UMarquee>
     </div>
 
-    <div class="w-full p-10 my-15">
+    <div class="w-full p-10 my-15 flex flex-col items-center gap-10 justify-around  bg-linear-to-tr from-primary/50  via-primary-200/50  dark:via-transparent to-transparent" >
+            <CodeCards data-aos="flip-left"
+     data-aos-easing="ease-out-cubic"
+     data-aos-duration="2000" />
+
       <UPageCard
         spotlight
         spotlight-color="primary"
         class="py-12 flex flex-col items-center text-center gap-6 w-fit m-auto"
       >
-        <div class="max-w-2xl">
+        <div class="max-w-2xl" data-aos="zoom-in-up">
           <h2 class="text-3xl font-bold tracking-tight">
             Ready to Join the Club?
           </h2>
@@ -361,6 +424,7 @@ useSeoMeta({
           class="w-fit shrink-0 m-auto"
         />
       </UPageCard>
+
     </div>
   </div>
 </template>

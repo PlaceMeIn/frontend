@@ -4,17 +4,33 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
-    '@maz-ui/nuxt',
     '@nuxt/content',
     '@vueuse/nuxt',
     'nuxt-og-image',
-    'motion-v/nuxt'
+    'motion-v/nuxt',
+    '@maz-ui/nuxt',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+
+
   ],
-  // mazUi: {
-  //   composables: {
-  //     useToast: true,
-  //   },
-  // },
+  mazUi: {
+    composables: {
+      useToast: true,
+    },
+  },
+
+    piniaPluginPersistedstate: {
+    storage: 'cookies',
+    cookieOptions: {
+      sameSite: 'lax',
+      secure: true,
+      maxAge: 60 * 60 * 24 * 30 // 30 days
+    },
+  },
+
+  
   devtools: {
     enabled: true
   },

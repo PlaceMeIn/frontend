@@ -4,7 +4,11 @@ export default defineAppConfig({
     motto:"Innovation Meets Talent",
     title:"Mut Tech Club - Murang'a University",
     description: "",
-    image: ""
+    image: "",
+    icon:"",
+    url:"",
+
+    
   },
   global: {
     picture: {
