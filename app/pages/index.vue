@@ -113,12 +113,20 @@ const counts = ref({
 });
 
 const groupImages = ref([
-  "https://picsum.photos/640/640?random=1",
-  "https://picsum.photos/640/640?random=2",
-  "https://picsum.photos/640/640?random=3",
-  "https://picsum.photos/640/640?random=4",
-  "https://picsum.photos/640/640?random=5",
-  "https://picsum.photos/640/640?random=6",
+  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1552664688-cf412ec27db2?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1543269664-7eef42226a21?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=640&h=640&fit=crop",
+  // "https://images.unsplash.com/photo-1558403710-8c56b4f5c2f1?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1520881363902-a0ff4e722963?w=640&h=640&fit=crop",
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=640&h=640&fit=crop",
+  // "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=640&h=640&fit=crop",
+  // "https://images.unsplash.com/photo-1573164574001-518958d9baa2?w=640&h=640&fit=crop"
 ]);
 
 useSeoMeta({
@@ -244,12 +252,12 @@ useSeoMeta({
               loop
               :autoplay="{ delay: 4000 }"
               wheel-gestures
-              class="w-full max-w-xs mx-auto"
+              class="w-full max-w-xs md:max-w-md  mx-auto"
             >
               <img
                 :src="item"
                 alt="Students collaborating"
-                class="w-full rounded-xl shadow-xl object-cover"
+                class="w-full h-[300px] rounded-sm shadow-xl object-cover"
               />
             </UCarousel>
           </div>
@@ -290,7 +298,9 @@ useSeoMeta({
               />
             </div>
 
-            <h3 class="font-semibold text-lg group-hover:text-primary transition">
+            <h3
+              class="font-semibold text-lg group-hover:text-primary transition"
+            >
               {{ feature.title }}
             </h3>
 
@@ -332,7 +342,9 @@ useSeoMeta({
               />
             </div>
 
-            <h3 class="font-semibold text-lg group-hover:text-primary transition">
+            <h3
+              class="font-semibold text-lg group-hover:text-primary transition"
+            >
               {{ area.title }}
             </h3>
 
@@ -395,10 +407,14 @@ useSeoMeta({
       </UMarquee>
     </div>
 
-    <div class="w-full p-10 my-15 flex flex-col items-center gap-10 justify-around  bg-linear-to-tr from-primary/50  via-primary-200/50  dark:via-transparent to-transparent" >
-            <CodeCards data-aos="flip-left"
-     data-aos-easing="ease-out-cubic"
-     data-aos-duration="2000" />
+    <div
+      class="w-full p-10 my-15 flex flex-col items-center gap-10 justify-around bg-linear-to-tr from-primary/50 via-primary-200/50 dark:via-transparent to-transparent"
+    >
+      <CodeCards
+        data-aos="flip-left"
+        data-aos-easing="ease-out-cubic"
+        data-aos-duration="2000"
+      />
 
       <UPageCard
         spotlight
@@ -424,7 +440,6 @@ useSeoMeta({
           class="w-fit shrink-0 m-auto"
         />
       </UPageCard>
-
     </div>
   </div>
 </template>
