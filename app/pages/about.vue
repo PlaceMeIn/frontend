@@ -300,6 +300,13 @@
 import MazAnimatedCounter from "maz-ui/components/MazAnimatedCounter";
 import ThreeDButton from "~/components/cool/ThreeDButton.vue";
 
+const config = useAppConfig()
+useSeoPage({
+  title:`About ${config.site.title}`,
+  description: "We are a student-led innovation hub dedicated to building real-world technical skills, fostering creativity, and preparing students for global tech careers."
+})
+
+
 const benefitsOfJoinning = [
   {
     icon: "i-lucide-code",
