@@ -14,7 +14,7 @@
 
     <!-- Sticky Filter Bar -->
     <section
-      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-0 backdrop-blur z-10 py-3 bg-white/80 dark:bg-black/50"
+      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-0 backdrop-blur z-10 py-3 "
       data-aos="fade-down"
       data-aos-delay="100"
     >
