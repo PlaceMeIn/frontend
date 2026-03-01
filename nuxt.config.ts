@@ -17,11 +17,11 @@ export default defineNuxtConfig({
   ],
   mazUi: {
     composables: {
-      useToast: true,
+      // useToast: true,
     },
   },
 
-    piniaPluginPersistedstate: {
+  piniaPluginPersistedstate: {
     storage: 'cookies',
     cookieOptions: {
       sameSite: 'lax',
@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     },
   },
 
-  
+
   devtools: {
     enabled: true
   },
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       { path: '~/components/', pathPrefix: false },
       { path: '~/components/defaults', pathPrefix: false },
       { path: '~/components/landing', pathPrefix: false },
-
+      { path: '~/components/cool', pathPrefix: false },
     ]
   },
 
