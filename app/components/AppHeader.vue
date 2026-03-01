@@ -10,35 +10,41 @@ const route = useRoute();
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: "Home",
-    to: "/Home",
-    active: route.path.startsWith("/docs/getting-started"),
+    to: "/",
+    active: route.path === "/"
   },
   {
     label: "About",
     to: "/about",
-    active: route.path.startsWith("/docs/components"),
+    active: route.path.startsWith("/about")
   },
   {
     label: "Projects",
     to: "/projects",
+    active: route.path.startsWith("/projects")
   },
   {
     label: "Events",
     to: "/events",
+    active: route.path.startsWith("/events")
   },
-    {
+  {
     label: "Leadership",
     to: "/leadership",
+    active: route.path.startsWith("/leadership")
   },
-    {
+  {
     label: "Resources",
     to: "/resources",
+    active: route.path.startsWith("/resources")
   },
-    {
+  {
     label: "Contact",
     to: "/contact",
-  },
+    active: route.path.startsWith("/contact")
+  }
 ]);
+
 </script>
 
 <template>
