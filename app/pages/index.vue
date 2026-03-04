@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { PageFeatureProps } from "@nuxt/ui";
-import MazAnimatedCounter from "maz-ui/components/MazAnimatedCounter";
+import CountUp from 'vue-countup-v3'
 import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
+
 const features = ref<PageFeatureProps[]>([
   {
     title: "Community Driven",
@@ -220,7 +221,7 @@ useSeoMeta({
             >
               <div data-aos="zoom-in" data-aos-delay="100">
                 <div class="flex items-center text-3xl font-bold text-primary">
-                  <MazAnimatedCounter :count="counts.activeMembers" />
+                  <CountUp :endVal="counts.activeMembers" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Active Members</p>
@@ -228,7 +229,7 @@ useSeoMeta({
 
               <div data-aos="zoom-in" data-aos-delay="200">
                 <div class="flex items-center text-3xl font-bold text-primary">
-                  <MazAnimatedCounter :count="counts.projects" />
+                  <CountUp :endVal="counts.projects" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Projects Built</p>
@@ -236,7 +237,7 @@ useSeoMeta({
 
               <div data-aos="zoom-in" data-aos-delay="300">
                 <div class="flex items-center text-3xl font-bold text-primary">
-                  <MazAnimatedCounter :count="counts.eventsYear" />
+                  <CountUp :endVal="counts.eventsYear" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Events / Year</p>

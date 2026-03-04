@@ -6,7 +6,12 @@ export const useEndpoints = () => {
             team: `${apiBase}/api/leadership/team`,
             faculty: `${apiBase}/api/leadership/faculty`,
             leads: `${apiBase}/api/leadership/lead`
-
+        },
+        resources:{
+            repos:`${apiBase}/api/resources/repos`,
+            learning:`${apiBase}/api/resources/learning`,
+            certifications:`${apiBase}/api/resourcces/certifications`,
+            recordedWorkshops :`${apiBase}/api/resources/recorded-workshops`,
         },
         utilities: {
 

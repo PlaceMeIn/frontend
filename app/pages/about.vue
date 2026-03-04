@@ -66,7 +66,7 @@
       >
         <div data-aos="fade-up">
           <div class="text-4xl font-bold text-primary flex justify-center">
-            <MazAnimatedCounter :count="2030" />
+            <CountUp :end="2030" :endVal="2030" :duration="2"/>
           </div>
 
           <h3 class="mt-3 font-semibold">Leading Tech Hub</h3>
@@ -78,7 +78,7 @@
 
         <div data-aos="fade-up" data-aos-delay="150">
           <div class="text-4xl font-bold text-primary flex justify-center">
-            <MazAnimatedCounter :count="1000" />
+            <CountUp :endVal="1000" :duration="2"  />
             <span>+</span>
           </div>
 
@@ -188,7 +188,7 @@
         <div class="mt-8 flex gap-6">
           <div class="p-5 rounded-xl bg-primary/10">
             <div class="text-3xl font-bold text-primary flex">
-              <MazAnimatedCounter :count="50" />
+              <CountUp :endVal="50" :duration="2" />
               <span>+</span>
             </div>
 
@@ -197,7 +197,7 @@
 
           <div class="p-5 rounded-xl bg-primary/10">
             <div class="text-3xl font-bold text-primary flex">
-              <MazAnimatedCounter :count="35" />
+              <CountUp :endVal="35" :duration="2"/>
               <span>%</span>
             </div>
 
@@ -222,7 +222,7 @@
         <div class="mt-8 flex gap-6">
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
-              <MazAnimatedCounter :count="100" />
+              <CountUp :endVal="100" :duration="2" />
               <span>+</span>
             </div>
 
@@ -231,7 +231,8 @@
 
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
-              <MazAnimatedCounter :count="15" />
+                <CountUp :endVal="15" :duration="2" />
+
               <span>+</span>
             </div>
 
@@ -297,8 +298,10 @@
 </template>
 
 <script lang="ts" setup>
-import MazAnimatedCounter from "maz-ui/components/MazAnimatedCounter";
+import CountUp from 'vue-countup-v3'
 import ThreeDButton from "~/components/cool/ThreeDButton.vue";
+
+
 
 const config = useAppConfig()
 useSeoPage({

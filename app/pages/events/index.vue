@@ -1,23 +1,21 @@
 <template>
   <section class="pb-16">
-
     <!-- Hero Section -->
     <section
       class="text-center h-[400px] flex flex-col justify-center items-center bg-gradient-to-br from-primary-500/10 to-primary-900/10"
       data-aos="fade-down"
     >
-      <MazAnimatedText
-        v-if="showAnimatedText"
-
+      <Typewriter
+        :words="['Events', 'Competitions', 'BootCamps', 'Hackathons']"
+        :type-speed="100"
+        :delete-speed="50"
+        :delay="1500"
+        :loop="true"
         class="text-4xl font-bold"
-        :text="['Events', 'Competitions', 'BootCamps', 'Hackathons']"
-        type-speed="100"
-        delete-speed="50"
-        pause="1500"
-        loop
       />
       <p class="text-muted mt-3 text-xl max-w-2xl">
-        Join us for workshops, hackathons, conferences, and networking events that will level up your tech skills
+        Join us for workshops, hackathons, conferences, and networking events
+        that will level up your tech skills
       </p>
     </section>
 
@@ -38,7 +36,8 @@
       <div class="text-center my-5">
         <h2 class="text-3xl md:text-4xl font-bold">Upcoming Events</h2>
         <p class="mt-3 text-muted max-w-xl mx-auto">
-          Don't miss out on these exciting opportunities to learn, network, and innovate
+          Don't miss out on these exciting opportunities to learn, network, and
+          innovate
         </p>
       </div>
 
@@ -64,7 +63,6 @@
     <!-- Upcoming Events Grid -->
     <section class="mt-6 max-w-6xl mx-auto">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 w-full">
-
         <template v-if="pending || loadingMore">
           <div class="col-span-full flex justify-center py-10">
             <Loader />
@@ -73,13 +71,24 @@
 
         <template v-else-if="error || loadingError">
           <div class="col-span-full flex flex-col items-center gap-4 py-10">
-            <UBanner color="error" icon="i-lucide-cloud-alert" title="Failed to load Events" />
-            <UButton label="Retry" variant="outline" icon="i-lucide-refresh-cw" @click="reload" />
+            <UBanner
+              color="error"
+              icon="i-lucide-cloud-alert"
+              title="Failed to load Events"
+            />
+            <UButton
+              label="Retry"
+              variant="outline"
+              icon="i-lucide-refresh-cw"
+              @click="reload"
+            />
           </div>
         </template>
 
         <template v-else-if="events.length === 0">
-          <div class="col-span-full text-center py-10 text-muted">No events found</div>
+          <div class="col-span-full text-center py-10 text-muted">
+            No events found
+          </div>
         </template>
 
         <template v-else>
@@ -112,7 +121,9 @@
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
         <div class="max-w-2xl text-center">
           <h2 class="text-3xl font-bold tracking-tight">Past Events</h2>
-          <p class="mt-3 text-lg text-muted">Relive memorable moments from previous events</p>
+          <p class="mt-3 text-lg text-muted">
+            Relive memorable moments from previous events
+          </p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 w-full">
@@ -124,8 +135,17 @@
 
           <template v-else-if="pastError">
             <div class="col-span-full flex flex-col items-center gap-4 py-10">
-              <UBanner color="error" icon="i-lucide-cloud-alert" title="Failed to load Past Events" />
-              <UButton label="Retry" variant="outline" icon="i-lucide-refresh-cw" @click="pastRefresh" />
+              <UBanner
+                color="error"
+                icon="i-lucide-cloud-alert"
+                title="Failed to load Past Events"
+              />
+              <UButton
+                label="Retry"
+                variant="outline"
+                icon="i-lucide-refresh-cw"
+                @click="pastRefresh"
+              />
             </div>
           </template>
 
@@ -159,10 +179,18 @@
         <UIcon name="i-lucide-video" :size="90" class="text-primary w-20" />
         <h2 class="text-3xl md:text-4xl font-bold">Never Miss an Event</h2>
         <p class="mt-3 text-muted max-w-xl mx-auto">
-          Join our community to get notified about upcoming events, workshops, and hackathons
+          Join our community to get notified about upcoming events, workshops,
+          and hackathons
         </p>
-        <div class="mt-10 flex flex-col items-center gap-6" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="2000">
-          <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl">Join Us</h2>
+        <div
+          class="mt-10 flex flex-col items-center gap-6"
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
+          <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl">
+            Join Us
+          </h2>
           <ThreeDButton @clicked="$router.push('/join')" />
         </div>
       </div>
@@ -171,7 +199,7 @@
 </template>
 
 <script setup lang="ts">
-import MazAnimatedText from "maz-ui/components/MazAnimatedText";
+import Typewriter from "vue-typewriter-effect";
 
 const nextEventDate = ref(new Date("2026-03-15T18:00:00"));
 const search = ref("");
@@ -206,7 +234,12 @@ async function fetchEvents(reset = false) {
   loadingError.value = null;
 
   try {
-    const params: any = { limit: limit.value, offset: offset.value, search: search.value, sort: sort.value };
+    const params: any = {
+      limit: limit.value,
+      offset: offset.value,
+      search: search.value,
+      sort: sort.value,
+    };
     const res = await get(endpoints.events.list, params);
     const newEvents = res?.events ?? [];
     if (newEvents.length < limit.value) hasMore.value = false;
@@ -242,9 +275,13 @@ function onSearch() {
 
 // Past events
 const pastEvents = ref<any[]>([]);
-const { pastPending, pastError, pastRefresh } = await useAsyncData("past-events", async () => {
-  const res = await get(endpoints.events.list, { type: "past" });
-  pastEvents.value = res?.events ?? [];
-  return true;
-}, { lazy: true });
+const { pastPending, pastError, pastRefresh } = await useAsyncData(
+  "past-events",
+  async () => {
+    const res = await get(endpoints.events.list, { type: "past" });
+    pastEvents.value = res?.events ?? [];
+    return true;
+  },
+  { lazy: true },
+);
 </script>

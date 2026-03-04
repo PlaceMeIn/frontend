@@ -4,21 +4,20 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@nuxt/content',
     '@vueuse/nuxt',
     'nuxt-og-image',
     'motion-v/nuxt',
-    '@maz-ui/nuxt',
     '@nuxtjs/color-mode',
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-
-
   ],
-  mazUi: {
-    composables: {
-      // useToast: true,
-    },
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'system', // or 'dark' if you want default dark
+    fallback: 'light',
+    storageKey: 'nuxt-color-mode'
   },
 
   piniaPluginPersistedstate: {

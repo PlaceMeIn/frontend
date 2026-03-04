@@ -14,7 +14,6 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.90",
     "@iconify-json/simple-icons": "^1.2.70",
-    "@maz-ui/nuxt": "^4.7.2",
     "@nuxt/content": "^3.11.2",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
@@ -26,7 +25,9 @@
     "nuxt": "^4.3.1",
     "nuxt-og-image": "^5.1.13",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vue-countup-v3": "^1.4.2",
+    "vue-typewriter-effect": "^1.0.1"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.1",
