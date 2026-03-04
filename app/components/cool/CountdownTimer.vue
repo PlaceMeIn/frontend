@@ -9,13 +9,13 @@
           <div
             v-for="num in unit.numbers"
             :key="num + '-' + unit.label"
-            class="flex items-center justify-center h-[3rem] text-2xl font-bold text-white"
+            class="flex items-center justify-center h-[3rem] text-2xl font-bold dark:text-white"
           >
             {{ num }}
           </div>
         </div>
       </div>
-      <div class="text-white text-xs mt-1 font-semibold tracking-widest">{{ unit.label }}</div>
+      <div class="dark:text-white text-xs mt-1 font-semibold tracking-widest">{{ unit.label }}</div>
     </UPageCard>
   </div>
 </template>

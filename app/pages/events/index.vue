@@ -6,10 +6,10 @@
       data-aos="fade-down"
     >
       <Typewriter
-        :words="['Events', 'Competitions', 'BootCamps', 'Hackathons']"
+        :strings="['Events & Competitions & BootCamps & Hackathons']"
         :type-speed="100"
         :delete-speed="50"
-        :delay="1500"
+        :delay="100"
         :loop="true"
         class="text-4xl font-bold"
       />
