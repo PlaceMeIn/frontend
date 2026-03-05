@@ -29,7 +29,7 @@
 
     <!-- Search and Filters -->
     <section
-      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-0 backdrop-blur z-10 py-3"
+      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 z-10 py-3"
       data-aos="fade-down"
       data-aos-delay="100"
     >
@@ -41,7 +41,9 @@
         </p>
       </div>
 
-      <div class="flex flex-wrap gap-3 justify-between items-center">
+      <div
+        class="flex flex-wrap gap-3 justify-between items-center sticky top-0 backdrop-blur"
+      >
         <UInput
           v-model="search"
           placeholder="Search events..."
@@ -62,7 +64,7 @@
 
     <!-- Upcoming Events Grid -->
     <section class="mt-6 max-w-6xl mx-auto">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 w-full">
+      <div class="grid lg:grid-cols-2  gap-8 mt-12 w-full">
         <template v-if="pending || loadingMore">
           <div class="col-span-full flex justify-center py-10">
             <Loader />
@@ -92,12 +94,13 @@
         </template>
 
         <template v-else>
-          <EventsCard
-            v-for="event in events"
+          <FullEventsCard
+            v-for="(event, i) in events"
             :key="event.id"
             :event="event"
+            :isOdd="i % 2 === 1"
             data-aos="fade-up"
-            data-aos-delay="50"
+            :data-aos-delay="i * 50"
             class="transition-transform hover:scale-105"
           />
         </template>
@@ -151,7 +154,7 @@
 
           <template v-else>
             <EventsCard
-              v-for="event in pastEvents"
+              v-for="event in pastEvents?.slice(0, 3)"
               :key="event.id"
               :event="event"
             />
@@ -212,6 +215,12 @@ const loadingError = ref(null);
 const events = ref<any[]>([]);
 const showAnimatedText = ref(false);
 
+useSeoPage({
+  title: `Tech Events & Workshops | ${useAppConfig().site.title}`,
+  description:
+    "Explore upcoming hackathons, coding workshops, tech talks, and innovation events hosted by the MUT Tech Club at Murang'a University of Technology.",
+});
+
 onMounted(() => {
   showAnimatedText.value = true;
 });
@@ -239,9 +248,10 @@ async function fetchEvents(reset = false) {
       offset: offset.value,
       search: search.value,
       sort: sort.value,
+      status:'upcoming'
     };
     const res = await get(endpoints.events.list, params);
-    const newEvents = res?.events ?? [];
+    const newEvents = res?.results ?? [];
     if (newEvents.length < limit.value) hasMore.value = false;
     events.value.push(...newEvents);
     offset.value += limit.value;
@@ -278,8 +288,8 @@ const pastEvents = ref<any[]>([]);
 const { pastPending, pastError, pastRefresh } = await useAsyncData(
   "past-events",
   async () => {
-    const res = await get(endpoints.events.list, { type: "past" });
-    pastEvents.value = res?.events ?? [];
+    const res = await get(endpoints.events.list, { status: "" });
+    pastEvents.value = res?.results ?? [];
     return true;
   },
   { lazy: true },

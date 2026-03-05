@@ -1,6 +1,5 @@
 <template>
   <section class="pb-16">
-
     <!-- Hero Header -->
     <section
       class="text-center h-[400px] flex flex-col justify-center items-center bg-gradient-to-br from-primary-500/30 to-primary-900/30"
@@ -14,7 +13,7 @@
 
     <!-- Sticky Filter Bar -->
     <section
-      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-0 backdrop-blur z-10 py-3 "
+      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-0 backdrop-blur z-10 py-3"
       data-aos="fade-down"
       data-aos-delay="100"
     >
@@ -53,7 +52,6 @@
     <!-- Projects Grid -->
     <section class="mt-6 max-w-6xl mx-auto">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 w-full">
-
         <template v-if="pending || loadingMore">
           <div class="col-span-full flex justify-center py-10">
             <Loader />
@@ -61,7 +59,10 @@
         </template>
 
         <template v-else-if="error || loadingError">
-          <div class="col-span-full flex flex-col items-center gap-4 py-10" data-aos="fade-up">
+          <div
+            class="col-span-full flex flex-col items-center gap-4 py-10"
+            data-aos="fade-up"
+          >
             <UBanner
               color="error"
               icon="i-lucide-cloud-alert"
@@ -77,7 +78,10 @@
         </template>
 
         <template v-else-if="projects.length === 0">
-          <div class="col-span-full text-center py-10 text-muted" data-aos="fade-up">
+          <div
+            class="col-span-full text-center py-10 text-muted"
+            data-aos="fade-up"
+          >
             No projects found
           </div>
         </template>
@@ -126,22 +130,23 @@
           data-aos-easing="ease-out-cubic"
           data-aos-duration="2000"
         >
-          <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl">Join Us</h2>
+          <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl">
+            Join Us
+          </h2>
           <ThreeDButton @clicked="$router.push('/join')" />
         </div>
       </div>
     </section>
-
   </section>
 </template>
 
 <script setup lang="ts">
 const config = useAppConfig();
 useSeoPage({
-  title: `Projects ${config.site.title}`,
-  description: "Browse our projects",
+  title: `Explore Projects | ${config.site.title}`,
+  description:
+    "Discover our latest projects, innovations, and case studies showcasing creativity and expertise.",
 });
-
 const projectTypes = [
   "All",
   "AI",
@@ -186,10 +191,10 @@ async function fetchProjects(reset = false) {
       search: search.value,
       sort: sort.value,
     };
-    if (activeType.value !== "All") params.type = activeType.value;
+    if (activeType.value !== "All") params.category = activeType.value;
 
     const res = await get(endpoints.projects.list, params);
-    const newProjects = res?.projects ?? [];
+    const newProjects = res?.results ?? [];
 
     if (newProjects.length < limit.value) hasMore.value = false;
     projects.value.push(...newProjects);

@@ -37,8 +37,10 @@
 
         <template v-else>
           <EventsCard
-            v-for="event in data.events"
+            v-for="(event, index) in data?.results"
             :key="event.id"
+            data-aos="fade-up"
+            :data-aos-delay="index * 120"
             :event="event"
           />
         </template>
@@ -68,7 +70,7 @@ const { data, pending, error, refresh } = await useAsyncData(
 
     // prevents undefined errors
     default: () => ({
-      projects: [],
+      events: [],
     }),
   },
 );

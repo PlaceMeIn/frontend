@@ -140,22 +140,31 @@ useSeoMeta({
 
 <template>
   <div class="w-full overflow-hidden">
-    <div
+
+    <!-- HERO -->
+    <section
       class="relative w-full bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:to-transparent"
     >
-      <div class="absolute inset-0 overflow-hidden opacity-40">
-        <BackGround class="absolute w-3/4" />
+      <!-- Background -->
+      <div class="absolute inset-0 overflow-hidden opacity-40 pointer-events-none">
+        <BackGround class="absolute w-[80%] -left-10 top-0" />
+
         <img
-          class="absolute right-0 h-full w-[30%] object-cover"
+          class="absolute right-0 top-0 h-full w-[35%] hidden md:block object-cover"
           src="/mut-image.jpg"
           alt="Murang'a University of Technology"
           data-aos="fade-left"
+          data-aos-duration="1200"
         />
       </div>
 
       <UPageSection class="relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div data-aos="fade-right">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+          <!-- LEFT -->
+          <div class="max-w-xl">
+
             <UBadge
               color="success"
               variant="outline"
@@ -166,35 +175,40 @@ useSeoMeta({
               Murang'a University of Technology
             </UBadge>
 
-            <div class="mt-4 space-y-2">
+            <div class="mt-5 space-y-3">
+
               <h1
-                class="font-bold text-5xl lg:text-6xl"
+                class="font-bold text-4xl md:text-5xl lg:text-6xl leading-tight"
+                data-aos="fade-up"
+              >
+                {{ ctaInfo?.title || "Welcome to" }}
+              </h1>
+
+              <h1
+                class="font-bold text-primary text-4xl md:text-5xl lg:text-6xl leading-tight"
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
-                {{ ctaInfo.title }}
+                {{ ctaInfo?.subtitle || "MUT Tech Club" }}
               </h1>
-              <h1
-                class="font-bold text-primary text-5xl lg:text-6xl"
+
+              <p
+                class="mt-4 text-lg text-gray-600 dark:text-gray-300"
                 data-aos="fade-up"
                 data-aos-delay="200"
               >
-                {{ ctaInfo.subtitle }}
-              </h1>
-              <p
-                class="mt-4 text-lg text-gray-500 dark:text-gray-300"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                {{ ctaInfo.description }}
+                {{ ctaInfo?.description || "Empowering students with real-world technical skills, innovation, and collaboration." }}
               </p>
+
             </div>
 
+            <!-- BUTTONS -->
             <div
-              class="flex flex-wrap items-center gap-4 mt-6"
+              class="flex flex-wrap items-center gap-4 mt-8"
               data-aos="fade-up"
-              data-aos-delay="400"
+              data-aos-delay="300"
             >
+
               <UButton
                 to="/join"
                 size="lg"
@@ -212,66 +226,86 @@ useSeoMeta({
               >
                 Explore Projects
               </UButton>
+
             </div>
 
+            <!-- STATS -->
             <div
-              class="grid grid-cols-3 gap-8 mt-8"
+              class="grid grid-cols-3 gap-8 mt-10"
               data-aos="fade-up"
-              data-aos-delay="500"
+              data-aos-delay="400"
             >
-              <div data-aos="zoom-in" data-aos-delay="100">
-                <div class="flex items-center text-3xl font-bold text-primary">
-                  <CountUp :endVal="counts.activeMembers" />
+
+              <div class="text-center" data-aos="zoom-in">
+                <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                  <CountUp :endVal="counts?.activeMembers || 0" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Active Members</p>
               </div>
 
-              <div data-aos="zoom-in" data-aos-delay="200">
-                <div class="flex items-center text-3xl font-bold text-primary">
-                  <CountUp :endVal="counts.projects" />
+              <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
+                <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                  <CountUp :endVal="counts?.projects || 0" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Projects Built</p>
               </div>
 
-              <div data-aos="zoom-in" data-aos-delay="300">
-                <div class="flex items-center text-3xl font-bold text-primary">
-                  <CountUp :endVal="counts.eventsYear" />
+              <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
+                <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                  <CountUp :endVal="counts?.eventsYear || 0" />
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Events / Year</p>
               </div>
+
             </div>
+
           </div>
 
-          <div data-aos="zoom-in-left" data-aos-delay="300">
+          <!-- RIGHT CAROUSEL -->
+          <div
+            class="flex justify-center"
+            data-aos="zoom-in-left"
+            data-aos-delay="200"
+          >
+
             <UCarousel
               v-slot="{ item }"
               dots
-              :items="groupImages"
+              :items="groupImages || []"
               loop
-              :autoplay="{ delay: 4000 }"
+              :autoplay="{ delay: 4500 }"
               wheel-gestures
-              class="w-full max-w-xs md:max-w-md  mx-auto"
+              class="w-full max-w-xs sm:max-w-sm md:max-w-md"
             >
+
               <img
                 :src="item"
                 alt="Students collaborating"
-                class="w-full h-[300px] rounded-sm shadow-xl object-cover"
+                class="w-full h-[260px] md:h-[320px] rounded-xl shadow-xl object-cover"
               />
-            </UCarousel>
-          </div>
-        </div>
-      </UPageSection>
-    </div>
 
+            </UCarousel>
+
+          </div>
+
+        </div>
+
+      </UPageSection>
+    </section>
+
+
+    <!-- ABOUT -->
     <section class="py-20">
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+
         <div class="max-w-2xl text-center" data-aos="fade-up">
           <h2 class="text-3xl font-bold tracking-tight">
             What is MUT Tech Club?
           </h2>
+
           <p class="mt-3 text-lg text-muted">
             We are a student-led innovation hub dedicated to building real-world
             technical skills, fostering creativity, and preparing students for
@@ -279,84 +313,94 @@ useSeoMeta({
           </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
+
           <NuxtLink
-            v-for="(feature, i) in features"
-            :key="feature.title"
-            :to="feature.to"
-            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+            v-for="(feature, i) in features || []"
+            :key="feature?.title || i"
+            :to="feature?.to || '#'"
+            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition"
             data-aos="fade-up"
             :data-aos-delay="i * 100"
           >
+
             <div
-              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
-              :class="`bg-${feature.icon?.color}-500/10`"
+              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4 bg-primary/10"
             >
               <UIcon
-                :name="feature.icon?.name"
-                class="text-xl"
-                :class="`text-${feature.icon?.color}-500`"
+                :name="feature?.icon?.name || 'i-lucide-box'"
+                class="text-xl text-primary"
               />
             </div>
 
-            <h3
-              class="font-semibold text-lg group-hover:text-primary transition"
-            >
-              {{ feature.title }}
+            <h3 class="font-semibold text-lg group-hover:text-primary">
+              {{ feature?.title || "Feature" }}
             </h3>
 
             <p class="mt-2 text-sm text-muted">
-              {{ feature.description }}
+              {{ feature?.description || "Feature description." }}
             </p>
+
           </NuxtLink>
+
         </div>
+
       </div>
     </section>
 
+
+    <!-- FOCUS AREAS -->
     <section class="py-20 bg-muted/30">
+
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
+
         <div class="max-w-2xl text-center" data-aos="fade-up">
-          <h2 class="text-3xl font-bold tracking-tight">Our Focus Areas</h2>
+          <h2 class="text-3xl font-bold tracking-tight">
+            Our Focus Areas
+          </h2>
+
           <p class="mt-3 text-lg text-muted">
-            Develop expertise in high-impact technology fields shaping the
-            future.
+            Develop expertise in high-impact technology fields shaping the future.
           </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
+
           <NuxtLink
-            v-for="(area, i) in focusAreas"
-            :key="area.title"
-            :to="area.to"
-            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+            v-for="(area, i) in focusAreas || []"
+            :key="area?.title || i"
+            :to="area?.to || '#'"
+            class="group rounded-xl border border-default p-6 hover:border-primary hover:shadow-lg transition"
             data-aos="fade-up"
             :data-aos-delay="i * 100"
           >
+
             <div
-              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4"
-              :class="`bg-${area.icon?.color}-500/10`"
+              class="flex items-center justify-center w-12 h-12 rounded-lg mb-4 bg-primary/10"
             >
               <UIcon
-                :name="area.icon?.name"
-                class="text-xl"
-                :class="`text-${area.icon?.color}-500`"
+                :name="area?.icon?.name || 'i-lucide-cpu'"
+                class="text-xl text-primary"
               />
             </div>
 
-            <h3
-              class="font-semibold text-lg group-hover:text-primary transition"
-            >
-              {{ area.title }}
+            <h3 class="font-semibold text-lg group-hover:text-primary">
+              {{ area?.title || "Technology Area" }}
             </h3>
 
             <p class="mt-2 text-sm text-muted">
-              {{ area.description }}
+              {{ area?.description || "Area description." }}
             </p>
+
           </NuxtLink>
+
         </div>
+
       </div>
     </section>
 
+
+    <!-- HIGHLIGHTS -->
     <section data-aos="fade-up">
       <HightlightFeaturedProject />
     </section>
@@ -365,7 +409,7 @@ useSeoMeta({
       <HighlightUpcomingEvent />
     </section>
 
-    <section class="m-auto">
+    <section class="m-auto text-center ">
       <HighlightCommunityGallery />
     </section>
 
@@ -373,12 +417,18 @@ useSeoMeta({
       <HighlightReviews />
     </section>
 
-    <div class="my-20 w-full">
-      <div class="max-w-2xl text-center m-auto mb-5" data-aos="fade-up">
-        <h2 class="text-3xl font-bold tracking-tight">Our Partners</h2>
+
+    <!-- PARTNERS -->
+    <section class="my-20 w-full">
+
+      <div class="max-w-2xl text-center m-auto mb-10" data-aos="fade-up">
+        <h2 class="text-3xl font-bold tracking-tight">
+          Our Partners
+        </h2>
+
         <p class="mt-3 text-lg text-muted">
-          Collaborating with industry leaders to provide opportunities for our
-          members
+          Collaborating with industry leaders to provide opportunities
+          for our members.
         </p>
       </div>
 
@@ -387,49 +437,62 @@ useSeoMeta({
         :overlay="false"
         :ui="{ root: '[--gap:--spacing(4)]', content: 'w-auto py-1' }"
       >
+
         <UPageCard
-          v-for="(patner, index) in collaborationPatners"
+          v-for="(partner, index) in collaborationPatners || []"
           :key="index"
           variant="subtle"
           class="w-64"
-          data-aos="zoom-in"
-          :data-aos-delay="index * 100"
         >
-          <div class="flex items-center flex-row gap-2">
-            <img
-              v-if="patner.image"
-              :src="patner?.image"
-              :alt="patner.label"
-              class="w-20 h-15 object-contain"
-            />
-            <p class="text-xl font-bold">{{ patner.label }}</p>
-          </div>
-        </UPageCard>
-      </UMarquee>
-    </div>
 
-    <div
-      class="w-full p-10 my-15 flex flex-col items-center gap-10 justify-around bg-linear-to-tr from-primary/50 via-primary-200/50 dark:via-transparent to-transparent"
+          <div class="flex items-center gap-3">
+
+            <img
+              v-if="partner?.image"
+              :src="partner?.image"
+              :alt="partner?.label"
+              class="w-16 h-12 object-contain"
+            />
+
+            <p class="text-lg font-semibold">
+              {{ partner?.label || "Partner" }}
+            </p>
+
+          </div>
+
+        </UPageCard>
+
+      </UMarquee>
+
+    </section>
+
+
+    <!-- CTA -->
+    <section
+      class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-200/40 dark:via-transparent to-transparent"
     >
+
       <CodeCards
         data-aos="flip-left"
-        data-aos-easing="ease-out-cubic"
-        data-aos-duration="2000"
+        data-aos-duration="1500"
       />
 
       <UPageCard
         spotlight
         spotlight-color="primary"
-        class="py-12 flex flex-col items-center text-center gap-6 w-fit m-auto"
+        class="py-12 flex flex-col items-center text-center gap-6 max-w-xl"
       >
-        <div class="max-w-2xl" data-aos="zoom-in-up">
+
+        <div data-aos="zoom-in-up">
+
           <h2 class="text-3xl font-bold tracking-tight">
             Ready to Join the Club?
           </h2>
+
           <p class="mt-3 text-lg text-muted">
             Become part of Kenya's most innovative university tech community.
-            Transform your ideas into reality.
           </p>
+
         </div>
 
         <UButton
@@ -438,9 +501,12 @@ useSeoMeta({
           trailing-icon="i-lucide-arrow-right"
           size="xl"
           to="/join"
-          class="w-fit shrink-0 m-auto"
+          class="w-fit m-auto"
         />
+
       </UPageCard>
-    </div>
+
+    </section>
+
   </div>
 </template>

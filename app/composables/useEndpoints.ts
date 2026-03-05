@@ -27,7 +27,7 @@ export const useEndpoints = () => {
             list: `${apiBase}/api/events`
         },
         reviews: {
-            list: `${apiBase}/api/reviews`
+            list: `${apiBase}/api/testimonials`
 
         },
         projects: {

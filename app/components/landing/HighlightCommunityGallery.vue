@@ -27,7 +27,7 @@ const communityGallery = ref([
 </script>
 
 <template>
-  <div class="relative w-full h-[500px] bg-gradient-to-br overflow-hidden">
+  <div class="relative w-full h-[500px] bg-gradient-to-br overflow-hidden ">
     <!-- First marquee (left) -->
     <UMarquee
       reverse
@@ -86,6 +86,43 @@ const communityGallery = ref([
         class="aspect-video border-4 border-white/20 rounded-lg shadow-2xl hover:scale-105 hover:border-white/40 transition-all duration-300"
       />
     </UMarquee>
+    
+
+    <UMarquee
+  orientation="vertical"
+  :overlay="false"
+  :ui="{
+    root: 'hidden xl:flex [--duration:40s] absolute w-[460px] -top-[350px] left-[1650px] h-[1100px] transform-3d rotate-x-55 rotate-z-30'
+  }"
+>
+  <img
+    v-for="(image, index) in communityGallery[0]"
+    :key="`xl-${index}`"
+    :src="image"
+    width="460"
+    height="258"
+    class="aspect-video border-4 border-white/20 rounded-lg shadow-2xl hover:scale-105 transition"
+  />
+</UMarquee>
+
+
+<UMarquee
+  reverse
+  orientation="vertical"
+  :overlay="false"
+  :ui="{
+    root: 'hidden 2xl:flex [--duration:40s] absolute w-[460px] -top-[300px] left-[2250px] h-[1000px] transform-3d rotate-x-55 rotate-z-30'
+  }"
+>
+  <img
+    v-for="(image, index) in communityGallery[1]"
+    :key="`2xl-${index}`"
+    :src="image"
+    width="460"
+    height="258"
+    class="aspect-video border-4 border-white/20 rounded-lg shadow-2xl hover:scale-105 transition"
+  />
+</UMarquee>
 
     <!-- Optional overlay text -->
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10 " data-aos="zoom-in-up">

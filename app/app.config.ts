@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
 
-    
+    apiBase:"https://cottages-spouse-icon-scoop.trycloudflare.com"
   },
   global: {
     picture: {
