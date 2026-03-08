@@ -120,6 +120,8 @@
               <USelect
                 v-model="form.subject"
                 :items="subjects"
+                value-key="value"
+                label-key="label"
                 icon="i-lucide-folder"
                 placeholder="Select subject"
                 class="w-full"
@@ -268,12 +270,12 @@ const form = computed({
 /* OPTIONS */
 const years = ["Year 1", "Year 2", "Year 3", "Year 4", "Alumni", "Other"];
 const subjects = [
-  "Join the club",
-  "Partnership",
-  "Event inquiry",
-  "Technical support",
-  "Mentorship",
-  "General question",
+  { value: "general", label: "General Inquiry" },
+  { value: "partnership", label: "Partnership" },
+  { value: "membership", label: "Membership" },
+  { value: "event", label: "Event Inquiry" },
+  { value: "support", label: "Technical Support" },
+  { value: "other", label: "Other" }
 ];
 
 /* CONTACT INFO */
@@ -324,7 +326,7 @@ const socialLinks = [
 ];
 
 function submitForm() {
-  stateStore.submitContactForm();
+  stateStore.submitContact();
 }
 
 /* FAQ */

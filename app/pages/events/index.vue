@@ -54,6 +54,8 @@
         />
         <USelect
           v-model="sort"
+          value-key="value"
+          label-key="label"
           :items="sortOptions"
           icon="i-lucide-arrow-up-down"
           class="w-48 transition-transform hover:scale-105"
@@ -64,7 +66,7 @@
 
     <!-- Upcoming Events Grid -->
     <section class="mt-6 max-w-6xl mx-auto">
-      <div class="grid lg:grid-cols-2  gap-8 mt-12 w-full">
+      <div class="grid lg:grid-cols-2 gap-8 mt-12 w-full">
         <template v-if="pending || loadingMore">
           <div class="col-span-full flex justify-center py-10">
             <Loader />
@@ -206,7 +208,7 @@ import Typewriter from "vue-typewriter-effect";
 
 const nextEventDate = ref(new Date("2026-03-15T18:00:00"));
 const search = ref("");
-const sort = ref("desc");
+const sort = ref("Newest");
 const limit = ref(9);
 const offset = ref(0);
 const hasMore = ref(true);
@@ -225,9 +227,10 @@ onMounted(() => {
   showAnimatedText.value = true;
 });
 const sortOptions = [
-  { label: "Newest", value: "desc" },
-  { label: "Oldest", value: "asc" },
-  { label: "Past", value: "past" },
+  { label: "Newest", value: "-created_at" },
+  { label: "Oldest", value: "created_at" },
+  { label: "Ongoing", value: "ongoing" },
+  { label: "Past", value: "completed" },
 ];
 
 const endpoints = useEndpoints();
@@ -247,8 +250,8 @@ async function fetchEvents(reset = false) {
       limit: limit.value,
       offset: offset.value,
       search: search.value,
-      sort: sort.value,
-      status:'upcoming'
+      ordering: (sort.value === '-created_at'||sort.value ==='created_at' )? sort.value :"-created_at" , 
+      status: (sort.value === 'ongoing'||sort.value ==='completed' )? sort.value :"upcoming"
     };
     const res = await get(endpoints.events.list, params);
     const newEvents = res?.results ?? [];
@@ -288,8 +291,10 @@ const pastEvents = ref<any[]>([]);
 const { pastPending, pastError, pastRefresh } = await useAsyncData(
   "past-events",
   async () => {
-    const res = await get(endpoints.events.list, { status: "" });
-    pastEvents.value = res?.results ?? [];
+    const res = await get(endpoints.events.past, {
+      status: "completed", ordering :"-created_at"
+    });
+    pastEvents.value = res;
     return true;
   },
   { lazy: true },

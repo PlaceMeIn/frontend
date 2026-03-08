@@ -378,7 +378,7 @@ async function fetchTeam() {
   teamError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.team);
+    const res = await get(endpoints.leadership.team,{position_type:'executive'});
 
     executiveTeam.value = res?.data?.length ? res.data : exec_team_hold;
   } catch {
@@ -394,7 +394,7 @@ async function fetchLeads() {
   leadsError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.leads);
+    const res = await get(endpoints.leadership.leads,{position_type:'department_lead'});
 
     departmentLeads.value = res?.data?.length ? res.data : departmentLeads_hold;
   } catch {
@@ -410,9 +410,9 @@ async function fetchFaculty() {
   facultyError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.faculty);
+    const res = await get(endpoints.leadership.faculty,{position_type:'faculty_advisor'});
 
-    faculty.value = res?.data?.length ? res.data : faculty_advisors_hold;
+    faculty.value = res?.length ? res : faculty_advisors_hold;
   } catch {
     faculty.value = faculty_advisors_hold;
     facultyError.value = true;

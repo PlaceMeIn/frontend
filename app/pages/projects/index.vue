@@ -31,10 +31,10 @@
           <UButton
             v-for="type in projectTypes"
             :key="type"
-            :label="type"
-            :variant="activeType === type ? 'solid' : 'outline'"
-            :icon="activeType === type ? 'i-lucide-check' : ''"
-            @click="setFilter(type)"
+            :label="type.label"
+            :variant="activeType === type.value ? 'solid' : 'outline'"
+            :icon="activeType === type.value ? 'i-lucide-check' : ''"
+            @click="setFilter(type.value)"
             class="transition-transform hover:scale-105"
           />
         </div>
@@ -148,13 +148,14 @@ useSeoPage({
     "Discover our latest projects, innovations, and case studies showcasing creativity and expertise.",
 });
 const projectTypes = [
-  "All",
-  "AI",
-  "Web",
-  "Mobile",
-  "Robotics",
-  "OpenSource",
-  "DataScience",
+  { value: "ai", label: "AI" },
+  { value: "web", label: "Web" },
+  { value: "mobile", label: "Mobile" },
+  { value: "robotics", label: "Robotics" },
+  { value: "open_source", label: "Open Source" },
+  { value: "data_science", label: "Data Science" },
+  { value: "cybersecurity", label: "Cybersecurity" },
+  { value: "iot", label: "IoT" }
 ];
 const sortOptions = [
   { label: "Newest", value: "desc" },

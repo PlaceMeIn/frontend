@@ -203,7 +203,7 @@ const fetchLearnings = async () => {
   loadingLearnings.value = true
   learningsError.value = false
   try {
-    const res = await get(endpoints.resources.learning)
+    const res = await get(endpoints.resources.main,{resource_type:'learning_path'})
     structuredLearnings.value = res?.data?.length ? res.data : defaultLearnings
   } catch {
     structuredLearnings.value = defaultLearnings
@@ -217,7 +217,7 @@ const fetchRepos = async () => {
   loadingRepos.value = true
   reposError.value = false
   try {
-    const res = await get(endpoints.resources.repos)
+    const res = await get(endpoints.resources.main,{resource_type:'repository'})
     repos.value = res?.data?.length ? res.data : defaultRepos
   } catch {
     repos.value = defaultRepos
@@ -231,7 +231,7 @@ const fetchRecordedWorkshops = async () => {
   loadingWorkshops.value = true
   workshopsError.value = false
   try {
-    const res = await get(endpoints.resources.recordedWorkshops)
+    const res = await get(endpoints.resources.main,{resource_type:'workshop'})
     recordedWorkshops.value = res?.data?.length ? res.data : defaultWorkshops
   } catch {
     recordedWorkshops.value = defaultWorkshops
@@ -245,7 +245,7 @@ const fetchCertifications = async () => {
   loadingCertifications.value = true
   certificationsError.value = false
   try {
-    const res = await get(endpoints.resources.certifications)
+    const res = await get(endpoints.resources.main,{resource_type:'certification'})
     certifications.value = res?.data?.length ? res.data : defaultCertifications
   } catch {
     certifications.value = defaultCertifications

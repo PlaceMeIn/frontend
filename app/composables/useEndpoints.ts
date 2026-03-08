@@ -3,15 +3,16 @@ export const useEndpoints = () => {
 
     return {
         main: {
-            contact: `${apiBase}/api/main/contact`,
-            join: `${apiBase}/api/main/join`,
+            contact: `${apiBase}/api/contact-messages/`,
+            join: `${apiBase}/api/join/`,
         },
         leadership: {
-            team: `${apiBase}/api/leadership/team`,
-            faculty: `${apiBase}/api/leadership/faculty`,
-            leads: `${apiBase}/api/leadership/lead`
+            team: `${apiBase}/api/leadership/`,
+            faculty: `${apiBase}/api/leadership/`,
+            leads: `${apiBase}/api/leadership/`
         },
         resources: {
+            main:`${apiBase}/api/resources`,
             repos: `${apiBase}/api/resources/repos`,
             learning: `${apiBase}/api/resources/learning`,
             certifications: `${apiBase}/api/resourcces/certifications`,
@@ -24,7 +25,8 @@ export const useEndpoints = () => {
 
         },
         events: {
-            list: `${apiBase}/api/events`
+            list: `${apiBase}/api/events`,
+            past:`${apiBase}/api/events/past/list`
         },
         reviews: {
             list: `${apiBase}/api/testimonials`

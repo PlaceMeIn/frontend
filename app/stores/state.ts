@@ -69,9 +69,9 @@ export const useStateStore = defineStore('state', {
     async submitContact() {
       try {
         if (!this.isContactFormValid) throw new Error('Please fill in all required fields.')
-            const {post} = useApi()
+        const { post } = useApi()
         const endpoints = useEndpoints()
-        const response = await post(endpoints.main.contact,this.ongoingContact)
+        const response = await post(endpoints.main.contact, this.ongoingContact)
         this.resetContactForm()
         return response
       } catch (error: any) {
@@ -104,8 +104,9 @@ export const useStateStore = defineStore('state', {
       try {
         if (!this.isJoinFormValid) throw new Error('Please fill in all required fields.')
 
-         const endpoints = useEndpoints()
-        const response = await post(endpoints.main.join,this.join)
+        const { post } = useApi()
+        const endpoints = useEndpoints()
+        const response = await post(endpoints.main.join, this.join)
         this.resetContactForm()
 
         this.submitSuccess = true
