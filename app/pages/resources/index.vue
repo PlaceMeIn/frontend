@@ -23,7 +23,7 @@
           <Loader />
         </div>
 
-        <div v-else class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-16">
+        <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
           <div
             v-for="(learning, i) in structuredLearnings"
             :key="learning?.name || i"
@@ -31,7 +31,7 @@
             data-aos="zoom-in"
             :data-aos-delay="i * 100"
           >
-            <!-- TODO: Display learning content -->
+            <StLearningPathCard :learning="learning" />
           </div>
         </div>
 
@@ -58,7 +58,7 @@
           <Loader />
         </div>
 
-        <div v-else class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-16">
+        <div v-else class="grid md:grid-cols-2  gap-10 mt-16">
           <div
             v-for="(repo, i) in repos"
             :key="repo?.name || i"
@@ -66,7 +66,7 @@
             data-aos="fade-up"
             :data-aos-delay="i * 100"
           >
-            <!-- TODO: Display repository -->
+          <ClubRepositoryCard :repo="repo" />
           </div>
         </div>
 
@@ -96,7 +96,7 @@
             data-aos="fade-right"
             :data-aos-delay="i * 100"
           >
-            <!-- TODO: Display workshop -->
+            <WorkshopCard :workshop="workshop" />
           </div>
         </div>
 
@@ -118,7 +118,7 @@
           <Loader />
         </div>
 
-        <div v-else class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-16">
+        <div v-else class="grid md:grid-cols-2  gap-10 mt-16">
           <div
             v-for="(certification, i) in certifications"
             :key="certification?.name || i"
@@ -126,7 +126,7 @@
             data-aos="zoom-in"
             :data-aos-delay="i * 100"
           >
-            <!-- TODO: Display certification -->
+            <RecommendedCertificationCard :certification="certification" />
           </div>
         </div>
 
@@ -161,7 +161,7 @@
           <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl">Join Us</h2>
           <div class="flex-1 gap-20 items-center">
             <ThreeDButton @clicked="$router.push('/join')" />
-            <StarOnGitButton @clicked="$router.push('/join')" class="mt-10 cursor-pointer" />
+            <StarOnGitButton @clicked="navigateTo(useAppConfig().site?.sourceLink)" class="mt-10 cursor-pointer" />
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ const fetchLearnings = async () => {
   learningsError.value = false
   try {
     const res = await get(endpoints.resources.main,{resource_type:'learning_path'})
-    structuredLearnings.value = res?.data?.length ? res.data : defaultLearnings
+    structuredLearnings.value = res?.results?.length ? res.results : defaultLearnings
   } catch {
     structuredLearnings.value = defaultLearnings
     learningsError.value = true
@@ -218,7 +218,7 @@ const fetchRepos = async () => {
   reposError.value = false
   try {
     const res = await get(endpoints.resources.main,{resource_type:'repository'})
-    repos.value = res?.data?.length ? res.data : defaultRepos
+    repos.value = res?.results?.length ? res.results : defaultRepos
   } catch {
     repos.value = defaultRepos
     reposError.value = true
@@ -232,7 +232,7 @@ const fetchRecordedWorkshops = async () => {
   workshopsError.value = false
   try {
     const res = await get(endpoints.resources.main,{resource_type:'workshop'})
-    recordedWorkshops.value = res?.data?.length ? res.data : defaultWorkshops
+    recordedWorkshops.value = res?.results?.length ? res.results : defaultWorkshops
   } catch {
     recordedWorkshops.value = defaultWorkshops
     workshopsError.value = true
@@ -246,7 +246,7 @@ const fetchCertifications = async () => {
   certificationsError.value = false
   try {
     const res = await get(endpoints.resources.main,{resource_type:'certification'})
-    certifications.value = res?.data?.length ? res.data : defaultCertifications
+    certifications.value = res?.results?.length ? res.results : defaultCertifications
   } catch {
     certifications.value = defaultCertifications
     certificationsError.value = true

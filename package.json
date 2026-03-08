@@ -27,6 +27,7 @@
     "nuxt-og-image": "^5.1.13",
     "pinia-plugin-persistedstate": "^4.7.1",
     "tailwindcss": "^4.1.18",
+    "valibot": "^1.2.0",
     "vue-countup-v3": "^1.4.2",
     "vue-typewriter-effect": "^1.0.1"
   },

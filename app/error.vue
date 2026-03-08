@@ -1,67 +1,65 @@
 <script setup lang="ts">
-import type { NuxtError } from '#app'
+import { useError, clearError } from '#app'
 
-defineProps({
-  error: {
-    type: Object as PropType<NuxtError>,
-    required: true
-  }
-})
+const error = useError()
 
-useHead({
-  htmlAttrs: {
-    lang: 'en'
-  }
-})
+// Check if this is a 404 (page not found)
+const is404 = computed(() => error.value?.statusCode === 404)
 
-useSeoMeta({
-  title: 'Page not found',
-  description: 'We are sorry but this page could not be found.'
-})
-
-const [{ data: navigation }, { data: files }] = await Promise.all([
-  useAsyncData('navigation', () => {
-    return Promise.all([
-      queryCollectionNavigation('blog')
-    ])
-  }, {
-    transform: data => data.flat()
-  }),
-  useLazyAsyncData('search', () => {
-    return Promise.all([
-      queryCollectionSearchSections('blog')
-    ])
-  }, {
-    server: false,
-    transform: data => data.flat()
-  })
-])
+// Go back to homepage
+const goHome = () => {
+  clearError({ redirect: '/' })
+}
 </script>
 
 <template>
-  <div>
-    <AppHeader :links="navLinks" />
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 to-gray-900 text-white px-6 py-12">
 
-    <UMain>
-      <UContainer>
-        <UPage>
-          <UError :error="error" />
-        </UPage>
-      </UContainer>
-    </UMain>
+    <!-- Logo -->
+    <AppLogo :size="5" class="mb-8" />
 
-    <AppFooter />
+    <NotFound />
 
-    <ClientOnly>
-      <LazyUContentSearch
-        :files="files"
-        shortcut="meta_k"
-        :navigation="navigation"
-        :links="navLinks"
-        :fuse="{ resultLimit: 42 }"
-      />
-    </ClientOnly>
+    <div class="max-w-lg text-center">
+      <!-- Error Code -->
+      <h1 class="text-8xl font-extrabold text-primary mb-4">
+        {{ is404 ? '404' : 'Error' }}
+      </h1>
 
-    <UToaster />
+      <!-- Title -->
+      <h2 class="text-2xl sm:text-3xl font-semibold mb-4">
+        {{ is404 ? 'Page Not Found' : 'Something went wrong' }}
+      </h2>
+
+      <!-- Message -->
+      <p class="text-gray-400 mb-6">
+        {{
+          is404
+            ? "The page you’re looking for doesn’t exist or may have been moved."
+            : error?.message || 'An unexpected error occurred.'
+        }}
+      </p>
+      
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <UButton
+          label="Go Back Home"
+          icon="i-lucide-home"
+          color="primary"
+          class="w-full sm:w-auto"
+          @click="goHome"
+        />
+
+        <UButton
+          label="Contact Us"
+          icon="i-lucide-mail"
+          variant="outline"
+          class="w-full sm:w-auto"
+          to="/contact"
+        />
+      </div>
+
+    </div>
   </div>
 </template>
