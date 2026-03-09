@@ -377,12 +377,12 @@ const clearFilters = () => {
           Join thousands of successful students who have transformed their careers with our programs.
         </p>
         <div class="flex flex-wrap gap-4 justify-center">
-          <UButton color="primary" size="xl" to="/courses" trailing-icon="i-lucide-arrow-right">
+          <UButton color="primary" size="xl" to="/resources" trailing-icon="i-lucide-arrow-right">
             Explore Courses
           </UButton>
-          <UButton color="neutral" variant="outline" size="xl" to="/write-review">
+          <!-- <UButton color="neutral" variant="outline" size="xl" to="/write-review">
             Write a Review
-          </UButton>
+          </UButton> -->
         </div>
       </div>
     </section>

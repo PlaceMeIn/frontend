@@ -120,11 +120,13 @@ export default defineNuxtConfig({
         '/projects',
         '/join'
       ],
-      crawlLinks: true
+      crawlLinks: true,
+      failOnError: false
     },
 
     routeRules: {
       '/': { prerender: true },
+
       '/api/**': {
         cors: true,
         headers: {
