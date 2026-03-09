@@ -238,7 +238,10 @@ useSeoMeta({
 
               <div class="text-center" data-aos="zoom-in">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                    <ClientOnly>
+
                   <CountUp :endVal="counts?.activeMembers || 0" />
+                  </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Active Members</p>
@@ -246,7 +249,10 @@ useSeoMeta({
 
               <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                    <ClientOnly>
+
                   <CountUp :endVal="counts?.projects || 0" />
+                  </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Projects Built</p>
@@ -254,7 +260,10 @@ useSeoMeta({
 
               <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
+                    <ClientOnly>
+
                   <CountUp :endVal="counts?.eventsYear || 0" />
+                  </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Events / Year</p>

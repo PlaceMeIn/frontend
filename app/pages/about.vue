@@ -197,7 +197,10 @@
 
           <div class="p-5 rounded-xl bg-primary/10">
             <div class="text-3xl font-bold text-primary flex">
+                <ClientOnly>
+
               <CountUp :endVal="35" :duration="2"/>
+              </ClientOnly>
               <span>%</span>
             </div>
 
@@ -222,7 +225,10 @@
         <div class="mt-8 flex gap-6">
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
+                <ClientOnly>
+
               <CountUp :endVal="100" :duration="2" />
+              </ClientOnly>
               <span>+</span>
             </div>
 
@@ -231,8 +237,10 @@
 
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
-                <CountUp :endVal="15" :duration="2" />
+                <ClientOnly>
 
+                <CountUp :endVal="15" :duration="2" />
+</ClientOnly>
               <span>+</span>
             </div>
 
