@@ -78,12 +78,12 @@
         </template>
 
         <template v-else-if="projects.length === 0">
-          <div
-            class="col-span-full text-center py-10 text-muted"
-            data-aos="fade-up"
-          >
-            No projects found
-          </div>
+         
+        <div  class="text-center py-20">
+          <UIcon name="i-lucide-message-square-off" class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold mb-2 dark:text-white">No Reviews Found</h3>
+          <p class="text-gray-500 dark:text-gray-400">Try adjusting your filters or check back later.</p>
+        </div>
         </template>
 
         <template v-else>
@@ -233,4 +233,8 @@ function onSearch() {
   clearTimeout(timeout);
   timeout = setTimeout(() => fetchProjects(true), 400);
 }
+
+onMounted(() => {
+  fetchProjects(true);
+});
 </script>

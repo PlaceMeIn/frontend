@@ -108,9 +108,12 @@
         </template>
 
         <template v-else-if="events.length === 0">
-          <div class="col-span-full text-center text-muted py-10">
-            No events found
-          </div>
+          
+        <div  class="text-center py-20">
+          <UIcon name="i-lucide-message-square-off" class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <h3 class="text-xl font-semibold mb-2 dark:text-white">No Reviews Found</h3>
+          <p class="text-gray-500 dark:text-gray-400">Try adjusting your filters or check back later.</p>
+        </div>
         </template>
 
         <template v-else>
@@ -261,7 +264,9 @@ useSeoPage({
 
 onMounted(() => {
   showAnimatedText.value = true;
+  fetchEvents(true);
 });
+
 const sortOptions = [
   { label: "Newest", value: "-created_at" },
   { label: "Oldest", value: "created_at" },
