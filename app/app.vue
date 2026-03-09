@@ -29,8 +29,8 @@ useSeoMeta({
 
 useSeoMeta({
   // titleTemplate: '%s - Nuxt Portfolio Template',
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png',
-  twitterImage: 'https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png',
+  ogImage: '/mut-image.jpg',
+  twitterImage: '/mut-image.jpg',
   twitterCard: 'summary_large_image'
 })
 
