@@ -13,7 +13,9 @@ export default defineNuxtConfig({
     'motion-v/nuxt',
     '@nuxtjs/color-mode'
   ],
-
+  build: {
+    transpile: ['vue-countup-v3'],
+  },
   runtimeConfig: {
     apiSecret: process.env.API_SECRET,
 

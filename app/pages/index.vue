@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { PageFeatureProps } from "@nuxt/ui";
-import CountUp from 'vue-countup-v3'
 import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
 

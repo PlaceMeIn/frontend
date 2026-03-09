@@ -72,6 +72,9 @@ importers:
       eslint:
         specifier: ^10.0.0
         version: 10.0.2(jiti@2.6.1)
+      nuxt-countup:
+        specifier: ^0.1.2
+        version: 0.1.2(magicast@0.5.2)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -4653,6 +4656,9 @@ packages:
   nuxt-component-meta@0.17.2:
     resolution: {integrity: sha512-2/mSSqutOX8t+r8cAX1yUYwAPBqicPO5Rfum3XaHVszxKCF4tXEXBiPGfJY9Zn69x/CIeOdw+aM9wmHzQ5Q+lA==}
     hasBin: true
+
+  nuxt-countup@0.1.2:
+    resolution: {integrity: sha512-O4xTXnWZZlWfFsqjqAwKsLOMCcjmfNl2YmSrSA/S9+7yJ/aDlceEWSupExbNe6eVk+/TusU9Qt4T+ic6el7GXQ==}
 
   nuxt-og-image@5.1.13:
     resolution: {integrity: sha512-H9kqGlmcEb9agWURwT5iFQjbr7Ec7tcQHZZaYSpC/JXKq2/dFyRyAoo6oXTk6ob20dK9aNjkJDcX2XmgZy67+w==}
@@ -11536,6 +11542,13 @@ snapshots:
       typescript: 5.9.3
       ufo: 1.6.3
       vue-component-meta: 3.2.5(typescript@5.9.3)
+    transitivePeerDependencies:
+      - magicast
+
+  nuxt-countup@0.1.2(magicast@0.5.2):
+    dependencies:
+      '@nuxt/kit': 3.21.1(magicast@0.5.2)
+      countup.js: 2.9.0
     transitivePeerDependencies:
       - magicast
 

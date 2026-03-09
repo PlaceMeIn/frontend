@@ -306,7 +306,6 @@
 </template>
 
 <script lang="ts" setup>
-import CountUp from 'vue-countup-v3'
 import ThreeDButton from "~/components/cool/ThreeDButton.vue";
 
 
