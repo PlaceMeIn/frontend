@@ -13,7 +13,9 @@
         class="absolute right-0 bottom-0 w-full h-full object-cover opacity-90"
       />
 
-      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+      ></div>
 
       <div class="z-50 px-6">
         <h1 class="text-5xl font-bold tracking-tight text-white">
@@ -29,14 +31,12 @@
     <!-- LEARNING PATHS -->
     <section id="learning-paths" class="py-24 scroll-mt-20">
       <div class="max-w-6xl mx-auto px-6 text-center">
-
         <h2 class="text-4xl font-bold">Structured Learning Paths</h2>
         <p class="mt-3 text-muted">
           Follow our curated curriculum to master in-demand tech skills
         </p>
 
         <div class="mt-16">
-
           <!-- Loading -->
           <div v-if="loadingLearnings" class="flex flex-col items-center gap-4">
             <Loader />
@@ -60,10 +60,7 @@
           />
 
           <!-- Data -->
-          <div
-            v-else
-            class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10"
-          >
+          <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
             <div
               v-for="(learning, i) in structuredLearnings"
               :key="learning?.name || i"
@@ -73,25 +70,19 @@
               <StLearningPathCard :learning="learning" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- REPOSITORIES -->
-    <section
-      id="repositories"
-      class="py-24 bg-primary-500/5 scroll-mt-20"
-    >
+    <section id="repositories" class="py-24 bg-primary-500/5 scroll-mt-20">
       <div class="max-w-6xl mx-auto px-6 text-center">
-
         <h2 class="text-4xl font-bold">Club Repositories</h2>
         <p class="mt-3 text-muted">
           Explore our open-source projects and code libraries
         </p>
 
         <div class="mt-16">
-
           <div v-if="loadingRepos" class="flex flex-col items-center gap-4">
             <Loader />
             <p class="text-sm text-muted">Loading repositories...</p>
@@ -111,10 +102,7 @@
             description="Our club repositories will appear here once available."
           />
 
-          <div
-            v-else
-            class="grid md:grid-cols-2 gap-10"
-          >
+          <div v-else class="grid md:grid-cols-2 gap-10">
             <div
               v-for="(repo, i) in repos"
               :key="repo?.name || i"
@@ -124,7 +112,6 @@
               <ClubRepositoryCard :repo="repo" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -132,14 +119,12 @@
     <!-- WORKSHOPS -->
     <section id="workshops" class="py-24 scroll-mt-20">
       <div class="max-w-5xl mx-auto px-6 text-center">
-
         <h2 class="text-4xl font-bold">Recorded Workshops</h2>
         <p class="mt-3 text-muted">
           Watch past workshops and learn at your own pace
         </p>
 
         <div class="mt-16">
-
           <div v-if="loadingWorkshops" class="flex flex-col items-center gap-4">
             <Loader />
             <p class="text-sm text-muted">Loading workshops...</p>
@@ -159,10 +144,7 @@
             description="New workshop recordings will appear here."
           />
 
-          <div
-            v-else
-            class="grid sm:grid-cols-2 gap-10 text-left"
-          >
+          <div v-else class="grid sm:grid-cols-2 gap-10 text-left">
             <div
               v-for="(workshop, i) in recordedWorkshops"
               :key="workshop?.title || i"
@@ -173,7 +155,6 @@
               <WorkshopCard :workshop="workshop" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -181,18 +162,17 @@
     <!-- CERTIFICATIONS -->
     <section id="certifications" class="py-24 scroll-mt-20">
       <div class="max-w-6xl mx-auto px-6 text-center">
-
-        <h2 class="text-4xl font-bold">
-          Recommended Certifications
-        </h2>
+        <h2 class="text-4xl font-bold">Recommended Certifications</h2>
 
         <p class="mt-3 text-muted">
           Industry-recognized certifications to boost your career
         </p>
 
         <div class="mt-16">
-
-          <div v-if="loadingCertifications" class="flex flex-col items-center gap-4">
+          <div
+            v-if="loadingCertifications"
+            class="flex flex-col items-center gap-4"
+          >
             <Loader />
             <p class="text-sm text-muted">Loading certifications...</p>
           </div>
@@ -211,22 +191,16 @@
             description="Recommended certifications will appear here."
           />
 
-          <div
-            v-else
-            class="grid md:grid-cols-2 gap-10"
-          >
+          <div v-else class="grid md:grid-cols-2 gap-10">
             <div
               v-for="(certification, i) in certifications"
               :key="certification?.name || i"
               data-aos="zoom-in"
               :data-aos-delay="i * 100"
             >
-              <RecommendedCertificationCard
-                :certification="certification"
-              />
+              <RecommendedCertificationCard :certification="certification" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -237,41 +211,36 @@
       class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 scroll-mt-20"
     >
       <div class="max-w-6xl mx-auto px-6 text-center">
-
         <UIcon name="i-lucide-library" :size="80" class="text-primary" />
 
-        <h2 class="text-3xl md:text-4xl font-bold">
-          Access Premium Resources
-        </h2>
+        <h2 class="text-3xl md:text-4xl font-bold">Access Premium Resources</h2>
 
         <p class="mt-3 text-muted max-w-xl mx-auto">
-          Join MUT Tech Club to unlock exclusive learning materials,
-          workshop recordings, and mentorship opportunities.
+          Join MUT Tech Club to unlock exclusive learning materials, workshop
+          recordings, and mentorship opportunities.
         </p>
 
         <div class="mt-10 flex flex-col items-center gap-6">
-          <h2 class="font-mono text-2xl md:text-4xl">
-            Join Us
-          </h2>
+          <h2 class="font-mono text-2xl md:text-4xl">Join Us</h2>
 
-          <div class="flex gap-20 items-center">
+          <div class="flex gap-20 flex-col md:flex-row items-center">
             <ThreeDButton @clicked="$router.push('/join')" />
 
-            <StarOnGitButton
-              @clicked="navigateTo(useAppConfig().site?.sourceLink)"
-              class="cursor-pointer"
-            />
+            <a :href="useAppConfig().site?.sourceLink"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <StarOnGitButton class="cursor-pointer" />
+            </a>
           </div>
         </div>
-
       </div>
     </section>
-
   </section>
 </template>
 
 <script lang="ts" setup>
-import ctaImg from "~/assets/files/learning.jpg"
+import ctaImg from "~/assets/files/learning.jpg";
 const sections = [
   { id: "hero", label: "Hero" },
   { id: "learning-paths", label: "Learning Paths" },

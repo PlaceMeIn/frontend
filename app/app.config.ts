@@ -7,7 +7,7 @@ export default defineAppConfig({
     image: "",
     icon:"",
     url:"",
-    sourceLink:"",
+    sourceLink:"https://github.com/PlaceMeIn",
 
     apiBase:"https://vancouver-organizations-miniature-not.trycloudflare.com"
   },
