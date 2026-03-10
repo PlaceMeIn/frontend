@@ -9,10 +9,24 @@
       data-aos="fade-down"
       aria-label="Contact hero section"
     >
-      <h1 class="text-5xl font-bold tracking-tight">Get in Touch</h1>
-      <p class="mt-4 text-lg text-muted max-w-xl">
-        Have questions? Want to collaborate? We'd love to hear from you.
-      </p>
+      <div class="z-100">
+        <h1 class="text-5xl text-white font-bold tracking-tight">Get in Touch</h1>
+        <p class="mt-4 text-lg text-gray-200 max-w-xl">
+          Have questions? Want to collaborate? We'd love to hear from you.
+        </p>
+      </div>
+
+      <img
+        :src="ctaImg"
+        alt="Murang'a University of Technology"
+        class="absolute inset-0 w-full h-full object-cover"
+        data-aos="fade-up"
+        data-aos-duration="1200"
+      />
+
+      <div
+        class="absolute inset-0 bg-gradient-to-tr from-white/85 dark:from-black/85 via-black/30 dark:via-black/60 to-transparent"
+      ></div>
     </section>
 
     <!-- CONTACT SECTION -->
@@ -392,12 +406,12 @@
 import { computed, ref, reactive } from "vue";
 import type { AccordionItem } from "@nuxt/ui";
 import * as v from "valibot";
-
+import ctaImg  from "~/assets/files/contact.jpg"
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'contact', label: 'Contact' },
-  { id: 'faq', label: 'FAQ' },
-  { id: 'office-hours', label: 'Office Hours' }
+  { id: "hero", label: "Hero" },
+  { id: "contact", label: "Contact" },
+  { id: "faq", label: "FAQ" },
+  { id: "office-hours", label: "Office Hours" },
 ];
 
 const stateStore = useStateStore();

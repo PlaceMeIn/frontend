@@ -32,14 +32,15 @@ export default defineNuxtConfig({
 
     }
   },
-  // vite: {
-  //   server: {
-  //     allowedHosts: [
-  //       'app.tera-in.top',
-  //       'localhost'
-  //     ]
-  //   }
-  // },
+  vite: {
+    server: {
+      allowedHosts: [
+        'app.tera-in.top',
+        'localhost',
+        'mutech-club.vercel.app'
+      ]
+    }
+  },
 
   colorMode: {
     classSuffix: '',

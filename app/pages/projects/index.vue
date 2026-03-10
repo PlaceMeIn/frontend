@@ -5,13 +5,27 @@
     <!-- HERO SECTION -->
     <section
       id="hero"
-      class="text-center h-[400px] flex flex-col justify-center items-center bg-gradient-to-br from-primary-500/30 to-primary-900/30"
+      class="relative h-[460px] md:h-[620px] flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-primary-500/30 to-primary-900/30"
       data-aos="fade-down"
     >
-      <h3 class="text-5xl font-bold">Our Projects</h3>
-      <p class="text-muted mt-3 text-xl">
-        Explore innovative projects built by our members.
-      </p>
+      <img
+        :src="ctaImg"
+        alt="Murang'a University of Technology"
+        class="absolute right-0 bottom-0 w-full h-full md:h-full object-cover opacity-90"
+        data-aos="fade-up"
+        data-aos-duration="1200"
+      />
+
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/60"
+      ></div>
+
+      <div class="relative z-10 px-6">
+        <h3 class="text-4xl md:text-5xl font-bold text-white">Our Projects</h3>
+        <p class="mt-4 text-lg md:text-xl text-gray-200 max-w-xl mx-auto">
+          Explore innovative projects built by our members.
+        </p>
+      </div>
     </section>
 
     <!-- FILTERS SECTION -->
@@ -30,7 +44,7 @@
           @update:model-value="onSearch"
           class="transition-shadow focus:shadow-lg flex-1"
         />
-        
+
         <UButton
           label="Reset"
           icon="i-lucide-rotate-ccw"
@@ -44,7 +58,11 @@
       </div>
 
       <div class="flex flex-wrap gap-3 justify-between items-center">
-        <div class="flex flex-wrap gap-2" role="group" aria-label="Project categories">
+        <div
+          class="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Project categories"
+        >
           <UButton
             label="All"
             :variant="activeType === 'All' ? 'solid' : 'outline'"
@@ -53,7 +71,7 @@
             class="transition-transform hover:scale-105"
             :aria-pressed="activeType === 'All'"
           />
-          
+
           <UButton
             v-for="type in projectTypes"
             :key="type.value"
@@ -78,18 +96,21 @@
 
       <!-- Active Filters Summary -->
       <div v-if="!isFiltersDefault" class="text-sm text-muted mt-2">
-        Active filters: 
+        Active filters:
         <span v-if="search" class="inline-flex items-center gap-1 mr-3">
           <UIcon name="i-lucide-search" class="w-3 h-3" />
           "{{ search }}"
         </span>
-        <span v-if="activeType !== 'All'" class="inline-flex items-center gap-1 mr-3">
+        <span
+          v-if="activeType !== 'All'"
+          class="inline-flex items-center gap-1 mr-3"
+        >
           <UIcon name="i-lucide-tag" class="w-3 h-3" />
           {{ getTypeLabel(activeType) }}
         </span>
         <span v-if="sort !== 'desc'" class="inline-flex items-center gap-1">
           <UIcon name="i-lucide-arrow-up-down" class="w-3 h-3" />
-          {{ sort === 'asc' ? 'Oldest first' : 'Newest first' }}
+          {{ sort === "asc" ? "Oldest first" : "Newest first" }}
         </span>
       </div>
     </section>
@@ -102,7 +123,9 @@
     >
       <!-- Results count -->
       <div v-if="projects.length > 0" class="text-sm text-muted mb-4 px-2">
-        Showing {{ projects.length }} project{{ projects.length !== 1 ? 's' : '' }}
+        Showing {{ projects.length }} project{{
+          projects.length !== 1 ? "s" : ""
+        }}
         <span v-if="!isFiltersDefault">with current filters</span>
       </div>
 
@@ -177,11 +200,16 @@
           :disabled="!hasMore || pending"
           @click="loadMore"
           class="transition-transform hover:scale-105"
-          :aria-label="hasMore ? 'Load more projects' : 'No more projects to load'"
+          :aria-label="
+            hasMore ? 'Load more projects' : 'No more projects to load'
+          "
         />
-        
+
         <!-- End of results message -->
-        <p v-if="!hasMore && projects.length > 0" class="text-sm text-muted mt-4 text-center w-full">
+        <p
+          v-if="!hasMore && projects.length > 0"
+          class="text-sm text-muted mt-4 text-center w-full"
+        >
           You've reached the end of the results
         </p>
       </div>
@@ -220,12 +248,12 @@
 
 <script setup lang="ts">
 import type { Project } from "~/types";
-
+import ctaImg from "~/assets/files/talk-is-cheap-show-me-the-code.png";
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'filters', label: 'Filters' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'cta', label: 'Join Us' }
+  { id: "hero", label: "Hero" },
+  { id: "filters", label: "Filters" },
+  { id: "projects", label: "Projects" },
+  { id: "cta", label: "Join Us" },
 ];
 
 const config = useAppConfig();
@@ -246,7 +274,7 @@ const projectTypes = [
   { value: "open_source", label: "Open Source" },
   { value: "data_science", label: "Data Science" },
   { value: "cybersecurity", label: "Cybersecurity" },
-  { value: "iot", label: "IoT" }
+  { value: "iot", label: "IoT" },
 ];
 
 const sortOptions = [
@@ -268,11 +296,13 @@ const endpoints = useEndpoints();
 const { get } = useApi();
 
 const isFiltersDefault = computed(() => {
-  return search.value === "" && sort.value === "desc" && activeType.value === "All";
+  return (
+    search.value === "" && sort.value === "desc" && activeType.value === "All"
+  );
 });
 
 function getTypeLabel(typeValue: string): string {
-  const type = projectTypes.find(t => t.value === typeValue);
+  const type = projectTypes.find((t) => t.value === typeValue);
   return type?.label || typeValue;
 }
 
@@ -286,7 +316,7 @@ onMounted(() => {
   if (route.query.type && route.query.type !== "All") {
     activeType.value = route.query.type as string;
   }
-  
+
   fetchProjects(true);
 });
 
@@ -294,27 +324,27 @@ watch(
   () => route.query,
   (newQuery) => {
     let shouldRefetch = false;
-    
+
     if (newQuery.search !== undefined && newQuery.search !== search.value) {
       search.value = newQuery.search as string;
       shouldRefetch = true;
     }
-    
+
     if (newQuery.sort !== undefined && newQuery.sort !== sort.value) {
       sort.value = newQuery.sort as string;
       shouldRefetch = true;
     }
-    
+
     if (newQuery.type !== undefined && newQuery.type !== activeType.value) {
       activeType.value = (newQuery.type as string) || "All";
       shouldRefetch = true;
     }
-    
+
     if (shouldRefetch) {
       fetchProjects(true);
     }
   },
-  { deep: true }
+  { deep: true },
 );
 
 let updateUrlTimeout: NodeJS.Timeout;
@@ -322,7 +352,7 @@ watch([search, sort, activeType], () => {
   clearTimeout(updateUrlTimeout);
   updateUrlTimeout = setTimeout(() => {
     const query: Record<string, string> = {};
-    
+
     if (search.value) {
       query.search = search.value;
     }
@@ -332,7 +362,7 @@ watch([search, sort, activeType], () => {
     if (activeType.value !== "All") {
       query.type = activeType.value;
     }
-    
+
     router.replace({ query });
   }, 300);
 });
@@ -352,13 +382,13 @@ async function fetchProjects(reset = false) {
       limit: limit.value,
       offset: offset.value,
     };
-    
+
     if (search.value) {
       params.search = search.value;
     }
-    
-    params.sort = sort.value === 'desc' ? 'created_at' : '-created_at';
-    
+
+    params.sort = sort.value === "desc" ? "created_at" : "-created_at";
+
     if (activeType.value !== "All") {
       params.category = activeType.value;
     }
@@ -369,7 +399,7 @@ async function fetchProjects(reset = false) {
     if (newProjects.length < limit.value) {
       hasMore.value = false;
     }
-    
+
     projects.value.push(...newProjects);
     offset.value += limit.value;
   } catch (err) {

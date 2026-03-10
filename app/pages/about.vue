@@ -5,20 +5,33 @@
     <!-- HERO SECTION -->
     <div
       id="hero"
-      class="relative w-full h-[340px] md:h-[520px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20 scroll-mt-20"
+      class="relative w-full h-[460px] md:h-[620px] flex items-center justify-center scroll-mt-20 overflow-hidden"
     >
-      <div data-aos="zoom-out" data-aos-duration="900">
-        <UPageCard
-          class="text-center backdrop-blur-xl bg-white/70 dark:bg-white/5 border border-white/10 px-8 py-10"
-        >
-          <h1 class="text-4xl md:text-6xl font-bold tracking-tight">
-            About MUT Tech Club
-          </h1>
-          <p class="mt-4 text-base md:text-lg text-muted max-w-xl">
-            Building Kenya's premier university tech community by empowering
-            innovators, developers, and future tech leaders.
-          </p>
-        </UPageCard>
+      <img
+        :src="passionateImg"
+        alt="Murang'a University of Technology"
+        class="absolute inset-0 w-full h-full object-cover"
+        data-aos="fade-up"
+        data-aos-duration="1200"
+      />
+
+      <div
+        class="absolute inset-0 bg-gradient-to-tr from-white/85 dark:from-black/85 via-black/30 dark:via-black/60 to-transparent"
+      ></div>
+
+      <div
+        data-aos="zoom-out"
+        data-aos-duration="900"
+        class="relative z-20 max-w-3xl px-6 md:px-12 text-white text-center"
+      >
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight">
+          About MUT Tech Club
+        </h1>
+
+        <p class="mt-4 text-sm md:text-lg text-gray-100 max-w-xl leading-relaxed">
+          Building Kenya's premier university tech community by empowering
+          innovators, developers, and future tech leaders.
+        </p>
       </div>
     </div>
 
@@ -314,7 +327,9 @@
         data-aos-easing="ease-out-cubic"
         data-aos-duration="2000"
       >
-        <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl mb-6">Join Us</h2>
+        <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl mb-6">
+          Join Us
+        </h2>
         <ThreeDButton @clicked="$router.push('/join')" />
       </div>
     </section>
@@ -323,23 +338,24 @@
 
 <script lang="ts" setup>
 import ThreeDButton from "~/components/cool/ThreeDButton.vue";
-
+import passionateImg from "~/assets/files/passionate.jpg";
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'mission', label: 'Mission' },
-  { id: 'stats', label: 'Statistics' },
-  { id: 'values', label: 'Values' },
-  { id: 'benefits', label: 'Benefits' },
-  { id: 'community', label: 'Community' },
-  { id: 'mindset', label: 'Mindset' },
-  { id: 'cta', label: 'Join Us' }
+  { id: "hero", label: "Hero" },
+  { id: "mission", label: "Mission" },
+  { id: "stats", label: "Statistics" },
+  { id: "values", label: "Values" },
+  { id: "benefits", label: "Benefits" },
+  { id: "community", label: "Community" },
+  { id: "mindset", label: "Mindset" },
+  { id: "cta", label: "Join Us" },
 ];
 
 const config = useAppConfig();
 
 useSeoPage({
   title: `About ${config.site.title}`,
-  description: "We are a student-led innovation hub dedicated to building real-world technical skills, fostering creativity, and preparing students for global tech careers."
+  description:
+    "We are a student-led innovation hub dedicated to building real-world technical skills, fostering creativity, and preparing students for global tech careers.",
 });
 
 const benefitsOfJoinning = [

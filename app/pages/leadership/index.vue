@@ -5,19 +5,33 @@
     <!-- HERO SECTION -->
     <section
       id="hero"
-      class="h-[420px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30 scroll-mt-20"
+      class="relative h-[460px] md:h-[620px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30 scroll-mt-20"
       data-aos="fade-down"
       aria-label="Leadership hero section"
     >
-      <h1 class="text-5xl font-bold tracking-tight">
-        {{ "Our Leadership" }}
-      </h1>
+      <img
+        :src="ctaImg"
+        alt="Murang'a University of Technology"
+        class="absolute right-0 bottom-0 w-full h-full md:h-full object-cover opacity-90"
+        data-aos="fade-up"
+        data-aos-duration="1200"
+      />
 
-      <p class="mt-4 text-lg text-muted max-w-xl">
-        {{
-          "Meet the passionate team driving innovation and excellence at MUT Tech Club"
-        }}
-      </p>
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/60"
+      ></div>
+
+      <div class="z-50">
+        <h1 class="text-5xl text-white font-bold tracking-tight">
+          {{ "Our Leadership" }}
+        </h1>
+
+        <p class="mt-4 text-lg  text-gray-200 max-w-xl">
+          {{
+            "Meet the passionate team driving innovation and excellence at MUT Tech Club"
+          }}
+        </p>
+      </div>
     </section>
 
     <!-- EXECUTIVE TEAM SECTION -->
@@ -48,7 +62,9 @@
             :data-aos-delay="i * 100"
           >
             <img
-              :src="member?.user_profile?.user?.profile_picture || defaultAvatar"
+              :src="
+                member?.user_profile?.user?.profile_picture || defaultAvatar
+              "
               :alt="member?.user_profile?.full_name || '?'"
               class="w-full h-56 object-cover rounded-t-xl transition-transform duration-300 group-hover:scale-[1.03]"
             />
@@ -63,7 +79,8 @@
               </p>
 
               <p class="text-muted text-sm">
-                {{ member?.user_profile?.course || "?" }} - Year {{ member?.user_profile?.year_of_study || "?" }}
+                {{ member?.user_profile?.course || "?" }} - Year
+                {{ member?.user_profile?.year_of_study || "?" }}
               </p>
 
               <p class="text-sm text-muted mt-2 leading-relaxed">
@@ -126,7 +143,8 @@
             </p>
 
             <p class="text-muted text-sm">
-              {{ lead?.user_profile?.course || "?" }} - Year {{ lead?.user_profile?.year_of_study || "?" }}
+              {{ lead?.user_profile?.course || "?" }} - Year
+              {{ lead?.user_profile?.year_of_study || "?" }}
             </p>
           </div>
         </div>
@@ -165,7 +183,9 @@
             :data-aos-delay="i * 100"
           >
             <img
-              :src="advisor?.user_profile?.user?.profile_picture || defaultAvatar"
+              :src="
+                advisor?.user_profile?.user?.profile_picture || defaultAvatar
+              "
               :alt="advisor?.user_profile?.full_name || '?'"
               class="w-20 h-20 object-cover rounded-xl"
             />
@@ -226,12 +246,13 @@
 </template>
 
 <script setup lang="ts">
+import ctaImg from "~/assets/files/leadership.jpg";
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'executive-team', label: 'Executive Team' },
-  { id: 'department-leads', label: 'Department Leads' },
-  { id: 'faculty-advisors', label: 'Faculty Advisors' },
-  { id: 'cta', label: 'Join Leadership' }
+  { id: "hero", label: "Hero" },
+  { id: "executive-team", label: "Executive Team" },
+  { id: "department-leads", label: "Department Leads" },
+  { id: "faculty-advisors", label: "Faculty Advisors" },
+  { id: "cta", label: "Join Leadership" },
 ];
 
 const defaultAvatar =
@@ -245,8 +266,9 @@ const exec_team_hold = [
       course: "Computer Science",
       year_of_study: "4",
       user: {
-        profile_picture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces"
-      }
+        profile_picture:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
+      },
     },
     title: "Chairperson",
     bio: "4th year Computer Science student passionate about React and Node.js. Led development of 3 major campus projects.",
@@ -261,8 +283,9 @@ const departmentLeads_hold = [
       course: "Computer Science",
       year_of_study: "3",
       user: {
-        profile_picture: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=faces"
-      }
+        profile_picture:
+          "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=faces",
+      },
     },
     title: "Web development lead",
   },
@@ -274,8 +297,9 @@ const faculty_advisors_hold = [
     user_profile: {
       full_name: "Dr. John Kariuki",
       user: {
-        profile_picture: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=faces"
-      }
+        profile_picture:
+          "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=faces",
+      },
     },
     title: "Faculty Advisor",
     department_display: "School Of Computing & IT",
@@ -304,7 +328,9 @@ async function fetchTeam() {
   teamError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.team, {position_type: 'executive'});
+    const res = await get(endpoints.leadership.team, {
+      position_type: "executive",
+    });
     executiveTeam.value = res?.results?.length ? res.results : exec_team_hold;
   } catch {
     executiveTeam.value = exec_team_hold;
@@ -319,8 +345,12 @@ async function fetchLeads() {
   leadsError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.leads, {position_type: 'department_lead'});
-    departmentLeads.value = res?.results?.length ? res.results : departmentLeads_hold;
+    const res = await get(endpoints.leadership.leads, {
+      position_type: "department_lead",
+    });
+    departmentLeads.value = res?.results?.length
+      ? res.results
+      : departmentLeads_hold;
   } catch {
     departmentLeads.value = departmentLeads_hold;
     leadsError.value = true;
@@ -334,7 +364,9 @@ async function fetchFaculty() {
   facultyError.value = false;
 
   try {
-    const res = await get(endpoints.leadership.faculty, {position_type: 'faculty_advisor'});
+    const res = await get(endpoints.leadership.faculty, {
+      position_type: "faculty_advisor",
+    });
     faculty.value = res?.results?.length ? res.results : faculty_advisors_hold;
   } catch {
     faculty.value = faculty_advisors_hold;

@@ -5,7 +5,7 @@
     <!-- HERO SECTION -->
     <section
       id="hero"
-      class="h-[380px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/10 to-primary-900/10 px-6 scroll-mt-20"
+      class="h-[460px] md:h-[620px] relative flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/10 to-primary-900/10 px-6 scroll-mt-20"
     >
       <Typewriter
         :strings="['Events • Competitions • Bootcamps • Hackathons']"
@@ -13,19 +13,31 @@
         :delete-speed="50"
         :delay="100"
         :loop="true"
-        class="text-3xl md:text-5xl font-bold"
+        class="text-3xl md:text-5xl font-bold z-50 text-white"
       />
 
-      <p class="text-muted mt-4 max-w-2xl text-lg md:text-xl">
+      <p class=" text-gray-200 mt-4 max-w-2xl text-lg md:text-xl z-50">
         Join workshops, hackathons, and conferences that help you grow your tech
         skills and connect with innovators.
       </p>
+
+      <img
+        :src="eventsImg"
+        alt="Murang'a University of Technology"
+        class="absolute inset-0 w-full h-full object-cover"
+        data-aos="fade-up"
+        data-aos-duration="1200"
+      />
+
+      <div
+        class="absolute inset-0 bg-gradient-to-tr from-white/85 dark:from-black/85 via-black/30 dark:via-black/60 to-transparent"
+      ></div>
     </section>
 
     <!-- COUNTDOWN SECTION -->
     <section
       id="countdown"
-      class="py-20 flex flex-col items-center text-center px-6 scroll-mt-20"
+      class="py-20 flex flex-col items-center text-center px-6 scroll-mt-20 z-50"
     >
       <h3 class="text-2xl md:text-3xl font-bold mb-6">Next Event Starts In</h3>
       <CountdownTimer :targetDate="nextEventDate" />
@@ -48,7 +60,7 @@
             class="flex-1"
             @update:model-value="onSearch"
           />
-          
+
           <UButton
             label="Reset"
             icon="i-lucide-rotate-ccw"
@@ -74,8 +86,11 @@
       </div>
 
       <!-- Active Filters Summary -->
-      <div v-if="!isFiltersDefault" class="max-w-6xl mx-auto px-6 pb-2 text-sm text-muted">
-        Active filters: 
+      <div
+        v-if="!isFiltersDefault"
+        class="max-w-6xl mx-auto px-6 pb-2 text-sm text-muted"
+      >
+        Active filters:
         <span v-if="search" class="inline-flex items-center gap-1 mr-3">
           <UIcon name="i-lucide-search" class="w-3 h-3" />
           "{{ search }}"
@@ -95,7 +110,9 @@
     >
       <!-- Results count -->
       <div v-if="events.length > 0" class="text-sm text-muted mb-4">
-        Showing {{ events.length }} upcoming event{{ events.length !== 1 ? 's' : '' }}
+        Showing {{ events.length }} upcoming event{{
+          events.length !== 1 ? "s" : ""
+        }}
         <span v-if="!isFiltersDefault">with current filters</span>
       </div>
 
@@ -166,7 +183,7 @@
           @click="loadMore"
           :aria-label="hasMore ? 'Load more events' : 'No more events to load'"
         />
-        
+
         <!-- End of results message -->
         <p v-if="!hasMore && events.length > 0" class="text-sm text-muted mt-4">
           You've reached the end of upcoming events
@@ -188,7 +205,9 @@
 
         <!-- Results count -->
         <div v-if="pastEvents.length > 0" class="text-sm text-muted mt-4">
-          Showing {{ pastEvents.length }} past event{{ pastEvents.length !== 1 ? 's' : '' }}
+          Showing {{ pastEvents.length }} past event{{
+            pastEvents.length !== 1 ? "s" : ""
+          }}
         </div>
 
         <div class="grid gap-8 mt-14 sm:grid-cols-2 lg:grid-cols-3">
@@ -271,14 +290,14 @@
 <script setup lang="ts">
 import Typewriter from "vue-typewriter-effect";
 import type { Event } from "~/types";
-
+import eventsImg from "~/assets/files/conference-img.jpg";
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'countdown', label: 'Countdown' },
-  { id: 'filters', label: 'Filters' },
-  { id: 'upcoming-events', label: 'Upcoming Events' },
-  { id: 'past-events', label: 'Past Events' },
-  { id: 'cta', label: 'Join Us' }
+  { id: "hero", label: "Hero" },
+  { id: "countdown", label: "Countdown" },
+  { id: "filters", label: "Filters" },
+  { id: "upcoming-events", label: "Upcoming Events" },
+  { id: "past-events", label: "Past Events" },
+  { id: "cta", label: "Join Us" },
 ];
 
 const nextEventDate = ref(new Date("2026-03-15T18:00:00"));
@@ -316,20 +335,20 @@ const isFiltersDefault = computed(() => {
 });
 
 function getSortLabel(sortValue: string): string {
-  const option = sortOptions.find(opt => opt.value === sortValue);
+  const option = sortOptions.find((opt) => opt.value === sortValue);
   return option?.label || sortValue;
 }
 
 onMounted(() => {
   showAnimatedText.value = true;
-  
+
   if (route.query.search) {
     search.value = route.query.search as string;
   }
   if (route.query.sort) {
     sort.value = route.query.sort as string;
   }
-  
+
   fetchEvents(true);
   pastRefresh();
 });
@@ -338,22 +357,22 @@ watch(
   () => route.query,
   (newQuery) => {
     let shouldRefetch = false;
-    
+
     if (newQuery.search !== undefined && newQuery.search !== search.value) {
       search.value = newQuery.search as string;
       shouldRefetch = true;
     }
-    
+
     if (newQuery.sort !== undefined && newQuery.sort !== sort.value) {
       sort.value = newQuery.sort as string;
       shouldRefetch = true;
     }
-    
+
     if (shouldRefetch) {
       fetchEvents(true);
     }
   },
-  { deep: true }
+  { deep: true },
 );
 
 let updateUrlTimeout: NodeJS.Timeout;
@@ -361,14 +380,14 @@ watch([search, sort], () => {
   clearTimeout(updateUrlTimeout);
   updateUrlTimeout = setTimeout(() => {
     const query: Record<string, string> = {};
-    
+
     if (search.value) {
       query.search = search.value;
     }
     if (sort.value !== "Newest") {
       query.sort = sort.value;
     }
-    
+
     router.replace({ query });
   }, 300);
 });
@@ -379,7 +398,7 @@ async function fetchEvents(reset = false) {
     hasMore.value = true;
     events.value = [];
   }
-  
+
   loadingMore.value = true;
   loadingError.value = null;
 
@@ -388,30 +407,30 @@ async function fetchEvents(reset = false) {
       limit: limit.value,
       offset: offset.value,
     };
-    
+
     if (search.value) {
       params.search = search.value;
     }
-    
+
     if (sort.value === "-created_at" || sort.value === "created_at") {
       params.ordering = sort.value;
     } else {
       params.ordering = "-created_at";
     }
-    
+
     if (sort.value === "ongoing" || sort.value === "completed") {
       params.status = sort.value;
     } else {
       params.status = "upcoming";
     }
-    
+
     const res = await get(endpoints.events.list, params);
     const newEvents = res?.results ?? [];
-    
+
     if (newEvents.length < limit.value) {
       hasMore.value = false;
     }
-    
+
     events.value.push(...newEvents);
     offset.value += limit.value;
   } catch (err) {
@@ -427,7 +446,11 @@ const { pending, error, refresh } = await useAsyncData("events", async () => {
   return true;
 });
 
-const { pending: pastPending, error: pastError, refresh: pastRefresh } = await useAsyncData(
+const {
+  pending: pastPending,
+  error: pastError,
+  refresh: pastRefresh,
+} = await useAsyncData(
   "past-events",
   async () => {
     const res = await get(endpoints.events.past, {
@@ -439,7 +462,7 @@ const { pending: pastPending, error: pastError, refresh: pastRefresh } = await u
     pastEvents.value = res?.results ?? [];
     return true;
   },
-  { lazy: true }
+  { lazy: true },
 );
 
 function reload() {
