@@ -1,13 +1,19 @@
 <template>
   <div
     ref="container"
-    class="fixed z-200 cursor-grab touch-none"
+    class="fixed z-200"
+    :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
     :style="{ left: left + 'px', top: top + 'px' }"
-    @click.stop
+    @mousedown="startDrag"
+    @touchstart.prevent="startTouchDrag"
   >
+  <div>
+    <UIcon name="i-lucide-grip-horizontal" class="border -mb-3  ml-[90px] z-201" />
+  </div>
     <button
-      @click="toggle"
-      class="flex items-center gap-2 p-2 rounded bg-white/5 dark:bg-black/5 backdrop-blur-sm border border-white/10 dark:border-black/10 hover:bg-white/10 dark:hover:bg-black/10 shadow-lg"
+      @click.stop="toggle"
+      class="flex items-center gap-2 p-2 rounded bg-white/5 dark:bg-black/5 backdrop-blur-sm border border-white/10 dark:border-black/10 hover:bg-white/10 dark:hover:bg-black/10 shadow-lg pointer-events-auto"
+      :class="{ 'opacity-50': isDragging }"
     >
       <div class="relative">
         <div class="w-1 h-8 bg-primary/40 rounded-full overflow-hidden">
@@ -24,7 +30,8 @@
     <transition name="fade">
       <div
         v-if="isExpanded"
-        class="mt-2 bg-white/5 dark:bg-black/5 backdrop-blur-sm border border-white/10 dark:border-black/10 rounded p-2 text-[10px] font-mono w-fit min-w-[110px] shadow-xl"
+        class="mt-2 bg-white/5 dark:bg-black/5 backdrop-blur-sm border border-white/10 dark:border-black/10 rounded p-2 text-[10px] font-mono w-fit min-w-[110px] shadow-xl pointer-events-auto"
+        @click.stop
       >
         <div class="flex justify-between items-center mb-1 px-2 py-0.5 text-[8px] uppercase tracking-widest border-b border-white/10 dark:border-black/10">
           <span class="text-primary/70">// {{ title }}</span>
@@ -55,7 +62,7 @@
         </template>
 
         <div class="mt-1 pt-1 border-t border-white/10 dark:border-black/10 flex justify-between items-center">
-          <button @click="scrollTop" class="text-[8px] text-gray-500 hover:text-primary inline-flex items-center gap-1 px-2 py-1 rounded hover:bg-white/5 dark:hover:bg-black/5">
+          <button @click.stop="scrollTop" class="text-[8px] text-gray-500 hover:text-primary inline-flex items-center gap-1 px-2 py-1 rounded hover:bg-white/5 dark:hover:bg-black/5">
             <UIcon name="i-lucide-arrow-up" class="w-3 h-3" /> TOP
           </button>
           <span class="text-[8px] text-gray-500">{{ displayIndex }}/{{ sections.length }}</span>
@@ -83,22 +90,23 @@ const stateStore = useStateStore();
 const container = ref<HTMLElement | null>(null);
 const isExpanded = ref(false);
 const activeSection = ref("");
+const isDragging = ref(false);
 
 const left = ref(0);
 const top = ref(0);
 
-let dragging = false;
 let startX = 0;
 let startY = 0;
 let initialLeft = 0;
 let initialTop = 0;
 
-let touchDragging = false;
-let touchTimer: number | null = null;
-let touchStartX = 0;
-let touchStartY = 0;
+let longPressTimer: number | null = null;
 
-const toggle = () => (isExpanded.value = !isExpanded.value);
+const toggle = () => {
+  if (!isDragging.value) {
+    isExpanded.value = !isExpanded.value;
+  }
+};
 
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
@@ -108,6 +116,7 @@ const scrollTo = (id: string) => {
   isExpanded.value = false;
   emit("update:active", id);
 };
+
 const scrollTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
   activeSection.value = "";
@@ -115,92 +124,184 @@ const scrollTop = () => {
   emit("update:active", "");
 };
 
-const handleScroll = () => {
-  const scrollPos = window.scrollY + props.offset;
-  let current = "";
-  for (let i = props.sections.length - 1; i >= 0; i--) {
-    const el = document.getElementById(props.sections[i].id);
-    if (el && scrollPos >= el.offsetTop) { current = props.sections[i].id; break; }
-  }
-  if (!current && window.scrollY < 100) current = "";
-  if (current !== activeSection.value) { activeSection.value = current; emit("update:active", current); }
-};
-
-let ticking = false;
-const onScroll = () => { if (!ticking) { window.requestAnimationFrame(() => { handleScroll(); ticking = false; }); ticking = true; } };
-
 // Desktop drag
-const onMouseDown = (e: MouseEvent) => {
-  dragging = true; startX = e.clientX; startY = e.clientY; initialLeft = left.value; initialTop = top.value; e.preventDefault();
+const startDrag = (e: MouseEvent) => {
+  // Only start drag if clicking on the container (not on interactive elements)
+  const target = e.target as HTMLElement;
+  if (target.closest('button, a')) return;
+  
+  e.preventDefault();
+  isDragging.value = true;
+  startX = e.clientX;
+  startY = e.clientY;
+  initialLeft = left.value;
+  initialTop = top.value;
+  
+  window.addEventListener('mousemove', onDrag);
+  window.addEventListener('mouseup', stopDrag);
 };
-const onMouseMove = (e: MouseEvent) => {
-  if (!dragging) return;
-  const dx = e.clientX - startX, dy = e.clientY - startY;
-  const cw = container.value?.offsetWidth || 0, ch = container.value?.offsetHeight || 0;
+
+const onDrag = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  e.preventDefault();
+  
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  const cw = container.value?.offsetWidth || 0;
+  const ch = container.value?.offsetHeight || 0;
+  
   left.value = Math.min(Math.max(0, initialLeft + dx), window.innerWidth - cw);
   top.value = Math.min(Math.max(0, initialTop + dy), window.innerHeight - ch);
   stateStore.onthispage.left = left.value;
   stateStore.onthispage.top = top.value;
 };
-const onMouseUp = () => (dragging = false);
 
-// Mobile drag
-const onTouchStart = (e: TouchEvent) => { const t = e.touches[0]; touchStartX = t.clientX; touchStartY = t.clientY; touchTimer = window.setTimeout(() => touchDragging = true, 250); };
-const onTouchMove = (e: TouchEvent) => {
-  if (!touchDragging) return;
-  const t = e.touches[0];
-  const cw = container.value?.offsetWidth || 0, ch = container.value?.offsetHeight || 0;
-  const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
-  left.value = Math.min(Math.max(0, left.value + dx), window.innerWidth - cw);
-  top.value = Math.min(Math.max(0, top.value + dy), window.innerHeight - ch);
-  touchStartX = t.clientX; touchStartY = t.clientY;
+const stopDrag = () => {
+  isDragging.value = false;
+  window.removeEventListener('mousemove', onDrag);
+  window.removeEventListener('mouseup', stopDrag);
+};
+
+// Mobile drag (long press to activate)
+const startTouchDrag = (e: TouchEvent) => {
+  const target = e.target as HTMLElement;
+  if (target.closest('button, a')) return;
+  
+  e.preventDefault();
+  const touch = e.touches[0];
+  startX = touch.clientX;
+  startY = touch.clientY;
+  initialLeft = left.value;
+  initialTop = top.value;
+  
+  // Long press to activate drag mode
+  longPressTimer = window.setTimeout(() => {
+    isDragging.value = true;
+    window.addEventListener('touchmove', onTouchDrag, { passive: false });
+    window.addEventListener('touchend', stopTouchDrag);
+    window.addEventListener('touchcancel', stopTouchDrag);
+  }, 300);
+};
+
+const onTouchDrag = (e: TouchEvent) => {
+  if (!isDragging.value) return;
+  e.preventDefault();
+  
+  const touch = e.touches[0];
+  const dx = touch.clientX - startX;
+  const dy = touch.clientY - startY;
+  const cw = container.value?.offsetWidth || 0;
+  const ch = container.value?.offsetHeight || 0;
+  
+  left.value = Math.min(Math.max(0, initialLeft + dx), window.innerWidth - cw);
+  top.value = Math.min(Math.max(0, initialTop + dy), window.innerHeight - ch);
+  
+  startX = touch.clientX;
+  startY = touch.clientY;
+  initialLeft = left.value;
+  initialTop = top.value;
+  
   stateStore.onthispage.left = left.value;
   stateStore.onthispage.top = top.value;
 };
-const onTouchEnd = () => { touchDragging = false; if (touchTimer) clearTimeout(touchTimer); touchTimer = null; };
 
-const handleClickOutside = (e: MouseEvent) => { if (!container.value) return; if (!container.value.contains(e.target as Node)) isExpanded.value = false; };
+const stopTouchDrag = () => {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+  }
+  isDragging.value = false;
+  window.removeEventListener('touchmove', onTouchDrag);
+  window.removeEventListener('touchend', stopTouchDrag);
+  window.removeEventListener('touchcancel', stopTouchDrag);
+};
 
+const handleClickOutside = (e: MouseEvent) => {
+  if (!container.value) return;
+  if (!container.value.contains(e.target as Node) && !isDragging.value) {
+    isExpanded.value = false;
+  }
+};
+
+// Scroll detection
+const handleScroll = () => {
+  const scrollPos = window.scrollY + props.offset;
+  let current = "";
+  for (let i = props.sections.length - 1; i >= 0; i--) {
+    const el = document.getElementById(props.sections[i].id);
+    if (el && scrollPos >= el.offsetTop) { 
+      current = props.sections[i].id; 
+      break; 
+    }
+  }
+  if (!current && window.scrollY < 100) current = "";
+  if (current !== activeSection.value) { 
+    activeSection.value = current; 
+    emit("update:active", current); 
+  }
+};
+
+let ticking = false;
+const onScroll = () => { 
+  if (!ticking) { 
+    window.requestAnimationFrame(() => { 
+      handleScroll(); 
+      ticking = false; 
+    }); 
+    ticking = true; 
+  } 
+};
+
+// Computed
 const activeLabel = computed(() => props.sections.find(s => s.id === activeSection.value)?.label || "");
 const activeIndex = computed(() => props.sections.findIndex(s => s.id === activeSection.value));
 const displayIndex = computed(() => activeIndex.value === -1 ? 0 : activeIndex.value + 1);
 const progress = computed(() => activeIndex.value === -1 ? 0 : ((activeIndex.value + 1) / props.sections.length) * 100);
 
+// Lifecycle
 onMounted(() => {
-  left.value = stateStore.onthispage.left ?? (window.innerWidth - 100);
+  left.value = stateStore.onthispage.left ?? (window.innerWidth - 150);
   top.value = stateStore.onthispage.top ?? 100;
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("mousedown", onMouseDown);
-  window.addEventListener("mousemove", onMouseMove);
-  window.addEventListener("mouseup", onMouseUp);
-  window.addEventListener("touchstart", onTouchStart);
-  window.addEventListener("touchmove", onTouchMove);
-  window.addEventListener("touchend", onTouchEnd);
-  window.addEventListener("touchcancel", onTouchEnd);
   window.addEventListener("mousedown", handleClickOutside);
   nextTick(() => handleScroll());
 });
 
 onUnmounted(() => {
   window.removeEventListener("scroll", onScroll);
-  window.removeEventListener("mousedown", onMouseDown);
-  window.removeEventListener("mousemove", onMouseMove);
-  window.removeEventListener("mouseup", onMouseUp);
-  window.removeEventListener("touchstart", onTouchStart);
-  window.removeEventListener("touchmove", onTouchMove);
-  window.removeEventListener("touchend", onTouchEnd);
-  window.removeEventListener("touchcancel", onTouchEnd);
   window.removeEventListener("mousedown", handleClickOutside);
+  window.removeEventListener('mousemove', onDrag);
+  window.removeEventListener('mouseup', stopDrag);
+  window.removeEventListener('touchmove', onTouchDrag);
+  window.removeEventListener('touchend', stopTouchDrag);
+  window.removeEventListener('touchcancel', stopTouchDrag);
+  if (longPressTimer) clearTimeout(longPressTimer);
 });
 
 const route = useRoute();
-watch(() => route.path, () => { activeSection.value = ""; isExpanded.value = false; nextTick(() => handleScroll()); });
+watch(() => route.path, () => { 
+  activeSection.value = ""; 
+  isExpanded.value = false; 
+  nextTick(() => handleScroll()); 
+});
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(5px); }
-.cursor-grab { cursor: grab; }
-.cursor-grabbing { cursor: grabbing; }
+.fade-enter-active, .fade-leave-active { 
+  transition: opacity 0.2s ease, transform 0.2s ease; 
+}
+.fade-enter-from, .fade-leave-to { 
+  opacity: 0; 
+  transform: translateY(5px); 
+}
+.cursor-grab { 
+  cursor: grab; 
+}
+.cursor-grabbing { 
+  cursor: grabbing; 
+}
+.pointer-events-auto {
+  pointer-events: auto;
+}
 </style>
