@@ -9,7 +9,7 @@
       data-aos="fade-down"
       aria-label="Contact hero section"
     >
-      <div class="z-100">
+      <div class="z-100 px-6">
         <h1 class="text-5xl text-white font-bold tracking-tight">Get in Touch</h1>
         <p class="mt-4 text-lg text-gray-200 max-w-xl">
           Have questions? Want to collaborate? We'd love to hear from you.

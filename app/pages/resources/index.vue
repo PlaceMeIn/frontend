@@ -20,7 +20,7 @@
       <div
         class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/60"
       ></div>
-      <div class="z-50">
+      <div class="z-50 px-6">
         <h1 class="text-5xl font-bold tracking-tight text-white">Learning Resources</h1>
         <p class="mt-4 text-lg t text-gray-200 max-w-xl">
           Everything you need to level up your tech skills—learning paths,

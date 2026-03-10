@@ -7,19 +7,20 @@
       id="hero"
       class="h-[460px] md:h-[620px] relative flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/10 to-primary-900/10 px-6 scroll-mt-20"
     >
-      <Typewriter
-        :strings="['Events • Competitions • Bootcamps • Hackathons']"
-        :type-speed="100"
-        :delete-speed="50"
-        :delay="100"
-        :loop="true"
-        class="text-3xl md:text-5xl font-bold z-50 text-white"
-      />
-
-      <p class=" text-gray-200 mt-4 max-w-2xl text-lg md:text-xl z-50">
-        Join workshops, hackathons, and conferences that help you grow your tech
-        skills and connect with innovators.
-      </p>
+      <div class="z-50 px-6">
+        <Typewriter
+          :strings="['Events • Competitions • Bootcamps • Hackathons']"
+          :type-speed="100"
+          :delete-speed="50"
+          :delay="100"
+          :loop="true"
+          class="text-3xl md:text-5xl font-bold z-50 text-white"
+        />
+        <p class="text-gray-200 mt-4 max-w-2xl text-lg md:text-xl z-50">
+          Join workshops, hackathons, and conferences that help you grow your
+          tech skills and connect with innovators.
+        </p>
+      </div>
 
       <img
         :src="eventsImg"

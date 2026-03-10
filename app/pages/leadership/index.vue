@@ -21,7 +21,7 @@
         class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent dark:from-black/80 dark:via-black/60"
       ></div>
 
-      <div class="z-50">
+      <div class="z-50 px-6">
         <h1 class="text-5xl text-white font-bold tracking-tight">
           {{ "Our Leadership" }}
         </h1>
