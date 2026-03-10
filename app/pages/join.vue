@@ -1,8 +1,12 @@
 <template>
   <section class="relative">
+    <OnThisPage :sections="sections" />
+
     <!-- HERO SECTION -->
-    <div
-      class="relative w-full h-[460px] md:h-[620px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20 overflow-hidden"
+    <section
+      id="hero"
+      class="relative w-full h-[460px] md:h-[620px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20 overflow-hidden scroll-mt-20"
+      aria-label="Join hero section"
     >
       <!-- Animated background elements -->
       <div class="absolute inset-0 overflow-hidden">
@@ -45,11 +49,16 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- MEMBERSHIP BENEFITS & APPLICATION FORM -->
-    <div class="max-w-7xl mx-auto px-6 py-16 lg:flex lg:gap-12 relative">
-      <section class="lg:w-1/3 lg:sticky lg:top-20 self-start">
+    <section
+      id="application"
+      class="max-w-7xl mx-auto px-6 py-16 lg:flex lg:gap-12 relative scroll-mt-20"
+      aria-label="Membership benefits and application form"
+    >
+      <!-- Benefits Section (Sticky) -->
+      <div class="lg:w-1/3 lg:sticky lg:top-20 self-start">
         <div class="mb-8" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
             Membership Benefits
@@ -98,10 +107,10 @@
             </div>
           </UCard>
         </div>
-      </section>
+      </div>
 
       <!-- Application Form -->
-      <section class="lg:w-2/3 mt-12 lg:mt-0">
+      <div class="lg:w-2/3 mt-12 lg:mt-0">
         <div class="mb-8" data-aos="fade-up">
           <h2 class="text-3xl font-bold mb-2">Application Form</h2>
           <p class="text-muted">
@@ -420,11 +429,15 @@
             </Transition>
           </form>
         </UCard>
-      </section>
-    </div>
+      </div>
+    </section>
 
-    <!-- WHAT HAPPENS NEXT -->
-    <section class="bg-muted/20 py-20">
+    <!-- WHAT HAPPENS NEXT SECTION -->
+    <section
+      id="next-steps"
+      class="bg-muted/20 py-20 scroll-mt-20"
+      aria-label="Application next steps"
+    >
       <div class="max-w-6xl mx-auto px-6">
         <div class="text-center mb-12" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
@@ -457,88 +470,94 @@
         </div>
       </div>
     </section>
-  </section>
 
-  <!-- Error Modal -->
-  <UModal v-model:open="showModal" title="Application Error">
-    <template #body>
-      <div class="flex flex-col items-center gap-4 py-4">
-        <UIcon name="i-lucide-alert-circle" class="text-6xl text-danger" />
-        <p class="text-center text-muted">
-          {{
-            errorMessage ||
-            "An unexpected error occurred while submitting your application."
-          }}
-        </p>
-      </div>
-    </template>
-
-    <template #footer="{ close }">
-      <div class="flex justify-end gap-3">
-        <UButton
-          label="Reset Form"
-          color="neutral"
-          variant="outline"
-          @click="
-            resetForm();
-            close();
-          "
-        />
-        <UButton label="Try Again" color="primary" @click="close()" />
-      </div>
-    </template>
-  </UModal>
-
-  <!-- Success Modal -->
-  <UModal v-model:open="showSuccessModal" title="Application Submitted!">
-    <template #body>
-      <div class="flex flex-col items-center gap-4 py-4">
-        <UIcon name="i-lucide-check-circle" class="text-6xl text-success" />
-        <h3 class="text-xl font-semibold">Thank You for Applying!</h3>
-        <p class="text-center text-muted">
-          Your application has been received. Our team will review it and
-          contact you within 3-5 business days.
-        </p>
-        <div class="bg-primary/10 p-4 rounded-lg w-full mt-2">
-          <p class="text-sm text-center">
-            <span class="font-semibold">Next steps:</span> Check your email for
-            confirmation and updates.
+    <!-- Error Modal -->
+    <UModal v-model:open="showModal" title="Application Error">
+      <template #body>
+        <div class="flex flex-col items-center gap-4 py-4">
+          <UIcon name="i-lucide-alert-circle" class="text-6xl text-danger" />
+          <p class="text-center text-muted">
+            {{
+              errorMessage ||
+              "An unexpected error occurred while submitting your application."
+            }}
           </p>
         </div>
-      </div>
-    </template>
+      </template>
 
-    <template #footer="{ close }">
-      <div class="flex justify-end">
-        <UButton
-          label="Close"
-          color="success"
-          variant="subtle"
-          @click="
-            close();
-            resetForm();
-          "
-        />
-      </div>
-    </template>
-  </UModal>
-  <UModal v-model:open="submitting" dismissible="false">
-    <template #content>
-      <div class=" ">
-        <TechLoader />
-      </div>
-    </template>
-  </UModal>
+      <template #footer="{ close }">
+        <div class="flex justify-end gap-3">
+          <UButton
+            label="Reset Form"
+            color="neutral"
+            variant="outline"
+            @click="
+              resetForm();
+              close();
+            "
+          />
+          <UButton label="Try Again" color="primary" @click="close()" />
+        </div>
+      </template>
+    </UModal>
+
+    <!-- Success Modal -->
+    <UModal v-model:open="showSuccessModal" title="Application Submitted!">
+      <template #body>
+        <div class="flex flex-col items-center gap-4 py-4">
+          <UIcon name="i-lucide-check-circle" class="text-6xl text-success" />
+          <h3 class="text-xl font-semibold">Thank You for Applying!</h3>
+          <p class="text-center text-muted">
+            Your application has been received. Our team will review it and
+            contact you within 3-5 business days.
+          </p>
+          <div class="bg-primary/10 p-4 rounded-lg w-full mt-2">
+            <p class="text-sm text-center">
+              <span class="font-semibold">Next steps:</span> Check your email for
+              confirmation and updates.
+            </p>
+          </div>
+        </div>
+      </template>
+
+      <template #footer="{ close }">
+        <div class="flex justify-end">
+          <UButton
+            label="Close"
+            color="success"
+            variant="subtle"
+            @click="
+              close();
+              resetForm();
+            "
+          />
+        </div>
+      </template>
+    </UModal>
+
+    <UModal v-model:open="submitting" dismissible="false">
+      <template #content>
+        <div class=" ">
+          <TechLoader />
+        </div>
+      </template>
+    </UModal>
+  </section>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
 
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'application', label: 'Application' },
+  { id: 'next-steps', label: 'Next Steps' }
+];
+
 const stateStore = useStateStore();
 const toast = useToast();
 
-// Validation schema
 const schema = v.object({
   fullName: v.pipe(
     v.string(),
@@ -584,16 +603,13 @@ const schema = v.object({
 
 type Schema = v.InferOutput<typeof schema>;
 
-/* FORM STATE */
 const form = computed({
   get: () => stateStore.join,
   set: (val) => (stateStore.join = val),
 });
 
-/* ERROR STATE */
 const errors = reactive<Partial<Record<keyof Schema, string>>>({});
 
-/* VALIDATION FUNCTIONS */
 function validateField(field: keyof Schema) {
   const value = form.value[field];
   try {
@@ -627,11 +643,10 @@ function clearFieldError(field: keyof Schema) {
 }
 
 function resetForm() {
-  stateStore.resetJoinForm(); // Make sure this method exists in your store
+  stateStore.resetJoinForm();
   Object.keys(errors).forEach((key) => delete errors[key as keyof Schema]);
 }
 
-/* STATS */
 const stats = [
   {
     icon: "i-lucide-group",
@@ -720,6 +735,7 @@ const allInterests = [
 const showModal = ref(false);
 const errorMessage = ref<string | null>(null);
 const showSuccessModal = ref(false);
+const submitting = ref(false);
 
 function toggleSkill(skill: string) {
   form.value.techSkills = form.value.techSkills || [];
@@ -727,7 +743,6 @@ function toggleSkill(skill: string) {
     ? form.value.techSkills.filter((s) => s !== skill)
     : [...form.value.techSkills, skill];
 
-  // Clear error for techSkills if at least one is selected
   if (form.value.techSkills.length > 0) {
     delete errors.techSkills;
   }
@@ -739,13 +754,10 @@ function toggleInterest(interest: string) {
     ? form.value.interests.filter((i) => i !== interest)
     : [...form.value.interests, interest];
 
-  // Clear error for interests if at least one is selected
   if (form.value.interests.length > 0) {
     delete errors.interests;
   }
 }
-
-const submitting = ref(false);
 
 async function validateAndSubmit() {
   submitting.value = true;
@@ -757,20 +769,17 @@ async function validateAndSubmit() {
       icon: "i-lucide-alert-circle",
     });
 
-    // Scroll to first error
     const firstError = Object.keys(errors)[0];
     if (firstError) {
       const element = document.querySelector(`[name="${firstError}"]`);
       element?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-        submitting.value = false;
-
+    submitting.value = false;
     return;
   }
 
   try {
     const response = await stateStore.submitJoinForm();
-
     showSuccessModal.value = true;
     toast.add({
       title: "Application Submitted!",
@@ -779,9 +788,7 @@ async function validateAndSubmit() {
       icon: "i-lucide-check-circle",
     });
   } catch (error: any) {
-    // Check if it's a validation error
     if (error.validationErrors) {
-      // Display validation errors
       toast.add({
         title: "Validation Error",
         description: error.message || "Please check your form inputs",
@@ -789,12 +796,10 @@ async function validateAndSubmit() {
         icon: "i-lucide-alert-circle",
       });
 
-      // You can also set the errors in your component's error state
       if (error.validationErrors) {
         Object.assign(errors, error.validationErrors);
       }
     } else {
-      // Handle API/server errors
       errorMessage.value =
         error?.message ||
         "An error occurred while submitting your application.";

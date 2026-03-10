@@ -3,6 +3,19 @@ import type { PageFeatureProps } from "@nuxt/ui";
 import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
 
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'about', label: 'About' },
+  { id: 'focus-areas', label: 'Focus Areas' },
+  { id: 'highlights', label: 'Highlights' },
+  { id: 'featured-project', label: 'Featured Project' },
+  { id: 'upcoming-event', label: 'Upcoming Event' },
+  { id: 'community', label: 'Community' },
+  { id: 'reviews', label: 'Reviews' },
+  { id: 'partners', label: 'Partners' },
+  { id: 'cta', label: 'Join Us' }
+];
+
 const features = ref<PageFeatureProps[]>([
   {
     title: "Community Driven",
@@ -121,12 +134,9 @@ const groupImages = ref([
   "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=640&h=640&fit=crop",
   "https://images.unsplash.com/photo-1543269664-7eef42226a21?w=640&h=640&fit=crop",
   "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=640&h=640&fit=crop",
-  // "https://images.unsplash.com/photo-1558403710-8c56b4f5c2f1?w=640&h=640&fit=crop",
   "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=640&h=640&fit=crop",
   "https://images.unsplash.com/photo-1520881363902-a0ff4e722963?w=640&h=640&fit=crop",
   "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=640&h=640&fit=crop",
-  // "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=640&h=640&fit=crop",
-  // "https://images.unsplash.com/photo-1573164574001-518958d9baa2?w=640&h=640&fit=crop"
 ]);
 
 useSeoMeta({
@@ -139,13 +149,16 @@ useSeoMeta({
 
 <template>
   <div class="w-full overflow-hidden">
+    <OnThisPage :sections="sections" />
 
-    <!-- HERO -->
+    <!-- HERO SECTION -->
     <section
-      class="relative w-full bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:to-transparent"
+      id="hero"
+      class="relative w-full bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:to-transparent scroll-mt-20"
+      aria-label="Hero section"
     >
       <!-- Background -->
-      <div class="absolute inset-0 overflow-hidden opacity-40 pointer-events-none">
+      <div class="absolute inset-0 overflow-hidden opacity-100 pointer-events-none">
         <BackGround class="absolute w-[80%] -left-10 top-0" />
 
         <img
@@ -157,16 +170,15 @@ useSeoMeta({
         />
       </div>
 
+      <div class="absolute z-1 w-full h-full bg-linear-to-tr from-white/30 dark:from-black/80 via-black/50 to-black/20"></div>
+
       <UPageSection class="relative z-10">
-
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-          <!-- LEFT -->
+          <!-- LEFT CONTENT -->
           <div class="max-w-xl">
-
             <UBadge
               color="success"
-              variant="outline"
+              variant="soft"
               icon="i-lucide-graduation-cap"
               size="lg"
               data-aos="fade-down"
@@ -175,7 +187,6 @@ useSeoMeta({
             </UBadge>
 
             <div class="mt-5 space-y-3">
-
               <h1
                 class="font-bold text-4xl md:text-5xl lg:text-6xl leading-tight"
                 data-aos="fade-up"
@@ -198,16 +209,14 @@ useSeoMeta({
               >
                 {{ ctaInfo?.description || "Empowering students with real-world technical skills, innovation, and collaboration." }}
               </p>
-
             </div>
 
-            <!-- BUTTONS -->
+            <!-- CTA BUTTONS -->
             <div
               class="flex flex-wrap items-center gap-4 mt-8"
               data-aos="fade-up"
               data-aos-delay="300"
             >
-
               <UButton
                 to="/join"
                 size="lg"
@@ -225,7 +234,6 @@ useSeoMeta({
               >
                 Explore Projects
               </UButton>
-
             </div>
 
             <!-- STATS -->
@@ -234,12 +242,10 @@ useSeoMeta({
               data-aos="fade-up"
               data-aos-delay="400"
             >
-
               <div class="text-center" data-aos="zoom-in">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                    <ClientOnly>
-
-                  <CountUp :endVal="counts?.activeMembers || 0" />
+                  <ClientOnly>
+                    <CountUp :endVal="counts?.activeMembers || 0" />
                   </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
@@ -248,9 +254,8 @@ useSeoMeta({
 
               <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                    <ClientOnly>
-
-                  <CountUp :endVal="counts?.projects || 0" />
+                  <ClientOnly>
+                    <CountUp :endVal="counts?.projects || 0" />
                   </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
@@ -259,17 +264,14 @@ useSeoMeta({
 
               <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
                 <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                    <ClientOnly>
-
-                  <CountUp :endVal="counts?.eventsYear || 0" />
+                  <ClientOnly>
+                    <CountUp :endVal="counts?.eventsYear || 0" />
                   </ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
                 <p class="text-sm text-muted">Events / Year</p>
               </div>
-
             </div>
-
           </div>
 
           <!-- RIGHT CAROUSEL -->
@@ -278,7 +280,6 @@ useSeoMeta({
             data-aos="zoom-in-left"
             data-aos-delay="200"
           >
-
             <UCarousel
               v-slot="{ item }"
               dots
@@ -288,27 +289,24 @@ useSeoMeta({
               wheel-gestures
               class="w-full max-w-xs sm:max-w-sm md:max-w-md"
             >
-
               <img
                 :src="item"
                 alt="Students collaborating"
                 class="w-full h-[260px] md:h-[320px] rounded-xl shadow-xl object-cover"
               />
-
             </UCarousel>
-
           </div>
-
         </div>
-
       </UPageSection>
     </section>
 
-
-    <!-- ABOUT -->
-    <section class="py-20">
+    <!-- ABOUT SECTION -->
+    <section
+      id="about"
+      class="py-20 scroll-mt-20"
+      aria-label="About MUT Tech Club"
+    >
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
-
         <div class="max-w-2xl text-center" data-aos="fade-up">
           <h2 class="text-3xl font-bold tracking-tight">
             What is MUT Tech Club?
@@ -322,7 +320,6 @@ useSeoMeta({
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
-
           <NuxtLink
             v-for="(feature, i) in features || []"
             :key="feature?.title || i"
@@ -331,7 +328,6 @@ useSeoMeta({
             data-aos="fade-up"
             :data-aos-delay="i * 100"
           >
-
             <div
               class="flex items-center justify-center w-12 h-12 rounded-lg mb-4 bg-primary/10"
             >
@@ -348,20 +344,18 @@ useSeoMeta({
             <p class="mt-2 text-sm text-muted">
               {{ feature?.description || "Feature description." }}
             </p>
-
           </NuxtLink>
-
         </div>
-
       </div>
     </section>
 
-
-    <!-- FOCUS AREAS -->
-    <section class="py-20 bg-muted/30">
-
+    <!-- FOCUS AREAS SECTION -->
+    <section
+      id="focus-areas"
+      class="py-20 bg-muted/30 scroll-mt-20"
+      aria-label="Our focus areas"
+    >
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
-
         <div class="max-w-2xl text-center" data-aos="fade-up">
           <h2 class="text-3xl font-bold tracking-tight">
             Our Focus Areas
@@ -373,7 +367,6 @@ useSeoMeta({
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
-
           <NuxtLink
             v-for="(area, i) in focusAreas || []"
             :key="area?.title || i"
@@ -382,7 +375,6 @@ useSeoMeta({
             data-aos="fade-up"
             :data-aos-delay="i * 100"
           >
-
             <div
               class="flex items-center justify-center w-12 h-12 rounded-lg mb-4 bg-primary/10"
             >
@@ -399,36 +391,40 @@ useSeoMeta({
             <p class="mt-2 text-sm text-muted">
               {{ area?.description || "Area description." }}
             </p>
-
           </NuxtLink>
-
         </div>
-
       </div>
     </section>
 
+    <!-- HIGHLIGHTS SECTION -->
+    <section
+      id="highlights"
+      class="scroll-mt-20"
+      aria-label="Featured content"
+    >
+      <div data-aos="fade-up">
+        <HightlightFeaturedProject />
+      </div>
 
-    <!-- HIGHLIGHTS -->
-    <section data-aos="fade-up">
-      <HightlightFeaturedProject />
+      <div data-aos="fade-up" data-aos-delay="100">
+        <HighlightUpcomingEvent />
+      </div>
+
+      <div class="m-auto text-center">
+        <HighlightCommunityGallery />
+      </div>
+
+      <div data-aos="fade-up" data-aos-delay="200">
+        <HighlightReviews />
+      </div>
     </section>
 
-    <section data-aos="fade-up" data-aos-delay="100">
-      <HighlightUpcomingEvent />
-    </section>
-
-    <section class="m-auto text-center ">
-      <HighlightCommunityGallery />
-    </section>
-
-    <section data-aos="fade-up" data-aos-delay="200">
-      <HighlightReviews />
-    </section>
-
-
-    <!-- PARTNERS -->
-    <section class="my-20 w-full">
-
+    <!-- PARTNERS SECTION -->
+    <section
+      id="partners"
+      class="my-20 w-full scroll-mt-20"
+      aria-label="Our partners"
+    >
       <div class="max-w-2xl text-center m-auto mb-10" data-aos="fade-up">
         <h2 class="text-3xl font-bold tracking-tight">
           Our Partners
@@ -445,16 +441,13 @@ useSeoMeta({
         :overlay="false"
         :ui="{ root: '[--gap:--spacing(4)]', content: 'w-auto py-1' }"
       >
-
         <UPageCard
           v-for="(partner, index) in collaborationPatners || []"
           :key="index"
           variant="subtle"
           class="w-64"
         >
-
           <div class="flex items-center gap-3">
-
             <img
               v-if="partner?.image"
               :src="partner?.image"
@@ -465,21 +458,17 @@ useSeoMeta({
             <p class="text-lg font-semibold">
               {{ partner?.label || "Partner" }}
             </p>
-
           </div>
-
         </UPageCard>
-
       </UMarquee>
-
     </section>
 
-
-    <!-- CTA -->
+    <!-- CALL TO ACTION SECTION -->
     <section
-      class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-200/40 dark:via-transparent to-transparent"
+      id="cta"
+      class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-200/40 dark:via-transparent to-transparent scroll-mt-20"
+      aria-label="Join us call to action"
     >
-
       <CodeCards
         data-aos="flip-left"
         data-aos-duration="1500"
@@ -490,9 +479,7 @@ useSeoMeta({
         spotlight-color="primary"
         class="py-12 flex flex-col items-center text-center gap-6 max-w-xl"
       >
-
         <div data-aos="zoom-in-up">
-
           <h2 class="text-3xl font-bold tracking-tight">
             Ready to Join the Club?
           </h2>
@@ -500,7 +487,6 @@ useSeoMeta({
           <p class="mt-3 text-lg text-muted">
             Become part of Kenya's most innovative university tech community.
           </p>
-
         </div>
 
         <UButton
@@ -511,10 +497,7 @@ useSeoMeta({
           to="/join"
           class="w-fit m-auto"
         />
-
       </UPageCard>
-
     </section>
-
   </div>
 </template>

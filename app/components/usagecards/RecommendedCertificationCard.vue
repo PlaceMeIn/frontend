@@ -47,6 +47,8 @@
           size="sm"
           variant="soft"
           :to="certification?.link"
+            target="_blank"
+
         />
 
       </div>

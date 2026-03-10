@@ -1,7 +1,11 @@
 <template>
   <section class="w-full flex flex-col items-center overflow-hidden">
+    <OnThisPage :sections="sections" />
+
+    <!-- HERO SECTION -->
     <div
-      class="relative w-full h-[340px] md:h-[520px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20"
+      id="hero"
+      class="relative w-full h-[340px] md:h-[520px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20 scroll-mt-20"
     >
       <div data-aos="zoom-out" data-aos-duration="900">
         <UPageCard
@@ -11,15 +15,18 @@
             About MUT Tech Club
           </h1>
           <p class="mt-4 text-base md:text-lg text-muted max-w-xl">
-            Building Kenya’s premier university tech community by empowering
+            Building Kenya's premier university tech community by empowering
             innovators, developers, and future tech leaders.
           </p>
         </UPageCard>
       </div>
     </div>
 
+    <!-- MISSION SECTION -->
     <section
-      class="max-w-7xl w-full px-6 py-24 grid md:grid-cols-2 gap-16 items-center"
+      id="mission"
+      class="max-w-7xl w-full px-6 py-24 grid md:grid-cols-2 gap-16 items-center scroll-mt-20"
+      aria-label="Our mission"
     >
       <div data-aos="fade-right">
         <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
@@ -58,27 +65,30 @@
       </div>
     </section>
 
+    <!-- STATS SECTION -->
     <section
-      class="w-full py-20 bg-gradient-to-b from-transparent to-primary-500/5"
+      id="stats"
+      class="w-full py-20 bg-gradient-to-b from-transparent to-primary-500/5 scroll-mt-20"
+      aria-label="Community statistics"
     >
       <div
         class="max-w-6xl mx-auto px-6 grid sm:grid-cols-3 gap-10 text-center"
       >
         <div data-aos="fade-up">
           <div class="text-4xl font-bold text-primary flex justify-center">
-            <CountUp :end="2030" :endVal="2030" :duration="2"/>
+            <CountUp :end="2030" :endVal="2030" :duration="2" />
           </div>
 
           <h3 class="mt-3 font-semibold">Leading Tech Hub</h3>
 
           <p class="text-sm text-muted">
-            One of East Africa’s fastest-growing student tech communities
+            One of East Africa's fastest-growing student tech communities
           </p>
         </div>
 
         <div data-aos="fade-up" data-aos-delay="150">
           <div class="text-4xl font-bold text-primary flex justify-center">
-            <CountUp :endVal="1000" :duration="2"  />
+            <CountUp :endVal="1000" :duration="2" />
             <span>+</span>
           </div>
 
@@ -103,7 +113,12 @@
       </div>
     </section>
 
-    <section class="max-w-6xl w-full px-6 py-24">
+    <!-- VALUES SECTION -->
+    <section
+      id="values"
+      class="max-w-6xl w-full px-6 py-24 scroll-mt-20"
+      aria-label="Our core values"
+    >
       <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
         <h2 class="text-3xl md:text-4xl font-bold">What Makes Us Elite</h2>
 
@@ -135,8 +150,11 @@
       </div>
     </section>
 
+    <!-- BENEFITS SECTION -->
     <section
-      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10"
+      id="benefits"
+      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 scroll-mt-20"
+      aria-label="Benefits of joining"
     >
       <div class="max-w-6xl mx-auto px-6">
         <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
@@ -169,8 +187,11 @@
       </div>
     </section>
 
+    <!-- COMMUNITY SECTION -->
     <section
-      class="max-w-6xl w-full px-6 py-24 grid md:grid-cols-2 gap-12 items-stretch"
+      id="community"
+      class="max-w-6xl w-full px-6 py-24 grid md:grid-cols-2 gap-12 items-stretch scroll-mt-20"
+      aria-label="Our community"
     >
       <div
         data-aos="fade-right"
@@ -197,9 +218,8 @@
 
           <div class="p-5 rounded-xl bg-primary/10">
             <div class="text-3xl font-bold text-primary flex">
-                <ClientOnly>
-
-              <CountUp :endVal="35" :duration="2"/>
+              <ClientOnly>
+                <CountUp :endVal="35" :duration="2" />
               </ClientOnly>
               <span>%</span>
             </div>
@@ -225,9 +245,8 @@
         <div class="mt-8 flex gap-6">
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
-                <ClientOnly>
-
-              <CountUp :endVal="100" :duration="2" />
+              <ClientOnly>
+                <CountUp :endVal="100" :duration="2" />
               </ClientOnly>
               <span>+</span>
             </div>
@@ -237,10 +256,9 @@
 
           <div class="p-5 rounded-xl bg-white/10">
             <div class="text-3xl font-bold flex">
-                <ClientOnly>
-
+              <ClientOnly>
                 <CountUp :endVal="15" :duration="2" />
-</ClientOnly>
+              </ClientOnly>
               <span>+</span>
             </div>
 
@@ -250,8 +268,11 @@
       </div>
     </section>
 
+    <!-- MINDSET SECTION -->
     <section
-      class="w-full px-6 pb-24 text-center bg-gradient-to-b from-transparent to-primary-500/5"
+      id="mindset"
+      class="w-full px-6 pb-24 text-center bg-gradient-to-b from-transparent to-primary-500/5 scroll-mt-20"
+      aria-label="Our innovation mindset"
     >
       <div data-aos="zoom-in">
         <h2 class="text-3xl md:text-4xl font-bold">Innovation Mindset</h2>
@@ -265,40 +286,35 @@
 
       <div class="mt-16 grid sm:grid-cols-3 gap-8 max-w-5xl mx-auto">
         <UPageCard data-aos="fade-up" class="py-10">
-          <!-- <UIcon name="i-lucide-brain" class="text-primary text-3xl mb-3" /> -->
-
           <h3 class="font-semibold text-xl text-primary">Think Big</h3>
-
           <p class="text-sm text-muted">Solve ambitious problems</p>
         </UPageCard>
 
         <UPageCard data-aos="fade-up" data-aos-delay="150" class="py-10">
-          <!-- <UIcon name="i-lucide-zap" class="text-primary text-3xl mb-3" /> -->
-
           <h3 class="font-semibold text-xl text-primary">Build Fast</h3>
-
           <p class="text-sm text-muted">Rapid experimentation and iteration</p>
         </UPageCard>
 
         <UPageCard data-aos="fade-up" data-aos-delay="300" class="py-10">
-          <!-- <UIcon
-            name="i-lucide-package-check"
-            class="text-primary text-3xl mb-3"
-          /> -->
-
           <h3 class="font-semibold text-xl text-primary">Ship Better</h3>
-
           <p class="text-sm text-muted">Deliver real-world solutions</p>
         </UPageCard>
       </div>
+    </section>
 
+    <!-- CALL TO ACTION SECTION -->
+    <section
+      id="cta"
+      class="w-full px-6 pb-24 text-center scroll-mt-20"
+      aria-label="Join us call to action"
+    >
       <div
         class="mt-10"
         data-aos="flip-left"
         data-aos-easing="ease-out-cubic"
         data-aos-duration="2000"
       >
-        <h2 class="text-shadow-2xl font-mono">Join US</h2>
+        <h2 class="text-shadow-2xl font-mono text-2xl md:text-4xl mb-6">Join Us</h2>
         <ThreeDButton @clicked="$router.push('/join')" />
       </div>
     </section>
@@ -308,14 +324,23 @@
 <script lang="ts" setup>
 import ThreeDButton from "~/components/cool/ThreeDButton.vue";
 
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'mission', label: 'Mission' },
+  { id: 'stats', label: 'Statistics' },
+  { id: 'values', label: 'Values' },
+  { id: 'benefits', label: 'Benefits' },
+  { id: 'community', label: 'Community' },
+  { id: 'mindset', label: 'Mindset' },
+  { id: 'cta', label: 'Join Us' }
+];
 
+const config = useAppConfig();
 
-const config = useAppConfig()
 useSeoPage({
-  title:`About ${config.site.title}`,
+  title: `About ${config.site.title}`,
   description: "We are a student-led innovation hub dedicated to building real-world technical skills, fostering creativity, and preparing students for global tech careers."
-})
-
+});
 
 const benefitsOfJoinning = [
   {

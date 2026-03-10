@@ -1,5 +1,5 @@
 <template>
-  <section class="py-20 bg-muted/30">
+  <section id="featured-project" class="py-20 bg-muted/30">
     <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
       <!-- Header -->
       <div class="max-w-2xl text-center">

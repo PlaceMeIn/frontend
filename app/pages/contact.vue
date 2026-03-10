@@ -1,9 +1,13 @@
 <template>
   <section>
-    <!-- HERO -->
+    <OnThisPage :sections="sections" />
+
+    <!-- HERO SECTION -->
     <section
-      class="relative h-[420px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30"
+      id="hero"
+      class="relative h-[420px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30 scroll-mt-20"
       data-aos="fade-down"
+      aria-label="Contact hero section"
     >
       <h1 class="text-5xl font-bold tracking-tight">Get in Touch</h1>
       <p class="mt-4 text-lg text-muted max-w-xl">
@@ -13,10 +17,12 @@
 
     <!-- CONTACT SECTION -->
     <section
-      class="flex flex-col md:flex-row md:items-start md:gap-12 max-w-7xl mx-auto px-6 py-20"
+      id="contact"
+      class="flex flex-col md:flex-row md:items-start md:gap-12 max-w-7xl mx-auto px-6 py-20 scroll-mt-20"
+      aria-label="Contact information and form"
     >
       <!-- CONTACT INFO + SOCIAL LINKS -->
-      <section class="md:w-1/2 flex flex-col gap-6 mb-16 md:mb-0">
+      <div class="md:w-1/2 flex flex-col gap-6 mb-16 md:mb-0">
         <div data-aos="fade-up">
           <h2 class="text-4xl font-bold tracking-tight">Contact Information</h2>
           <p class="mt-2 text-lg text-muted max-w-lg">
@@ -68,10 +74,10 @@
             </a>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- CONTACT FORM -->
-      <section class="md:w-1/2 w-full max-w-md mx-auto">
+      <div class="md:w-1/2 w-full max-w-md mx-auto">
         <div class="text-center mb-10" data-aos="fade-up">
           <h2 class="text-3xl font-bold">Send us a message</h2>
           <p class="text-muted mt-2">We'll respond as soon as possible</p>
@@ -79,7 +85,6 @@
 
         <UCard data-aos="fade-up" data-aos-delay="100">
           <form @submit.prevent="validateAndSubmit" class="flex flex-col gap-6">
-            <!-- Full Name Field -->
             <UFormField label="Full Name" required :error="errors.fullname">
               <UInput
                 v-model="form.fullname"
@@ -94,7 +99,6 @@
               />
             </UFormField>
 
-            <!-- Email Field -->
             <UFormField label="Email Address" required :error="errors.email">
               <UInput
                 v-model="form.email"
@@ -108,7 +112,6 @@
               />
             </UFormField>
 
-            <!-- Phone Field -->
             <UFormField
               label="WhatsApp / Phone (optional)"
               :error="errors.phone"
@@ -127,7 +130,6 @@
               </p>
             </UFormField>
 
-            <!-- Year of Study Field -->
             <UFormField label="Year of Study" :error="errors.year">
               <USelect
                 v-model="form.year"
@@ -140,7 +142,6 @@
               />
             </UFormField>
 
-            <!-- Subject Field -->
             <UFormField label="Subject" required :error="errors.subject">
               <USelect
                 v-model="form.subject"
@@ -155,7 +156,6 @@
               />
             </UFormField>
 
-            <!-- Message Field -->
             <UFormField label="Message" required :error="errors.message">
               <UTextarea
                 v-model="form.message"
@@ -173,7 +173,6 @@
               <p class="text-xs text-muted mt-1">Minimum 10 characters</p>
             </UFormField>
 
-            <!-- Submit Button -->
             <UButton
               type="submit"
               :icon="
@@ -191,7 +190,6 @@
               {{ stateStore.isSubmitting ? "Sending..." : "Send Message" }}
             </UButton>
 
-            <!-- Success Message -->
             <Transition
               enter-active-class="transition duration-300 ease-out"
               enter-from-class="transform scale-95 opacity-0"
@@ -209,7 +207,6 @@
               </p>
             </Transition>
 
-            <!-- Error Message -->
             <Transition
               enter-active-class="transition duration-300 ease-out"
               enter-from-class="transform scale-95 opacity-0"
@@ -228,11 +225,15 @@
             </Transition>
           </form>
         </UCard>
-      </section>
+      </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="max-w-3xl mx-auto px-6 pb-24">
+    <!-- FAQ SECTION -->
+    <section
+      id="faq"
+      class="max-w-3xl mx-auto px-6 pb-24 scroll-mt-20"
+      aria-label="Frequently asked questions"
+    >
       <div class="text-center mb-10" data-aos="fade-up">
         <h2 class="text-3xl font-bold">Frequently Asked Questions</h2>
         <p class="text-muted mt-2">Quick answers to common questions</p>
@@ -243,10 +244,12 @@
       </div>
     </section>
 
-    <!-- Office Hours Section -->
+    <!-- OFFICE HOURS SECTION -->
     <section
-      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 dark:from-primary-900/20 dark:via-transparent dark:to-primary-800/20"
+      id="office-hours"
+      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 dark:from-primary-900/20 dark:via-transparent dark:to-primary-800/20 scroll-mt-20"
       data-aos="fade-up"
+      aria-label="Office hours and location"
     >
       <div class="max-w-6xl mx-auto px-6">
         <div class="mb-12 text-center">
@@ -259,7 +262,6 @@
         </div>
 
         <div class="grid md:grid-cols-2 gap-8">
-          <!-- During Semester -->
           <div
             class="p-8 rounded-2xl bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-lg hover:shadow-xl transition-all duration-300"
           >
@@ -285,7 +287,6 @@
             </ul>
           </div>
 
-          <!-- Holidays / Breaks -->
           <div
             class="p-8 rounded-2xl bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-lg hover:shadow-xl transition-all duration-300"
           >
@@ -312,7 +313,6 @@
           </div>
         </div>
 
-        <!-- Location -->
         <div class="mt-12 text-center">
           <p class="text-muted flex items-center justify-center gap-2">
             <UIcon name="i-lucide-map-pin" class="text-primary" />
@@ -321,70 +321,71 @@
         </div>
       </div>
     </section>
-  </section>
 
-  <!-- Error Modal -->
-  <UModal v-model:open="showModal" title="Error submitting form">
-    <template #body>
-      <div class="flex flex-col items-center gap-4 py-4">
-        <UIcon name="i-lucide-alert-circle" class="text-6xl text-danger" />
-        <p class="text-center text-muted">
-          {{
-            errorMessage || "An unexpected error occurred. Please try again."
-          }}
-        </p>
-      </div>
-    </template>
+    <!-- Error Modal -->
+    <UModal v-model:open="showModal" title="Error submitting form">
+      <template #body>
+        <div class="flex flex-col items-center gap-4 py-4">
+          <UIcon name="i-lucide-alert-circle" class="text-6xl text-danger" />
+          <p class="text-center text-muted">
+            {{
+              errorMessage || "An unexpected error occurred. Please try again."
+            }}
+          </p>
+        </div>
+      </template>
 
-    <template #footer="{ close }">
-      <div class="flex justify-end gap-3">
-        <UButton
-          label="Reset Form"
-          color="neutral"
-          variant="outline"
-          @click="
-            resetForm();
-            close();
-          "
-        />
-        <UButton label="Try Again" color="primary" @click="close()" />
-      </div>
-    </template>
-  </UModal>
+      <template #footer="{ close }">
+        <div class="flex justify-end gap-3">
+          <UButton
+            label="Reset Form"
+            color="neutral"
+            variant="outline"
+            @click="
+              resetForm();
+              close();
+            "
+          />
+          <UButton label="Try Again" color="primary" @click="close()" />
+        </div>
+      </template>
+    </UModal>
 
-  <!-- Success Modal -->
-  <UModal v-model:open="showSuccessModal" title="Message Sent Successfully!">
-    <template #body>
-      <div class="flex flex-col items-center gap-4 py-4">
-        <UIcon name="i-lucide-check-circle" class="text-6xl text-success" />
-        <p class="text-center text-muted">
-          Thank you for reaching out! We've received your message and will get
-          back to you within 24 hours.
-        </p>
-      </div>
-    </template>
+    <!-- Success Modal -->
+    <UModal v-model:open="showSuccessModal" title="Message Sent Successfully!">
+      <template #body>
+        <div class="flex flex-col items-center gap-4 py-4">
+          <UIcon name="i-lucide-check-circle" class="text-6xl text-success" />
+          <p class="text-center text-muted">
+            Thank you for reaching out! We've received your message and will get
+            back to you within 24 hours.
+          </p>
+        </div>
+      </template>
 
-    <template #footer="{ close }">
-      <div class="flex justify-end">
-        <UButton
-          label="Close"
-          color="success"
-          variant="subtle"
-          @click="
-            close();
-            resetForm();
-          "
-        />
-      </div>
-    </template>
-  </UModal>
+      <template #footer="{ close }">
+        <div class="flex justify-end">
+          <UButton
+            label="Close"
+            color="success"
+            variant="subtle"
+            @click="
+              close();
+              resetForm();
+            "
+          />
+        </div>
+      </template>
+    </UModal>
+
     <UModal v-model:open="submitting" dismissible="false">
-    <template #content>
-      <div class=" ">
-        <TechLoader />
-      </div>
-    </template>
-  </UModal>
+      <template #content>
+        <div class=" ">
+          <TechLoader />
+        </div>
+      </template>
+    </UModal>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -392,10 +393,16 @@ import { computed, ref, reactive } from "vue";
 import type { AccordionItem } from "@nuxt/ui";
 import * as v from "valibot";
 
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'contact', label: 'Contact' },
+  { id: 'faq', label: 'FAQ' },
+  { id: 'office-hours', label: 'Office Hours' }
+];
+
 const stateStore = useStateStore();
 const toast = useToast();
 
-// Validation schema
 const schema = v.object({
   fullname: v.pipe(
     v.string(),
@@ -418,16 +425,13 @@ const schema = v.object({
 
 type Schema = v.InferOutput<typeof schema>;
 
-/* FORM STATE */
 const form = computed({
   get: () => stateStore.ongoingContact,
   set: (value) => (stateStore.ongoingContact = value),
 });
 
-/* ERROR STATE */
 const errors = reactive<Partial<Record<keyof Schema, string>>>({});
 
-/* VALIDATION FUNCTIONS */
 function validateField(field: keyof Schema) {
   const value = form.value[field];
   try {
@@ -465,7 +469,6 @@ function resetForm() {
   Object.keys(errors).forEach((key) => delete errors[key as keyof Schema]);
 }
 
-/* OPTIONS */
 const years = [
   { value: "1", label: "Year 1" },
   { value: "2", label: "Year 2" },
@@ -484,7 +487,6 @@ const subjects = [
   { value: "other", label: "Other" },
 ];
 
-/* CONTACT INFO */
 const contactInfo = [
   {
     name: "email",
@@ -503,7 +505,6 @@ const contactInfo = [
   },
 ];
 
-/* SOCIAL LINKS */
 const socialLinks = [
   {
     name: "Facebook",
@@ -547,13 +548,11 @@ async function validateAndSubmit() {
       icon: "i-lucide-alert-circle",
     });
     submitting.value = false;
-
     return;
   }
 
   try {
     submitting.value = true;
-
     const res = await stateStore.submitContact();
     if (res.success) {
       showSuccessModal.value = true;
@@ -579,7 +578,6 @@ async function validateAndSubmit() {
   }
 }
 
-/* FAQ */
 const faqs = ref<AccordionItem[]>([
   {
     label: "How can I join MUT Tech Club?",
@@ -605,7 +603,6 @@ const faqs = ref<AccordionItem[]>([
 </script>
 
 <style scoped>
-/* Optional: Add custom transitions */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

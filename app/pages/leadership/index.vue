@@ -1,9 +1,13 @@
 <template>
   <section>
-    <!-- HERO -->
+    <OnThisPage :sections="sections" />
+
+    <!-- HERO SECTION -->
     <section
-      class="h-[420px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30"
+      id="hero"
+      class="h-[420px] flex flex-col items-center justify-center text-center bg-gradient-to-br from-primary-500/30 to-primary-900/30 scroll-mt-20"
       data-aos="fade-down"
+      aria-label="Leadership hero section"
     >
       <h1 class="text-5xl font-bold tracking-tight">
         {{ "Our Leadership" }}
@@ -16,8 +20,12 @@
       </p>
     </section>
 
-    <!-- EXECUTIVE TEAM -->
-    <section class="py-24">
+    <!-- EXECUTIVE TEAM SECTION -->
+    <section
+      id="executive-team"
+      class="py-24 scroll-mt-20"
+      aria-label="Executive team"
+    >
       <div class="max-w-6xl mx-auto px-6 text-center">
         <h2 class="text-4xl font-bold" data-aos="fade-up">
           {{ "Executive Team" }}
@@ -76,8 +84,12 @@
       </div>
     </section>
 
-    <!-- DEPARTMENT LEADS -->
-    <section class="py-24 bg-primary-500/5">
+    <!-- DEPARTMENT LEADS SECTION -->
+    <section
+      id="department-leads"
+      class="py-24 bg-primary-500/5 scroll-mt-20"
+      aria-label="Department leads"
+    >
       <div class="max-w-6xl mx-auto px-6 text-center">
         <h2 class="text-4xl font-bold" data-aos="fade-up">
           {{ "Department Leads" }}
@@ -125,8 +137,12 @@
       </div>
     </section>
 
-    <!-- FACULTY -->
-    <section class="py-24">
+    <!-- FACULTY ADVISORS SECTION -->
+    <section
+      id="faculty-advisors"
+      class="py-24 scroll-mt-20"
+      aria-label="Faculty advisors"
+    >
       <div class="max-w-5xl mx-auto px-6 text-center">
         <h2 class="text-4xl font-bold" data-aos="fade-up">
           {{ "Faculty Advisors" }}
@@ -180,9 +196,12 @@
       </div>
     </section>
 
+    <!-- CALL TO ACTION SECTION -->
     <section
-      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10"
+      id="cta"
+      class="w-full py-24 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 scroll-mt-20"
       data-aos="fade-up"
+      aria-label="Join leadership call to action"
     >
       <div class="max-w-6xl mx-auto px-6 text-center">
         <h2 class="text-3xl md:text-4xl font-bold">Become a Leader!</h2>
@@ -207,6 +226,14 @@
 </template>
 
 <script setup lang="ts">
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'executive-team', label: 'Executive Team' },
+  { id: 'department-leads', label: 'Department Leads' },
+  { id: 'faculty-advisors', label: 'Faculty Advisors' },
+  { id: 'cta', label: 'Join Leadership' }
+];
+
 const defaultAvatar =
   "https://ui-avatars.com/api/?background=6366f1&color=fff&name=Member";
 
@@ -223,7 +250,6 @@ const exec_team_hold = [
     },
     title: "Chairperson",
     bio: "4th year Computer Science student passionate about React and Node.js. Led development of 3 major campus projects.",
-    // ... other fields
   },
   // ... rest of your hold data transformed similarly
 ];
@@ -239,7 +265,6 @@ const departmentLeads_hold = [
       }
     },
     title: "Web development lead",
-    // ... other fields
   },
   // ... rest transformed similarly
 ];
@@ -255,12 +280,10 @@ const faculty_advisors_hold = [
     title: "Faculty Advisor",
     department_display: "School Of Computing & IT",
     bio: "Artificial Intelligence & Machine Learning",
-    // ... other fields
   },
   // ... rest transformed similarly
 ];
 
-/* STATE */
 const executiveTeam = ref<any[]>([]);
 const departmentLeads = ref<any[]>([]);
 const faculty = ref<any[]>([]);

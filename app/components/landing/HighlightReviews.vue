@@ -1,5 +1,5 @@
 <template>
-  <section class="py-20 bg-muted/30">
+  <section id="reviews" class="py-20 bg-muted/30">
     <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
       <div class="max-w-2xl text-center">
         <h2 class="text-3xl font-bold tracking-tight">What Our Members Say</h2>

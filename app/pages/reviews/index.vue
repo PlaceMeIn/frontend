@@ -1,152 +1,13 @@
-<script lang="ts" setup>
-// SEO Configuration
-useSeoPage({
-  title: `Student Reviews | ${useAppConfig().site.title}`,
-  description: "Discover authentic experiences from our community. Read honest reviews about our programs, events, and learning journey.",
-  ogImage: '/images/reviews-og.jpg'
-})
-
-interface Review {
-  id: number
-  user_profile: {
-    user: {
-      profile_picture: string | null
-    }
-    full_name: string
-    course: string
-    year_of_study: string
-    technical_skills: string
-    github_link: string | null
-    portfolio_website: string | null
-    is_verified_member: boolean
-  }
-  content: string
-  role: string | null
-  company: string | null
-  stars: number
-  stars_display: string
-  is_featured: boolean
-  created_at: string
-}
-
-const selectedStars = ref<number | null>(null)
-const minStars = ref<number | null>(null)
-const searchQuery = ref('')
-const currentPage = ref(1)
-const itemsPerPage = 6
-const selectedSort = ref<string>('-created_at')
-
-const starsOptions = [
-  { label: '5 Stars ★★★★★', value: 5 },
-  { label: '4 Stars ★★★★☆', value: 4 },
-  { label: '3 Stars ★★★☆☆', value: 3 },
-  { label: '2 Stars ★★☆☆☆', value: 2 },
-  { label: '1 Star ★☆☆☆☆', value: 1 }
-]
-
-const minStarsOptions = [
-  { label: 'Minimum 5 ★', value: 5 },
-  { label: 'Minimum 4 ★', value: 4 },
-  { label: 'Minimum 3 ★', value: 3 },
-  { label: 'Minimum 2 ★', value: 2 },
-  { label: 'Minimum 1 ★', value: 1 }
-]
-
-const sortOptions = [
-  { label: 'Most Recent', value: '-created_at' },
-  { label: 'Highest Rated', value: '-stars' },
-  { label: 'Lowest Rated', value: 'stars' },
-  { label: 'Featured First', value: '-is_featured' }
-]
-
-let searchTimeout: NodeJS.Timeout
-const handleFilterChange = () => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    currentPage.value = 1
-    refresh()
-  }, 400)
-}
-
-const endpoints = useEndpoints()
-const { get } = useApi()
-
-const { data, pending, error, refresh } = await useAsyncData(
-  'reviews',
-  async () => {
-    const params = new URLSearchParams({
-      page: currentPage.value.toString(),
-      page_size: itemsPerPage.toString(),
-      ...(selectedStars.value && { stars: selectedStars.value.toString() }),
-      ...(minStars.value && { min_stars: minStars.value.toString() }),
-      ...(searchQuery.value && { search: searchQuery.value }),
-      ...(selectedSort.value && { ordering: selectedSort.value })
-    })
-    
-    return get(`${endpoints.reviews.list}?${params}`)
-  },
-  {
-    lazy: true,
-    default: () => ({ results: [], count: 0 }),
-    watch: [currentPage, selectedStars, minStars, searchQuery, selectedSort]
-  }
-)
-
-const reviews = computed<Review[]>(() => data.value?.results || [])
-const totalReviews = computed(() => data.value?.count || 0)
-const totalPages = computed(() => Math.ceil(totalReviews.value / itemsPerPage))
-const hasReviews = computed(() => reviews.value.length > 0)
-
-const reviewStats = computed(() => {
-  const allReviews = reviews.value
-  const total = allReviews.length
-  const avgRating = total > 0 
-    ? (allReviews.reduce((acc, r) => acc + r.stars, 0) / total).toFixed(1)
-    : '4.8'
-  
-  const fiveStarCount = allReviews.filter(r => r.stars === 5).length
-  const fiveStarPercentage = total > 0 ? Math.round((fiveStarCount / total) * 100) : 85
-  
-  return {
-    averageRating: avgRating,
-    totalReviews: totalReviews.value,
-    fiveStarPercentage
-  }
-})
-
-const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(word => word[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-}
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffDays = Math.ceil(Math.abs(now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 1) return 'Yesterday'
-  if (diffDays < 7) return `${diffDays} days ago`
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
-
-const clearFilters = () => {
-  selectedStars.value = null
-  minStars.value = null
-  searchQuery.value = ''
-  selectedSort.value = '-created_at'
-  currentPage.value = 1
-}
-</script>
-
 <template>
   <div class="min-h-screen">
-    <!-- Hero Section -->
-    <section class="relative py-24 overflow-hidden">
+    <OnThisPage :sections="sections" />
+
+    <!-- HERO SECTION -->
+    <section
+      id="hero"
+      class="relative py-24 overflow-hidden scroll-mt-20"
+      aria-label="Reviews hero section"
+    >
       <div class="absolute inset-0 opacity-5 dark:opacity-10">
         <div class="absolute top-0 -left-4 w-72 h-72 bg-primary-400 dark:bg-primary-600 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
         <div class="absolute top-0 -right-4 w-72 h-72 bg-primary-300 dark:bg-primary-700 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -199,8 +60,12 @@ const clearFilters = () => {
       </div>
     </section>
 
-    <!-- Filters Section -->
-    <section class="py-2  sticky top-20 z-10 backdrop-blur-md">
+    <!-- FILTERS SECTION -->
+    <section
+      id="filters"
+      class="py-2 sticky top-20 z-10 backdrop-blur-md scroll-mt-20"
+      aria-label="Review filters"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
           <div class="w-full lg:w-96">
@@ -234,16 +99,21 @@ const clearFilters = () => {
               </template>
             </USelectMenu>
 
-            <UButton v-if="selectedStars || minStars || searchQuery" color="neutral" variant="ghost" size="lg"
+            <UButton v-if="selectedStars || minStars || searchQuery" color="error" variant="outline" size="lg"
               icon="i-lucide-x" @click="clearFilters">Clear</UButton>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Reviews Grid -->
-    <section class="py-16">
+    <!-- REVIEWS GRID SECTION -->
+    <section
+      id="reviews"
+      class="py-16 scroll-mt-20"
+      aria-label="Reviews grid"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Loading State -->
         <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="i in 6" :key="i" class="animate-pulse">
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-4">
@@ -263,6 +133,7 @@ const clearFilters = () => {
           </div>
         </div>
 
+        <!-- Error State -->
         <div v-else-if="error" class="text-center py-20">
           <UIcon name="i-lucide-cloud-alert" class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
           <h3 class="text-xl font-semibold mb-2 dark:text-white">Failed to Load Reviews</h3>
@@ -270,12 +141,14 @@ const clearFilters = () => {
           <UButton color="primary" size="lg" icon="i-lucide-refresh-cw" @click="refresh">Retry</UButton>
         </div>
 
+        <!-- Empty State -->
         <div v-else-if="!hasReviews" class="text-center py-20">
           <UIcon name="i-lucide-message-square-off" class="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
           <h3 class="text-xl font-semibold mb-2 dark:text-white">No Reviews Found</h3>
           <p class="text-gray-500 dark:text-gray-400">Try adjusting your filters or check back later.</p>
         </div>
 
+        <!-- Reviews Grid -->
         <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div v-for="(review, index) in reviews" :key="review.id" class="group"
             data-aos="fade-up" :data-aos-delay="index * 100">
@@ -362,6 +235,7 @@ const clearFilters = () => {
           </div>
         </div>
 
+        <!-- Pagination -->
         <div v-if="hasReviews && totalPages > 1" class="mt-12 flex justify-center">
           <UPagination v-model="currentPage" :page-count="itemsPerPage" :total="totalReviews" :max="5" size="lg"
             :show-first="true" :show-last="true" />
@@ -369,8 +243,12 @@ const clearFilters = () => {
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-primary-50 dark:bg-primary-900/20">
+    <!-- CALL TO ACTION SECTION -->
+    <section
+      id="cta"
+      class="py-20 bg-primary-50 dark:bg-primary-900/20 scroll-mt-20"
+      aria-label="Call to action"
+    >
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold mb-4 dark:text-white">Ready to Start Your Journey?</h2>
         <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
@@ -380,14 +258,162 @@ const clearFilters = () => {
           <UButton color="primary" size="xl" to="/resources" trailing-icon="i-lucide-arrow-right">
             Explore Courses
           </UButton>
-          <!-- <UButton color="neutral" variant="outline" size="xl" to="/write-review">
-            Write a Review
-          </UButton> -->
         </div>
       </div>
     </section>
   </div>
 </template>
+
+<script lang="ts" setup>
+const sections = [
+  { id: 'hero', label: 'Hero' },
+  { id: 'filters', label: 'Filters' },
+  { id: 'reviews', label: 'Reviews' },
+  { id: 'cta', label: 'Join Us' }
+];
+
+useSeoPage({
+  title: `Student Reviews | ${useAppConfig().site.title}`,
+  description: "Discover authentic experiences from our community. Read honest reviews about our programs, events, and learning journey.",
+  ogImage: '/images/reviews-og.jpg'
+});
+
+interface Review {
+  id: number;
+  user_profile: {
+    user: {
+      profile_picture: string | null;
+    };
+    full_name: string;
+    course: string;
+    year_of_study: string;
+    technical_skills: string;
+    github_link: string | null;
+    portfolio_website: string | null;
+    is_verified_member: boolean;
+  };
+  content: string;
+  role: string | null;
+  company: string | null;
+  stars: number;
+  stars_display: string;
+  is_featured: boolean;
+  created_at: string;
+}
+
+const selectedStars = ref<number | null>(null);
+const minStars = ref<number | null>(null);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = 6;
+const selectedSort = ref<string>('-created_at');
+
+const starsOptions = [
+  { label: '5 Stars ★★★★★', value: 5 },
+  { label: '4 Stars ★★★★☆', value: 4 },
+  { label: '3 Stars ★★★☆☆', value: 3 },
+  { label: '2 Stars ★★☆☆☆', value: 2 },
+  { label: '1 Star ★☆☆☆☆', value: 1 }
+];
+
+const minStarsOptions = [
+  { label: 'Minimum 5 ★', value: 5 },
+  { label: 'Minimum 4 ★', value: 4 },
+  { label: 'Minimum 3 ★', value: 3 },
+  { label: 'Minimum 2 ★', value: 2 },
+  { label: 'Minimum 1 ★', value: 1 }
+];
+
+const sortOptions = [
+  { label: 'Most Recent', value: '-created_at' },
+  { label: 'Highest Rated', value: '-stars' },
+  { label: 'Lowest Rated', value: 'stars' },
+  { label: 'Featured First', value: '-is_featured' }
+];
+
+let searchTimeout: NodeJS.Timeout;
+const handleFilterChange = () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    currentPage.value = 1;
+    refresh();
+  }, 400);
+};
+
+const endpoints = useEndpoints();
+const { get } = useApi();
+
+const { data, pending, error, refresh } = await useAsyncData(
+  'reviews',
+  async () => {
+    const params = new URLSearchParams({
+      page: currentPage.value.toString(),
+      page_size: itemsPerPage.toString(),
+      ...(selectedStars.value && { stars: selectedStars.value.toString() }),
+      ...(minStars.value && { min_stars: minStars.value.toString() }),
+      ...(searchQuery.value && { search: searchQuery.value }),
+      ...(selectedSort.value && { ordering: selectedSort.value })
+    });
+    
+    return get(`${endpoints.reviews.list}?${params}`);
+  },
+  {
+    lazy: true,
+    default: () => ({ results: [], count: 0 }),
+    watch: [currentPage, selectedStars, minStars, searchQuery, selectedSort]
+  }
+);
+
+const reviews = computed<Review[]>(() => data.value?.results || []);
+const totalReviews = computed(() => data.value?.count || 0);
+const totalPages = computed(() => Math.ceil(totalReviews.value / itemsPerPage));
+const hasReviews = computed(() => reviews.value.length > 0);
+
+const reviewStats = computed(() => {
+  const allReviews = reviews.value;
+  const total = allReviews.length;
+  const avgRating = total > 0 
+    ? (allReviews.reduce((acc, r) => acc + r.stars, 0) / total).toFixed(1)
+    : '4.8';
+  
+  const fiveStarCount = allReviews.filter(r => r.stars === 5).length;
+  const fiveStarPercentage = total > 0 ? Math.round((fiveStarCount / total) * 100) : 85;
+  
+  return {
+    averageRating: avgRating,
+    totalReviews: totalReviews.value,
+    fiveStarPercentage
+  };
+});
+
+const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+};
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffDays = Math.ceil(Math.abs(now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const clearFilters = () => {
+  selectedStars.value = null;
+  minStars.value = null;
+  searchQuery.value = '';
+  selectedSort.value = '-created_at';
+  currentPage.value = 1;
+};
+</script>
 
 <style scoped>
 @keyframes blob {
