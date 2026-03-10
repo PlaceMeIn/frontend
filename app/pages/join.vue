@@ -58,7 +58,7 @@
       aria-label="Membership benefits and application form"
     >
       <!-- Benefits Section (Sticky) -->
-      <div class="lg:w-1/3 lg:sticky lg:top-20 self-start">
+      <div id="benefits-f" class="lg:w-1/3 lg:sticky lg:top-20 self-start">
         <div class="mb-8" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
             Membership Benefits
@@ -110,7 +110,7 @@
       </div>
 
       <!-- Application Form -->
-      <div class="lg:w-2/3 mt-12 lg:mt-0">
+      <section id="join" class="lg:w-2/3 mt-12 lg:mt-0">
         <div class="mb-8" data-aos="fade-up">
           <h2 class="text-3xl font-bold mb-2">Application Form</h2>
           <p class="text-muted">
@@ -429,7 +429,7 @@
             </Transition>
           </form>
         </UCard>
-      </div>
+      </section>
     </section>
 
     <!-- WHAT HAPPENS NEXT SECTION -->
@@ -513,8 +513,8 @@
           </p>
           <div class="bg-primary/10 p-4 rounded-lg w-full mt-2">
             <p class="text-sm text-center">
-              <span class="font-semibold">Next steps:</span> Check your email for
-              confirmation and updates.
+              <span class="font-semibold">Next steps:</span> Check your email
+              for confirmation and updates.
             </p>
           </div>
         </div>
@@ -550,9 +550,12 @@ import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
 
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'application', label: 'Application' },
-  { id: 'next-steps', label: 'Next Steps' }
+  { id: "hero", label: "Hero" },
+  { id: "application", label: "Application" },
+  { id: "benefits-f", label: "Benefits" },
+  { id: "join", label: "Join" },
+
+  { id: "next-steps", label: "Next Steps" },
 ];
 
 const stateStore = useStateStore();

@@ -77,6 +77,7 @@ export default defineNuxtConfig({
   image: {
     domains: [
       'github.com',
+      'vercel.com',
       'avatars.githubusercontent.com',
       'images.unsplash.com'
     ]

@@ -61,7 +61,6 @@
             class="flex-1"
             @update:model-value="onSearch"
           />
-
           <UButton
             label="Reset"
             icon="i-lucide-rotate-ccw"
@@ -128,16 +127,10 @@
         <!-- Error State -->
         <template v-else-if="error || loadingError">
           <div class="col-span-full flex flex-col items-center gap-4 py-10">
-            <UBanner
-              color="error"
-              icon="i-lucide-cloud-alert"
+            <ErrorState
               title="Failed to load events"
-            />
-            <UButton
-              label="Retry"
-              icon="i-lucide-refresh-cw"
-              variant="outline"
-              @click="reload"
+              description="We couldn't fetch upcoming events. Please try again."
+              @retry="reload"
             />
           </div>
         </template>
@@ -145,19 +138,12 @@
         <!-- Empty State -->
         <template v-else-if="events.length === 0">
           <div class="col-span-full flex justify-center">
-            <UEmpty
+            <EmptyState
               icon="i-lucide-calendar-x"
               title="No Events Found"
-              description="We couldn't find any events matching your filters. Try refreshing or adjusting your search."
-              :actions="[
-                {
-                  icon: 'i-lucide-refresh-cw',
-                  label: 'Reset Filters',
-                  color: 'neutral',
-                  variant: 'subtle',
-                  onClick: resetFilters,
-                },
-              ]"
+              description="We couldn't find any events matching your filters."
+              :action="'Reset Filters'"
+              @action="resetFilters"
             />
           </div>
         </template>
@@ -222,19 +208,18 @@
           <!-- Error State -->
           <template v-else-if="pastError">
             <div class="col-span-full flex flex-col items-center gap-4 py-10">
-              <UBanner
-                color="error"
-                icon="i-lucide-cloud-alert"
+              <ErrorState
                 title="Failed to load past events"
+                description="Unable to retrieve past events. Please try again."
+                @retry="pastRefresh"
               />
-              <UButton label="Retry" variant="outline" @click="pastRefresh" />
             </div>
           </template>
 
           <!-- Empty State -->
           <template v-else-if="pastEvents.length === 0">
             <div class="col-span-full flex justify-center">
-              <UEmpty
+              <EmptyState
                 icon="i-lucide-calendar-x"
                 title="No Past Events"
                 description="There are no past events to display at the moment."

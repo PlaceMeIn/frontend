@@ -4,7 +4,7 @@ import type { ApiOptions, ApiError } from '~/types/api'
 
 export const useApi = () => {
   const { site } = useAppConfig()
- 
+
 
   const toast = useToast()
   const authStore = useAuthStore()
@@ -33,14 +33,22 @@ export const useApi = () => {
   }
 
   const handleError = (error: any, endpoint: string): never => {
-    const apiError: ApiError = new Error(error?.message || 'Request failed')
+    const apiError: ApiError = new Error(
+      error?.data?.message ||
+      error?.data?.detail ||
+      error?.message ||
+      'Request failed'
+    )
+
     apiError.status = error?.status || 500
     apiError.response = error?.data
 
-    const message =
-      error?.data?.message ||
-      error?.data?.detail ||
-      apiError.message
+    // Prevent leaking endpoint / request info
+    let message = apiError.message
+
+    if (message.includes('Failed to fetch')) {
+      message = 'Network error. Please check your connection.'
+    }
 
     toast.add({
       title: 'Error',
@@ -49,7 +57,9 @@ export const useApi = () => {
       color: 'error'
     })
 
+    // keep detailed error only in console
     console.error(`API Error [${endpoint}]`, error)
+
     throw apiError
   }
 

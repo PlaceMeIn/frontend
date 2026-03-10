@@ -10,7 +10,9 @@
       aria-label="Contact hero section"
     >
       <div class="z-100 px-6">
-        <h1 class="text-5xl text-white font-bold tracking-tight">Get in Touch</h1>
+        <h1 class="text-5xl text-white font-bold tracking-tight">
+          Get in Touch
+        </h1>
         <p class="mt-4 text-lg text-gray-200 max-w-xl">
           Have questions? Want to collaborate? We'd love to hear from you.
         </p>
@@ -36,7 +38,7 @@
       aria-label="Contact information and form"
     >
       <!-- CONTACT INFO + SOCIAL LINKS -->
-      <div class="md:w-1/2 flex flex-col gap-6 mb-16 md:mb-0">
+      <div id="contact-info" class="md:w-1/2 flex flex-col gap-6 mb-16 md:mb-0">
         <div data-aos="fade-up">
           <h2 class="text-4xl font-bold tracking-tight">Contact Information</h2>
           <p class="mt-2 text-lg text-muted max-w-lg">
@@ -91,7 +93,7 @@
       </div>
 
       <!-- CONTACT FORM -->
-      <div class="md:w-1/2 w-full max-w-md mx-auto">
+      <div id="contact-form" class="md:w-1/2 w-full max-w-md mx-auto">
         <div class="text-center mb-10" data-aos="fade-up">
           <h2 class="text-3xl font-bold">Send us a message</h2>
           <p class="text-muted mt-2">We'll respond as soon as possible</p>
@@ -406,10 +408,12 @@
 import { computed, ref, reactive } from "vue";
 import type { AccordionItem } from "@nuxt/ui";
 import * as v from "valibot";
-import ctaImg  from "~/assets/files/contact.jpg"
+import ctaImg from "~/assets/files/contact.jpg";
 const sections = [
   { id: "hero", label: "Hero" },
   { id: "contact", label: "Contact" },
+  { id: "contact-info", label: "Info " },
+  { id: "contact-form", label: "Message" },
   { id: "faq", label: "FAQ" },
   { id: "office-hours", label: "Office Hours" },
 ];

@@ -44,7 +44,6 @@
           @update:model-value="onSearch"
           class="transition-shadow focus:shadow-lg flex-1"
         />
-
         <UButton
           label="Reset"
           icon="i-lucide-rotate-ccw"
@@ -58,11 +57,7 @@
       </div>
 
       <div class="flex flex-wrap gap-3 justify-between items-center">
-        <div
-          class="flex flex-wrap gap-2"
-          role="group"
-          aria-label="Project categories"
-        >
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Project categories">
           <UButton
             label="All"
             :variant="activeType === 'All' ? 'solid' : 'outline'"
@@ -101,10 +96,7 @@
           <UIcon name="i-lucide-search" class="w-3 h-3" />
           "{{ search }}"
         </span>
-        <span
-          v-if="activeType !== 'All'"
-          class="inline-flex items-center gap-1 mr-3"
-        >
+        <span v-if="activeType !== 'All'" class="inline-flex items-center gap-1 mr-3">
           <UIcon name="i-lucide-tag" class="w-3 h-3" />
           {{ getTypeLabel(activeType) }}
         </span>
@@ -123,9 +115,7 @@
     >
       <!-- Results count -->
       <div v-if="projects.length > 0" class="text-sm text-muted mb-4 px-2">
-        Showing {{ projects.length }} project{{
-          projects.length !== 1 ? "s" : ""
-        }}
+        Showing {{ projects.length }} project{{ projects.length !== 1 ? "s" : "" }}
         <span v-if="!isFiltersDefault">with current filters</span>
       </div>
 
@@ -139,20 +129,11 @@
 
         <!-- Error State -->
         <template v-else-if="error || loadingError">
-          <div
-            class="col-span-full flex flex-col items-center gap-4 py-10"
-            data-aos="fade-up"
-          >
-            <UBanner
-              color="error"
-              icon="i-lucide-cloud-alert"
-              title="Failed to load Projects"
-            />
-            <UButton
-              label="Retry"
-              variant="outline"
-              icon="i-lucide-refresh-cw"
-              @click="reload"
+          <div class="col-span-full flex flex-col items-center gap-4 py-10" data-aos="fade-up">
+            <ErrorState
+              title="Failed to load projects"
+              description="Unable to fetch projects. Please try again."
+              @retry="reload"
             />
           </div>
         </template>
@@ -160,19 +141,12 @@
         <!-- Empty State -->
         <template v-else-if="projects.length === 0">
           <div class="col-span-full flex justify-center my-10">
-            <UEmpty
+            <EmptyState
               icon="i-lucide-folder-x"
               title="No Projects Found"
-              description="We couldn't find any projects matching your filters. Try refreshing or adjusting your search."
-              :actions="[
-                {
-                  icon: 'i-lucide-refresh-cw',
-                  label: 'Reset Filters',
-                  color: 'neutral',
-                  variant: 'subtle',
-                  onClick: resetFilters,
-                },
-              ]"
+              description="We couldn't find any projects matching your filters."
+              :action="'Reset Filters'"
+              @action="resetFilters"
             />
           </div>
         </template>
@@ -200,9 +174,7 @@
           :disabled="!hasMore || pending"
           @click="loadMore"
           class="transition-transform hover:scale-105"
-          :aria-label="
-            hasMore ? 'Load more projects' : 'No more projects to load'
-          "
+          :aria-label="hasMore ? 'Load more projects' : 'No more projects to load'"
         />
 
         <!-- End of results message -->
@@ -227,8 +199,7 @@
           Want to Build Something Amazing?
         </h2>
         <p class="mt-3 text-muted max-w-xl mx-auto">
-          Join MUT Tech Club and work on exciting projects that make a real
-          impact. Turn your ideas into reality with support from our community.
+          Join MUT Tech Club and work on exciting projects that make a real impact.
         </p>
         <div
           class="mt-10 flex flex-col items-center gap-6"
