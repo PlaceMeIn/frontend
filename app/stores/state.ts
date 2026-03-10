@@ -24,6 +24,10 @@ interface JoinForm {
 
 export const useStateStore = defineStore('state', {
   state: () => ({
+    onthispage:{
+      left:null,
+      top:null
+    },
     ongoingContact: {
       fullname: '',
       email: '',

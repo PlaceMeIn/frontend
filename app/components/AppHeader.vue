@@ -11,57 +11,95 @@ const items = computed<NavigationMenuItem[]>(() => [
   {
     label: "Home",
     to: "/",
-    active: route.path === "/"
+    active: route.path === "/",
   },
   {
     label: "About",
     to: "/about",
-    active: route.path.startsWith("/about")
+    active: route.path.startsWith("/about"),
   },
   {
     label: "Projects",
     to: "/projects",
-    active: route.path.startsWith("/projects")
+    active: route.path.startsWith("/projects"),
   },
   {
     label: "Events",
     to: "/events",
-    active: route.path.startsWith("/events")
+    active: route.path.startsWith("/events"),
   },
   {
     label: "Leadership",
     to: "/leadership",
-    active: route.path.startsWith("/leadership")
+    active: route.path.startsWith("/leadership"),
   },
   {
     label: "Resources",
     to: "/resources",
-    active: route.path.startsWith("/resources")
+    active: route.path.startsWith("/resources"),
   },
   {
     label: "Contact",
     to: "/contact",
-    active: route.path.startsWith("/contact")
-  }
+    active: route.path.startsWith("/contact"),
+  },
 ]);
-
 </script>
 
 <template>
-  <UHeader mode="drawer"  title="MUT Tech Club" class="z-9999 border">
+  <UHeader
+    mode="drawer"
+    title="MUT Tech Club"
+    class="z-9999 border-b border-gray-200 dark:border-gray-800"
+  >
     <template #title>
       <AppLogo :size="3" class="h-6 w-auto" />
     </template>
 
-    <UNavigationMenu :items="items" />
+    <UNavigationMenu :items="items" class="hidden md:flex" />
 
     <template #right>
-      <ColorModeButton />
-      <UButton label="Join the CLub" to="/join"/>
+      <ColorModeButton class="hidden md:block mr-2" />
+
+      <UButton
+        icon="i-lucide-user-pen"
+        class="md:hidden"
+        size="sm"
+        to="/join"
+        aria-label="Join the Club"
+      />
+
+      <UButton
+        label="Join the Club"
+        icon="i-lucide-user-pen"
+        class="hidden md:flex"
+        size="sm"
+        color="primary"
+        to="/join"
+      />
     </template>
 
+    <!-- Drawer body for mobile menu -->
     <template #body>
-      <UNavigationMenu :items="items" variant="link" color="neutral" orientation="vertical" class="-mx-2.5" />
+      <div class="flex flex-col space-y-2 p-4">
+        <UNavigationMenu
+          :items="items"
+          variant="link"
+          color="neutral"
+          orientation="vertical"
+          class="-mx-2.5"
+        />
+        <ColorModeButton class="mt-2" />
+        <!-- Optional Join button inside drawer -->
+        <UButton
+          label="Join the Club"
+          icon="i-lucide-user-pen"
+          class="w-full"
+          size="sm"
+          color="primary"
+          to="/join"
+        />
+      </div>
     </template>
   </UHeader>
   <!-- <div class="border w-full fixed top-2 sm:top-4 mx-auto left-1/2 transform -translate-x-1/2 z-10">

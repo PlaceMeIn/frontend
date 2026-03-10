@@ -4,16 +4,16 @@ import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
 
 const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'about', label: 'About' },
-  { id: 'focus-areas', label: 'Focus Areas' },
-  { id: 'highlights', label: 'Highlights' },
-  { id: 'featured-project', label: 'Featured Project' },
-  { id: 'upcoming-event', label: 'Upcoming Event' },
-  { id: 'community', label: 'Community' },
-  { id: 'reviews', label: 'Reviews' },
-  { id: 'partners', label: 'Partners' },
-  { id: 'cta', label: 'Join Us' }
+  { id: "hero", label: "Hero" },
+  { id: "about", label: "About" },
+  { id: "focus-areas", label: "Focus Areas" },
+  { id: "highlights", label: "Highlights" },
+  { id: "featured-project", label: "Featured Project" },
+  { id: "upcoming-event", label: "Upcoming Event" },
+  { id: "community", label: "Community" },
+  { id: "reviews", label: "Reviews" },
+  { id: "partners", label: "Partners" },
+  { id: "cta", label: "Join Us" },
 ];
 
 const features = ref<PageFeatureProps[]>([
@@ -151,155 +151,161 @@ useSeoMeta({
   <div class="w-full overflow-hidden">
     <OnThisPage :sections="sections" />
 
-    <!-- HERO SECTION -->
-    <section
-      id="hero"
-      class="relative w-full bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:to-transparent scroll-mt-20"
-      aria-label="Hero section"
-    >
-      <!-- Background -->
-      <div class="absolute inset-0 overflow-hidden opacity-100 pointer-events-none">
-        <BackGround class="absolute w-[80%] -left-10 top-0" />
+<!-- HERO SECTION -->
+<section
+  id="hero"
+  class="relative w-full scroll-mt-20 overflow-hidden bg-gradient-to-b from-primary-50 via-primary-200 to-white dark:from-black/90 dark:via-black/70 dark:to-black/50"
+  aria-label="Hero section"
+>
+  <!-- Background container -->
+  <div class="absolute inset-0 pointer-events-none">
+    <!-- SVG/Component Background -->
+    <BackGround
+      class="absolute -left-0 top-0 w-[120%] h-[75%] md:w-[80%] md:h-full"
+    />
 
-        <img
-          class="absolute right-0 top-0 h-full w-[35%] hidden md:block object-cover"
-          src="/mut-image.jpg"
-          alt="Murang'a University of Technology"
-          data-aos="fade-left"
-          data-aos-duration="1200"
-        />
-      </div>
+    <!-- Hero Image (desktop only) -->
+    <img
+      src="/mut-image.jpg"
+      alt="Murang'a University of Technology"
+      class="hidden md:block absolute right-0 top-0 w-[40%] h-full object-cover  shadow-lg"
+      data-aos="fade-left"
+      data-aos-duration="1200"
+    />
 
-      <div class="absolute z-1 w-full h-full bg-linear-to-tr from-white/30 dark:from-black/80 via-black/50 to-black/20"></div>
+    <!-- Hero Image (mobile/tablet) -->
+    <img
+      src="/mut-image.jpg"
+      alt="Murang'a University of Technology"
+      class="block md:hidden absolute top-0 left-0 w-full h-[200px] object-cover shadow-lg"
+      data-aos="fade-up"
+      data-aos-duration="1200"
+    />
+  </div>
 
-      <UPageSection class="relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <!-- LEFT CONTENT -->
-          <div class="max-w-xl">
-            <UBadge
-              color="success"
-              variant="soft"
-              icon="i-lucide-graduation-cap"
-              size="lg"
-              data-aos="fade-down"
-            >
-              Murang'a University of Technology
-            </UBadge>
+  <!-- Gradient overlay -->
+  <div
+    class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-tr
+           from-white/30 dark:from-black/80
+           via-black/20 dark:via-black/50
+           to-white/0 dark:to-black/20"
+  ></div>
 
-            <div class="mt-5 space-y-3">
-              <h1
-                class="font-bold text-4xl md:text-5xl lg:text-6xl leading-tight"
-                data-aos="fade-up"
-              >
-                {{ ctaInfo?.title || "Welcome to" }}
-              </h1>
+  <!-- Hero content -->
+  <UPageSection class="relative z-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- LEFT CONTENT -->
+      <div class="max-w-xl space-y-5">
+        <!-- Badge -->
+        <UBadge
+          color="success"
+          variant="soft"
+          icon="i-lucide-graduation-cap"
+          size="lg"
+          data-aos="fade-down"
+        >
+          Murang'a University of Technology
+        </UBadge>
 
-              <h1
-                class="font-bold text-primary text-4xl md:text-5xl lg:text-6xl leading-tight"
-                data-aos="fade-up"
-                data-aos-delay="100"
-              >
-                {{ ctaInfo?.subtitle || "MUT Tech Club" }}
-              </h1>
+        <!-- Headings -->
+        <div class="space-y-2">
+          <h1
+            class="font-bold text-4xl md:text-5xl lg:text-6xl leading-tight text-white"
+            data-aos="fade-up"
+          >
+            {{ ctaInfo?.title || "Welcome to" }}
+          </h1>
 
-              <p
-                class="mt-4 text-lg text-gray-600 dark:text-gray-300"
-                data-aos="fade-up"
-                data-aos-delay="200"
-              >
-                {{ ctaInfo?.description || "Empowering students with real-world technical skills, innovation, and collaboration." }}
-              </p>
-            </div>
+          <h1
+            class="font-bold text-primary text-4xl md:text-5xl lg:text-6xl leading-tight"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            {{ ctaInfo?.subtitle || "MUT Tech Club" }}
+          </h1>
 
-            <!-- CTA BUTTONS -->
-            <div
-              class="flex flex-wrap items-center gap-4 mt-8"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <UButton
-                to="/join"
-                size="lg"
-                trailing-icon="i-lucide-arrow-right"
-              >
-                Join Club
-              </UButton>
-
-              <UButton
-                to="/projects"
-                size="lg"
-                color="neutral"
-                variant="soft"
-                icon="i-lucide-folder-code"
-              >
-                Explore Projects
-              </UButton>
-            </div>
-
-            <!-- STATS -->
-            <div
-              class="grid grid-cols-3 gap-8 mt-10"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            >
-              <div class="text-center" data-aos="zoom-in">
-                <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                  <ClientOnly>
-                    <CountUp :endVal="counts?.activeMembers || 0" />
-                  </ClientOnly>
-                  <span class="ml-1">+</span>
-                </div>
-                <p class="text-sm text-muted">Active Members</p>
-              </div>
-
-              <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
-                <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                  <ClientOnly>
-                    <CountUp :endVal="counts?.projects || 0" />
-                  </ClientOnly>
-                  <span class="ml-1">+</span>
-                </div>
-                <p class="text-sm text-muted">Projects Built</p>
-              </div>
-
-              <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
-                <div class="flex justify-center items-center text-3xl font-bold text-primary">
-                  <ClientOnly>
-                    <CountUp :endVal="counts?.eventsYear || 0" />
-                  </ClientOnly>
-                  <span class="ml-1">+</span>
-                </div>
-                <p class="text-sm text-muted">Events / Year</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- RIGHT CAROUSEL -->
-          <div
-            class="flex justify-center"
-            data-aos="zoom-in-left"
+          <p
+            class="text-lg md:text-xl text-gray-200 dark:text-gray-300"
+            data-aos="fade-up"
             data-aos-delay="200"
           >
-            <UCarousel
-              v-slot="{ item }"
-              dots
-              :items="groupImages || []"
-              loop
-              :autoplay="{ delay: 4500 }"
-              wheel-gestures
-              class="w-full max-w-xs sm:max-w-sm md:max-w-md"
-            >
-              <img
-                :src="item"
-                alt="Students collaborating"
-                class="w-full h-[260px] md:h-[320px] rounded-xl shadow-xl object-cover"
-              />
-            </UCarousel>
+            {{
+              ctaInfo?.description ||
+              "Empowering students with real-world technical skills, innovation, and collaboration."
+            }}
+          </p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4 mt-6" data-aos="fade-up" data-aos-delay="300">
+          <UButton
+            to="/join"
+            size="lg"
+            trailing-icon="i-lucide-arrow-right"
+          >
+            Join Club
+          </UButton>
+
+          <UButton
+            to="/projects"
+            size="lg"
+            color="neutral"
+            variant="soft"
+            icon="i-lucide-folder-code"
+          >
+            Explore Projects
+          </UButton>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-6 mt-10" data-aos="fade-up" data-aos-delay="400">
+          <div class="text-center" data-aos="zoom-in">
+            <div class="flex justify-center items-center text-3xl font-bold text-primary">
+              <ClientOnly><CountUp :endVal="counts?.activeMembers || 0" /></ClientOnly>
+              <span class="ml-1">+</span>
+            </div>
+            <p class="text-sm text-muted">Active Members</p>
+          </div>
+
+          <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
+            <div class="flex justify-center items-center text-3xl font-bold text-primary">
+              <ClientOnly><CountUp :endVal="counts?.projects || 0" /></ClientOnly>
+              <span class="ml-1">+</span>
+            </div>
+            <p class="text-sm text-muted">Projects Built</p>
+          </div>
+
+          <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
+            <div class="flex justify-center items-center text-3xl font-bold text-primary">
+              <ClientOnly><CountUp :endVal="counts?.eventsYear || 0" /></ClientOnly>
+              <span class="ml-1">+</span>
+            </div>
+            <p class="text-sm text-muted">Events / Year</p>
           </div>
         </div>
-      </UPageSection>
-    </section>
+      </div>
 
+      <!-- RIGHT CAROUSEL -->
+      <div class="flex justify-center items-start" data-aos="zoom-in-left" data-aos-delay="200">
+        <UCarousel
+          v-slot="{ item }"
+          :items="groupImages || []"
+          loop
+          dots
+          :autoplay="{ delay: 4500 }"
+          wheel-gestures
+          class="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
+        >
+          <img
+            :src="item"
+            alt="Students collaborating"
+            class="w-full h-[260px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover rounded-lg md:rounded-none shadow-lg"
+          />
+        </UCarousel>
+      </div>
+    </div>
+  </UPageSection>
+</section>
     <!-- ABOUT SECTION -->
     <section
       id="about"
@@ -357,12 +363,11 @@ useSeoMeta({
     >
       <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
         <div class="max-w-2xl text-center" data-aos="fade-up">
-          <h2 class="text-3xl font-bold tracking-tight">
-            Our Focus Areas
-          </h2>
+          <h2 class="text-3xl font-bold tracking-tight">Our Focus Areas</h2>
 
           <p class="mt-3 text-lg text-muted">
-            Develop expertise in high-impact technology fields shaping the future.
+            Develop expertise in high-impact technology fields shaping the
+            future.
           </p>
         </div>
 
@@ -397,11 +402,7 @@ useSeoMeta({
     </section>
 
     <!-- HIGHLIGHTS SECTION -->
-    <section
-      id="highlights"
-      class="scroll-mt-20"
-      aria-label="Featured content"
-    >
+    <section id="highlights" class="scroll-mt-20" aria-label="Featured content">
       <div data-aos="fade-up">
         <HightlightFeaturedProject />
       </div>
@@ -426,13 +427,11 @@ useSeoMeta({
       aria-label="Our partners"
     >
       <div class="max-w-2xl text-center m-auto mb-10" data-aos="fade-up">
-        <h2 class="text-3xl font-bold tracking-tight">
-          Our Partners
-        </h2>
+        <h2 class="text-3xl font-bold tracking-tight">Our Partners</h2>
 
         <p class="mt-3 text-lg text-muted">
-          Collaborating with industry leaders to provide opportunities
-          for our members.
+          Collaborating with industry leaders to provide opportunities for our
+          members.
         </p>
       </div>
 
@@ -469,10 +468,7 @@ useSeoMeta({
       class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-200/40 dark:via-transparent to-transparent scroll-mt-20"
       aria-label="Join us call to action"
     >
-      <CodeCards
-        data-aos="flip-left"
-        data-aos-duration="1500"
-      />
+      <CodeCards data-aos="flip-left" data-aos-duration="1500" />
 
       <UPageCard
         spotlight
