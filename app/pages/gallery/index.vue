@@ -58,7 +58,7 @@
               <NuxtImg
                 width="234"
                 height="234"
-                class="rounded-lg aspect-square object-cover min-w-[40px]"
+                class="rounded-lg aspect-square object-cover min-w-[40px] min-h-[50px] bg-muted"
                 :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
                 :src="img.url"
                 :alt="img.title"
@@ -139,7 +139,7 @@
                 :src="item.url + '/' + item.image"
                 format="webp"
                 loading="lazy"
-                class="w-full object-cover transition-transform duration-500 cursor-pointer"
+                class="w-full object-cover transition-transform duration-500 cursor-pointer min-h-[50px] bg-muted min-w-[40px]"
                 :placeholder="placeholderImg"
                 @click="openImageViewer(item)"
                 @error="handleImageError"
