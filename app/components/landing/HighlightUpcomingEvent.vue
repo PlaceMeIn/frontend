@@ -1,8 +1,8 @@
 <template>
-  <section id="upcoming-event" class="py-20 bg-muted/30">
+  <section id="upcoming-event" class="py-20 bg-gradient-to-tr from-primary-600/10 via-transparent to-primary-400/10 scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
       <div class="max-w-2xl text-center">
-        <h2 class="text-3xl font-bold tracking-tight">Upcoming Events</h2>
+        <h2 class="text-3xl font-bold tracking-tight">{{ title || 'Upcoming Events' }}</h2>
         <p class="mt-3 text-lg text-muted">
           Join us at our upcoming tech events, workshops, and hackathons
         </p>
@@ -59,19 +59,30 @@
 </template>
 
 <script setup lang="ts">
-const endpoints = useEndpoints();
-const { get } = useApi();
+import { useEndpoints } from '@/composables/useEndpoints'
+import { useApi } from '@/composables/useApi'
+
+const endpoints = useEndpoints()
+const { get } = useApi()
+
+interface Props {
+  title: string
+  limit: number
+  related: string
+}
+const props = defineProps<Props>()
 
 const { data, pending, error, refresh } = await useAsyncData(
-  "projects",
-  () => get(endpoints.events.list),
+  'projects',
+  () => get(endpoints.events.list, {
+    limit: props.limit,
+    search: props.related,
+  }),
   {
     lazy: true,
-
-    // prevents undefined errors
     default: () => ({
-      events: [],
+      events: [] as Array<any>, // You can replace `any` with proper type
     }),
-  },
-);
+  }
+)
 </script>

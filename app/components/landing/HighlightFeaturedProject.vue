@@ -1,9 +1,9 @@
 <template>
-  <section id="featured-project" class="py-20 bg-muted/30">
+  <section id="featured-project" class="py-20">
     <div class="max-w-7xl mx-auto px-6 flex flex-col items-center">
       <!-- Header -->
       <div class="max-w-2xl text-center">
-        <h2 class="text-3xl font-bold tracking-tight">Featured Projects</h2>
+        <h2 class="text-3xl font-bold tracking-tight">{{ title || 'Featured Projects' }}</h2>
         <p class="mt-3 text-lg text-muted">
           Explore some of the innovative projects built by our members
         </p>
@@ -64,10 +64,20 @@
 <script setup lang="ts">
 const endpoints = useEndpoints();
 const { get } = useApi();
+interface Props {
+  title: string;
+  limit: number;
+  related: string;
+}
+const props = defineProps<Props>();
 
 const { data, pending, error, refresh } = await useAsyncData(
   "events",
-  () => get(endpoints.projects.list),
+  () =>
+    get(endpoints.projects.list, {
+      limit: props.limit,
+      search: props.related,
+    }),
   {
     lazy: true,
 

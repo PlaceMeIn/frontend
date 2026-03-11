@@ -171,6 +171,7 @@ useSeoMeta({
           class="hidden md:block absolute right-0 top-0 w-[40%] h-full object-cover shadow-lg"
           data-aos="fade-left"
           data-aos-duration="1200"
+            loading="lazy" 
         />
 
         <!-- Hero Image (mobile/tablet) -->
@@ -180,6 +181,8 @@ useSeoMeta({
           class="block md:hidden absolute top-0 left-0 w-full h-[200px] object-cover shadow-lg"
           data-aos="fade-up"
           data-aos-duration="1200"
+            loading="lazy" 
+
         />
       </div>
 
@@ -318,7 +321,9 @@ useSeoMeta({
               class="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
             >
               <img
-                :src="item"
+                :src="item || '/placeholder.jpg'"
+                  loading="lazy" 
+
                 alt="Students collaborating"
                 class="w-full h-[260px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover rounded-lg md:rounded-none shadow-lg"
               />
@@ -491,9 +496,11 @@ useSeoMeta({
           <div class="flex items-center gap-3">
             <img
               v-if="partner?.image"
-              :src="partner?.image"
+              :src="partner?.image || '/placeholder.jpg'"
               :alt="partner?.label"
               class="w-16 h-12 object-contain"
+                loading="lazy" 
+
             />
 
             <p class="text-lg font-semibold">
@@ -507,7 +514,7 @@ useSeoMeta({
     <!-- CALL TO ACTION SECTION -->
     <section
       id="cta"
-      class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-200/40 dark:via-transparent to-transparent scroll-mt-20"
+      class="w-full px-6 py-16 flex flex-col items-center gap-10 bg-gradient-to-tr from-primary/40 via-primary-400/20 dark:via-primary-400/7 to-transparent scroll-mt-20"
       aria-label="Join us call to action"
     >
       <CodeCards data-aos="flip-left" data-aos-duration="1500" />

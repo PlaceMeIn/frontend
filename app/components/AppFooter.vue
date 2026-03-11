@@ -5,7 +5,7 @@ const columns = [
     children: [
       {
         label: "Home",
-        to:'/'
+        to: "/",
       },
       {
         label: "About",
@@ -23,10 +23,15 @@ const columns = [
         label: "Leadership",
         to: "/leadership",
       },
-        {
+      {
+        label: "Gallery & Memories",
+        to: "/gallery",
+      },
+      {
         label: "Reviews",
         to: "/reviews",
-      },  {
+      },
+      {
         label: "Suggestions",
         to: "/suggestions",
       },
@@ -35,7 +40,7 @@ const columns = [
   {
     label: "Features",
     children: [
-       {
+      {
         label: "Contests",
         to: "/contests",
       },
@@ -58,10 +63,10 @@ const columns = [
       },
     ],
   },
- {
+  {
     label: "Contact",
     children: [
-       {
+      {
         label: "Murang'a University Of Technology",
         to: "",
       },
@@ -115,7 +120,7 @@ const toast = useToast();
         <UFooterColumns :columns="columns">
           <template #left>
             <div>
-              <AppLogo />
+              <AppLogo :size="5" />
               <p class="font-normal text-muted text-md mt-5">
                 Empowering the next generation of innovators, developers, and
                 tech leaders at Murang'a University of Technology.
@@ -136,14 +141,12 @@ const toast = useToast();
       </UContainer>
     </template>
 
-    <div >
+    <div>
       <p class="text-sm text-muted text-center">
         © {{ new Date().getFullYear() }} MUT Tech Club. All rights reserved.
         <br />
         Developed by VD
       </p>
     </div>
-
-    
   </UFooter>
 </template>

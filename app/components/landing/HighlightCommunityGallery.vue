@@ -43,7 +43,8 @@ const communityGallery = ref([
       <img
         v-for="(image, index) in communityGallery[0]"
         :key="`left-${index}`"
-        :src="image"
+        :src="image || '/placeholder.jpg'"
+        loading="lazy"
         width="460"
         height="258"
         :alt="`Coding camp group ${index + 1}`"
@@ -62,7 +63,8 @@ const communityGallery = ref([
       <img
         v-for="(image, index) in communityGallery[1]"
         :key="`middle-${index}`"
-        :src="image"
+        :src="image || '/placeholder.jpg'"
+        loading="lazy"
         width="460"
         height="258"
         :alt="`Coding camp group ${index + 5}`"
@@ -82,7 +84,8 @@ const communityGallery = ref([
       <img
         v-for="(image, index) in communityGallery[2]"
         :key="`right-${index}`"
-        :src="image"
+        :src="image || '/placeholder.jpg'"
+        loading="lazy"
         width="460"
         height="258"
         :alt="`Coding camp group ${index + 9}`"
@@ -100,7 +103,8 @@ const communityGallery = ref([
       <img
         v-for="(image, index) in communityGallery[0]"
         :key="`xl-${index}`"
-        :src="image"
+        :src="image || '/placeholder.jpg'"
+        loading="lazy"
         width="460"
         height="258"
         class="aspect-video border-4 border-white/20 rounded-lg shadow-2xl hover:scale-105 transition"
@@ -118,7 +122,8 @@ const communityGallery = ref([
       <img
         v-for="(image, index) in communityGallery[1]"
         :key="`2xl-${index}`"
-        :src="image"
+        :src="image || '/placeholder.jpg'"
+        loading="lazy"
         width="460"
         height="258"
         class="aspect-video border-4 border-white/20 rounded-lg shadow-2xl hover:scale-105 transition"

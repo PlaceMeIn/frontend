@@ -12,7 +12,7 @@ export const useEndpoints = () => {
             leads: `${apiBase}/api/leadership/`
         },
         resources: {
-            main:`${apiBase}/api/resources`,
+            main: `${apiBase}/api/resources`,
             repos: `${apiBase}/api/resources/repos`,
             learning: `${apiBase}/api/resources/learning`,
             certifications: `${apiBase}/api/resourcces/certifications`,
@@ -25,15 +25,21 @@ export const useEndpoints = () => {
 
         },
         events: {
-            list: `${apiBase}/api/events`,
-            past:`${apiBase}/api/events/past/list`
+            list: `${apiBase}/api/events/`,
+            past: `${apiBase}/api/events/past/list`
         },
         reviews: {
             list: `${apiBase}/api/testimonials`
 
         },
         projects: {
-            list: `${apiBase}/api/projects`
+            list: `${apiBase}/api/projects/`
+        },
+        gallery:{
+            list:`${apiBase}/api/galleries/`,
+            event:`${apiBase}/api/galleries/by-event/`,
+            featured:`${apiBase}/api/galleries/featured/`,
+            unliked: `${apiBase}/api/galleries/unlinked/`,
         }
     };
 

@@ -14,6 +14,7 @@
         class="absolute right-0 bottom-0 w-full h-full md:h-full object-cover opacity-90"
         data-aos="fade-up"
         data-aos-duration="1200"
+        loading="lazy"
       />
 
       <div
@@ -31,79 +32,140 @@
     <!-- FILTERS SECTION -->
     <section
       id="filters"
-      class="mt-10 max-w-5xl mx-auto flex flex-col gap-4 sticky top-15 backdrop-blur z-10 py-3"
+      class="sticky top-16 z-40 mt-10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-y border-gray-200 dark:border-neutral-800 scroll-mt-16"
       data-aos="fade-down"
       data-aos-delay="100"
     >
-      <div class="flex gap-2 items-center">
-        <UInput
-          v-model="search"
-          placeholder="Search projects..."
-          icon="i-lucide-search"
-          size="lg"
-          @update:model-value="onSearch"
-          class="transition-shadow focus:shadow-lg flex-1"
-        />
-        <UButton
-          label="Reset"
-          icon="i-lucide-rotate-ccw"
-          variant="outline"
-          size="lg"
-          :disabled="isFiltersDefault"
-          @click="resetFilters"
-          class="transition-transform hover:scale-105 whitespace-nowrap"
-          title="Reset all filters to default"
-        />
-      </div>
-
-      <div class="flex flex-wrap gap-3 justify-between items-center">
-        <div class="flex flex-wrap gap-2" role="group" aria-label="Project categories">
-          <UButton
-            label="All"
-            :variant="activeType === 'All' ? 'solid' : 'outline'"
-            :icon="activeType === 'All' ? 'i-lucide-check' : ''"
-            @click="setFilter('All')"
-            class="transition-transform hover:scale-105"
-            :aria-pressed="activeType === 'All'"
+      <div class="max-w-5xl mx-auto px-2  py-2">
+        <!-- Search and Reset Row -->
+        <div class="flex gap-2 mb-4">
+          <UInput
+            v-model="search"
+            placeholder="Search projects..."
+            icon="i-lucide-search"
+            size="md"
+            class="flex-1"
+            :ui="{
+              wrapper: 'w-full',
+              base: 'h-10 pl-10',
+              icon: { trailing: { pointer: '' } },
+            }"
+            @update:model-value="onSearch"
           />
-
           <UButton
-            v-for="type in projectTypes"
-            :key="type.value"
-            :label="type.label"
-            :variant="activeType === type.value ? 'solid' : 'outline'"
-            :icon="activeType === type.value ? 'i-lucide-check' : ''"
-            @click="setFilter(type.value)"
-            class="transition-transform hover:scale-105"
-            :aria-pressed="activeType === type.value"
+            icon="i-lucide-rotate-ccw"
+            variant="soft"
+            color="gray"
+            size="md"
+            :disabled="isFiltersDefault"
+            @click="resetFilters"
+            class="shrink-0"
+            :ui="{ base: 'h-10 px-3' }"
+            title="Reset filters"
           />
         </div>
 
-        <USelect
-          v-model="sort"
-          :items="sortOptions"
-          icon="i-lucide-arrow-up-down"
-          class="w-48 transition-transform hover:scale-105"
-          @update:model-value="onSearch"
-          aria-label="Sort projects"
-        />
-      </div>
+        <!-- Categories and Sort Row -->
+        <div
+          class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between"
+        >
+          <!-- Category Filters -->
+          <div
+            class="flex flex-wrap gap-1.5"
+            role="group"
+            aria-label="Project categories"
+          >
+            <UButton
+              label="All"
+              size="sm"
+              :color="activeType === 'All' ? 'primary' : 'neutral'"
+              :variant="activeType === 'All' ? 'solid' : 'soft'"
+              @click="setFilter('All')"
+              class="!px-3 !py-1.5 text-xs"
+              :aria-pressed="activeType === 'All'"
+            />
 
-      <!-- Active Filters Summary -->
-      <div v-if="!isFiltersDefault" class="text-sm text-muted mt-2">
-        Active filters:
-        <span v-if="search" class="inline-flex items-center gap-1 mr-3">
-          <UIcon name="i-lucide-search" class="w-3 h-3" />
-          "{{ search }}"
-        </span>
-        <span v-if="activeType !== 'All'" class="inline-flex items-center gap-1 mr-3">
-          <UIcon name="i-lucide-tag" class="w-3 h-3" />
-          {{ getTypeLabel(activeType) }}
-        </span>
-        <span v-if="sort !== 'desc'" class="inline-flex items-center gap-1">
-          <UIcon name="i-lucide-arrow-up-down" class="w-3 h-3" />
-          {{ sort === "asc" ? "Oldest first" : "Newest first" }}
-        </span>
+            <UButton
+              v-for="type in projectTypes"
+              :key="type.value"
+              :label="type.label"
+              size="sm"
+              :color="activeType === type.value ? 'primary' : 'neutral'"
+              :variant="activeType === type.value ? 'solid' : 'soft'"
+              @click="setFilter(type.value)"
+              class="!px-3 !py-1.5 text-xs"
+              :aria-pressed="activeType === type.value"
+            />
+          </div>
+
+          <!-- Sort Dropdown -->
+          <USelect
+            v-model="sort"
+            :items="sortOptions"
+            value-key="value"
+            label-key="label"
+            icon="i-lucide-arrow-up-down"
+            size="sm"
+            class="w-full sm:w-40"
+            :ui="{
+              base: 'h-9',
+              wrapper: 'w-full',
+            }"
+            @update:model-value="onSearch"
+            aria-label="Sort projects"
+          />
+        </div>
+
+        <!-- Active Filters Summary -->
+        <Transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0 -translate-y-1"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 -translate-y-1"
+        >
+          <div
+            v-if="!isFiltersDefault"
+            class="flex flex-wrap items-center gap-2 mt-3 pt-2 border-t border-gray-200 dark:border-neutral-800 text-xs"
+          >
+            <span class="text-gray-500 dark:text-gray-400 font-medium"
+              >Active:</span>
+
+            <span
+              v-if="search"
+              class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full"
+            >
+              <UIcon name="i-lucide-search" class="w-3 h-3" />
+              "{{ search }}"
+            </span>
+
+            <span
+              v-if="activeType !== 'All'"
+              class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full"
+            >
+              <UIcon name="i-lucide-tag" class="w-3 h-3" />
+              {{ getTypeLabel(activeType) }}
+            </span>
+
+            <span
+              v-if="sort !== 'desc'"
+              class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full"
+            >
+              <UIcon name="i-lucide-arrow-up-down" class="w-3 h-3" />
+              {{ sort === "asc" ? "Oldest first" : "Newest first" }}
+            </span>
+
+            <UButton
+              label="Clear all"
+              color="neutral"
+              variant="link"
+              size="xs"
+              class="!text-xs underline"
+              @click="resetFilters"
+            />
+          </div>
+        </Transition>
       </div>
     </section>
 
@@ -115,7 +177,9 @@
     >
       <!-- Results count -->
       <div v-if="projects.length > 0" class="text-sm text-muted mb-4 px-2">
-        Showing {{ projects.length }} project{{ projects.length !== 1 ? "s" : "" }}
+        Showing {{ projects.length }} project{{
+          projects.length !== 1 ? "s" : ""
+        }}
         <span v-if="!isFiltersDefault">with current filters</span>
       </div>
 
@@ -129,7 +193,10 @@
 
         <!-- Error State -->
         <template v-else-if="error || loadingError">
-          <div class="col-span-full flex flex-col items-center gap-4 py-10" data-aos="fade-up">
+          <div
+            class="col-span-full flex flex-col items-center gap-4 py-10"
+            data-aos="fade-up"
+          >
             <ErrorState
               title="Failed to load projects"
               description="Unable to fetch projects. Please try again."
@@ -174,7 +241,9 @@
           :disabled="!hasMore || pending"
           @click="loadMore"
           class="transition-transform hover:scale-105"
-          :aria-label="hasMore ? 'Load more projects' : 'No more projects to load'"
+          :aria-label="
+            hasMore ? 'Load more projects' : 'No more projects to load'
+          "
         />
 
         <!-- End of results message -->
@@ -199,7 +268,8 @@
           Want to Build Something Amazing?
         </h2>
         <p class="mt-3 text-muted max-w-xl mx-auto">
-          Join MUT Tech Club and work on exciting projects that make a real impact.
+          Join MUT Tech Club and work on exciting projects that make a real
+          impact.
         </p>
         <div
           class="mt-10 flex flex-col items-center gap-6"

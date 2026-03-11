@@ -23,6 +23,8 @@
         alt="Murang'a University of Technology"
         class="absolute inset-0 w-full h-full object-cover"
         data-aos="fade-up"
+          loading="lazy" 
+
         data-aos-duration="1200"
       />
 
@@ -420,6 +422,12 @@ const sections = [
 
 const stateStore = useStateStore();
 const toast = useToast();
+
+useSeoPage({
+  title: `Contact MUT Tech Club | ${useAppConfig().site.title}`,
+  description:
+    "Get in touch with the MUT Tech Club at Murang'a University of Technology. Reach out for collaborations, membership inquiries, events, or tech community activities."
+})
 
 const schema = v.object({
   fullname: v.pipe(

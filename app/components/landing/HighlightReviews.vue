@@ -55,10 +55,10 @@
                   :name="review?.user_profile?.full_name || 'Anonymous'"
                   :description="review?.user_profile?.course || 'Student'"
                   :avatar="{
-                    src: review?.user_profile?.avatar || undefined,
+                    src: review?.user_profile?.profile_picture || undefined,
                     icon: 'i-lucide-user',
                   }"
-                  chip
+          
                   size="xl"
                 />
               </div>

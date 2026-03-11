@@ -8,8 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-
-    apiBase:"https://vancouver-organizations-miniature-not.trycloudflare.com"
+    apiBase:"https://dot-assembly-fine-cable.trycloudflare.com"
   },
   global: {
    

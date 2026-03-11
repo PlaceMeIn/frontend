@@ -11,6 +11,7 @@
         :src="ctaImg"
         alt="Murang'a University of Technology"
         class="absolute right-0 bottom-0 w-full h-full object-cover opacity-90"
+        loading="lazy"
       />
 
       <div
@@ -226,7 +227,8 @@
           <div class="flex gap-20 flex-col md:flex-row items-center">
             <ThreeDButton @clicked="$router.push('/join')" />
 
-            <a :href="useAppConfig().site?.sourceLink"
+            <a
+              :href="useAppConfig().site?.sourceLink"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -249,6 +251,12 @@ const sections = [
   { id: "certifications", label: "Certifications" },
   { id: "cta", label: "Join Us" },
 ];
+
+useSeoPage({
+  title: `Learning Resources | MUT Tech Club`,
+  description:
+    "Access curated learning resources, tutorials, and e-learning materials from MUT Tech Club to help you grow your skills in programming, development, and emerging technologies.",
+});
 
 const structuredLearnings = ref<any[]>([]);
 const repos = ref<any[]>([]);

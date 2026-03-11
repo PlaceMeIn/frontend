@@ -15,6 +15,7 @@
         class="absolute right-0 bottom-0 w-full h-full md:h-full object-cover opacity-90"
         data-aos="fade-up"
         data-aos-duration="1200"
+        loading="lazy"
       />
 
       <div
@@ -26,7 +27,7 @@
           {{ "Our Leadership" }}
         </h1>
 
-        <p class="mt-4 text-lg  text-gray-200 max-w-xl">
+        <p class="mt-4 text-lg text-gray-200 max-w-xl">
           {{
             "Meet the passionate team driving innovation and excellence at MUT Tech Club"
           }}
@@ -63,8 +64,10 @@
           >
             <img
               :src="
-                member?.user_profile?.user?.profile_picture || defaultAvatar
+                member?.user_profile?.user?.profile_picture ||
+                '/placeholder.jpg'
               "
+              loading="lazy"
               :alt="member?.user_profile?.full_name || '?'"
               class="w-full h-56 object-cover rounded-t-xl transition-transform duration-300 group-hover:scale-[1.03]"
             />
@@ -129,9 +132,12 @@
             :data-aos-delay="i * 100"
           >
             <img
-              :src="lead?.user_profile?.user?.profile_picture || defaultAvatar"
+              :src="
+                lead?.user_profile?.user?.profile_picture || '/placeholder.jpg'
+              "
               :alt="lead?.user_profile?.full_name || '?'"
               class="w-28 h-28 object-cover rounded-full mx-auto"
+              loading="lazy"
             />
 
             <h3 class="mt-4 font-semibold">
@@ -184,9 +190,11 @@
           >
             <img
               :src="
-                advisor?.user_profile?.user?.profile_picture || defaultAvatar
+                advisor?.user_profile?.user?.profile_picture ||
+                '/placeholder.jpg'
               "
               :alt="advisor?.user_profile?.full_name || '?'"
+              loading="lazy"
               class="w-20 h-20 object-cover rounded-xl"
             />
 
@@ -254,6 +262,12 @@ const sections = [
   { id: "faculty-advisors", label: "Faculty Advisors" },
   { id: "cta", label: "Join Leadership" },
 ];
+
+useSeoPage({
+  title: `Leadership | MUT Tech Club`,
+  description:
+    "Meet the leadership team of the MUT Tech Club at Murang'a University of Technology. Discover the students leading innovation, collaboration, and technology initiatives in the community.",
+});
 
 const defaultAvatar =
   "https://ui-avatars.com/api/?background=6366f1&color=fff&name=Member";

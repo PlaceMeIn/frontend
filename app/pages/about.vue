@@ -13,6 +13,8 @@
         class="absolute inset-0 w-full h-full object-cover"
         data-aos="fade-up"
         data-aos-duration="1200"
+          loading="lazy" 
+
       />
 
       <div
@@ -353,7 +355,7 @@ const sections = [
 const config = useAppConfig();
 
 useSeoPage({
-  title: `About ${config.site.title}`,
+  title: `About MUT Tech Club | ${config.site.title}`,
   description:
     "We are a student-led innovation hub dedicated to building real-world technical skills, fostering creativity, and preparing students for global tech careers.",
 });

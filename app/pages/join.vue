@@ -548,6 +548,11 @@
 <script setup lang="ts">
 import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
+useSeoPage({
+  title: `Join MUT Tech Club | ${useAppConfig().site.title}`,
+  description:
+    "Become part of the MUT Tech Club community. Learn, build projects, collaborate with fellow innovators, and grow your skills in technology at Murang'a University of Technology."
+})
 
 const sections = [
   { id: "hero", label: "Hero" },

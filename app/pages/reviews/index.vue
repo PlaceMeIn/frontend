@@ -273,10 +273,11 @@ const sections = [
 ];
 
 useSeoPage({
-  title: `Student Reviews | ${useAppConfig().site.title}`,
-  description: "Discover authentic experiences from our community. Read honest reviews about our programs, events, and learning journey.",
-  ogImage: '/images/reviews-og.jpg'
-});
+  title: `Reviews & Testimonials | ${useAppConfig().site.title}`,
+  description:
+    "Read reviews and testimonials from MUT Tech Club members and students. Discover their experiences from tech events, workshops, projects, and the learning community.",
+  image: "/images/reviews-og.jpg"
+})
 
 interface Review {
   id: number;

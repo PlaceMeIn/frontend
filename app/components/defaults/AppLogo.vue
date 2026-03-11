@@ -1,15 +1,24 @@
 <template>
-  <NuxtLink to="/" class="inline-flex  items-center">
-    <!-- <img
-      src="/logos/logo.png"
-      alt="Logo"
-      class="pointer-events-none select-none"
-      :style="{ height: `${size * 25}px` }"
-    /> -->
-    <div class="bg-primary rounded-xl p-2 mr-1 text-white">MT</div>
-    <div>
-      <h2 class="text-md text-lg md:text-2xl font-semibold md:font-bold">{{config.site.name}}</h2>
-      <p class="p-0 m-0 text-muted font-mono text-[10px] font-normal">{{config.site.motto}}</p>
+  <NuxtLink to="/" class="inline-flex items-center gap-2 group">
+    <div
+      class="flex items-center justify-center rounded-full bg-white/80 dark:bg-neutral-800/80 p-1 shadow-sm ring-1 ring-black/5 dark:ring-white/10 backdrop-blur"
+    >
+      <img
+        src="/logo.jpeg"
+        alt="Mut Tech Logo"
+        class="pointer-events-none select-none rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+        :style="{ height: `${size * 15}px`, width: `${size * 15}px` }"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="leading-tight">
+      <h2 class="text-lg md:text-2xl font-semibold md:font-bold">
+        {{ config.site.name }}
+      </h2>
+      <p class="text-muted font-mono text-[10px]">
+        {{ config.site.motto }}
+      </p>
     </div>
   </NuxtLink>
 </template>
@@ -19,5 +28,5 @@ defineProps<{
   size?: number
 }>()
 
-const config  = useAppConfig()
+const config = useAppConfig()
 </script>
