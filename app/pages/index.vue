@@ -435,7 +435,7 @@ useSeoMeta({
         aria-label="Featured Project"
         data-aos="fade-up"
       >
-        <HightlightFeaturedProject />
+        <HightlightFeaturedProject  :limit="6"/>
       </section>
 
       <section
@@ -445,7 +445,7 @@ useSeoMeta({
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        <HighlightUpcomingEvent />
+        <HighlightUpcomingEvent  :limit="6"/>
       </section>
 
       <section

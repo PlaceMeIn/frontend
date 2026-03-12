@@ -30,8 +30,7 @@
               class="!px-3 !py-1.5 text-xs font-medium"
             >
               <UIcon name="i-lucide-ticket" class="w-3.5 h-3.5 mr-1.5" />
-              <span class="hidden sm:inline">Register</span>
-              <span class="sm:hidden">Book</span>
+              <span class="inline">Register</span>
             </UButton>
 
             <UButton
@@ -549,7 +548,8 @@
         <!-- Related -->
         <section id="related" class="scroll-mt-16">
           <HighlightUpcomingEvent
-            :limit="3"
+            :limit="10"
+            :h-scroll="true"
             :related="eventData?.event_type"
             :title="'Related Events'"
           />

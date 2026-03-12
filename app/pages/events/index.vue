@@ -113,11 +113,7 @@
       </div>
 
       <div class="space-y-6">
-        <div v-if="pending || loadingMore" class="flex justify-center py-8">
-          <Loader />
-        </div>
-
-        <div v-else-if="error || loadingError" class="flex justify-center py-8">
+        <div v-if="error || loadingError" class="flex justify-center py-8">
           <ErrorState
             title="Failed to load events"
             description="Please try again"
@@ -143,6 +139,10 @@
             :isOdd="i % 2 === 1"
           />
         </template>
+
+        <div v-if="pending || loadingMore" class="flex justify-center py-8">
+          <Loader />
+        </div>
       </div>
 
       <div v-if="events.length > 0" class="flex flex-col items-center mt-8">

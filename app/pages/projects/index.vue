@@ -36,7 +36,7 @@
       data-aos="fade-down"
       data-aos-delay="100"
     >
-      <div class="max-w-5xl mx-auto px-2  py-2">
+      <div class="max-w-5xl mx-auto px-2 py-2">
         <!-- Search and Reset Row -->
         <div class="flex gap-2 mb-4">
           <UInput
@@ -130,7 +130,8 @@
             class="flex flex-wrap items-center gap-2 mt-3 pt-2 border-t border-gray-200 dark:border-neutral-800 text-xs"
           >
             <span class="text-gray-500 dark:text-gray-400 font-medium"
-              >Active:</span>
+              >Active:</span
+            >
 
             <span
               v-if="search"
@@ -185,14 +186,9 @@
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 w-full">
         <!-- Loading State -->
-        <template v-if="pending || loadingMore">
-          <div class="col-span-full flex justify-center py-10">
-            <Loader />
-          </div>
-        </template>
 
         <!-- Error State -->
-        <template v-else-if="error || loadingError">
+        <template v-if="error || loadingError">
           <div
             class="col-span-full flex flex-col items-center gap-4 py-10"
             data-aos="fade-up"
@@ -228,6 +224,12 @@
             data-aos-delay="50"
             class="transition-transform hover:scale-105"
           />
+        </template>
+
+        <template v-if="pending || loadingMore">
+          <div class="col-span-full flex justify-center py-10">
+            <Loader />
+          </div>
         </template>
       </div>
 

@@ -643,8 +643,10 @@
               Similar Projects
             </h2>
             <HighlightFeaturedProject
-              :limit="3"
+              :limit="10"
+              :title="'Related projects'"
               :related="projectData?.category"
+              :h-scroll=true
             />
           </div>
         </section>
