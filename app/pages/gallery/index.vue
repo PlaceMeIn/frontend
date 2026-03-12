@@ -60,14 +60,17 @@
                 height="234"
                 class="rounded-lg aspect-square object-cover min-w-[40px] min-h-[50px] bg-muted"
                 :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
-                :src="img.url"
+                :src="getMediaUrl(img, img.image)"
                 :alt="img.title"
                 :placeholder="placeholderImg"
                 @error="handleImageError"
               />
-              <div class="absolute bottom-1 left-4 right-4">
+              <div
+                :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
+                class="absolute inset-x-0 bottom-0 p-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent"
+              >
                 <h2
-                  class="text-white text-base font-semibold line-clamp-2  drop-shadow-md truncate"
+                  class="text-white text-lg font-semibold leading-snug line-clamp-2 tracking-tight drop-shadow"
                 >
                   {{ img.title }}
                 </h2>
@@ -75,11 +78,11 @@
                 <NuxtLink
                   v-if="img?.event_slug || img?.project_slug"
                   :to="'/events/' + (img?.event_slug || img?.project_slug)"
-                  class="text-sm text-primary hover:text-primary/80 font-medium inline-flex items-center gap-1 transition-colors"
+                  class="mt-1 text-sm text-primary-300 hover:text-primary-200 font-medium inline-flex items-center gap-1.5 transition-colors"
                   @click.stop
                 >
                   View Gallery
-                  <UIcon name="i-lucide-arrow-right" class="w-3.5 h-3.5" />
+                  <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
                 </NuxtLink>
               </div>
             </div>
@@ -128,43 +131,43 @@
           class="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3"
         >
           <div
-            v-for="item in filteredGallery"
+            v-for="(item, i) in filteredGallery"
             :key="item.id"
             class="break-inside-avoid group relative"
           >
-            <!-- Image Container -->
-            <div class="relative overflow-hidden rounded-lg">
+            <div class="relative overflow-hidden rounded-xl bg-muted">
+              <!-- Image -->
               <NuxtImg
                 v-if="item.image"
-                :src="item.url + '/' + item.image"
+                :src="getMediaUrl(item, item.image)"
+                :alt="item.title || 'Gallery image'"
                 format="webp"
                 loading="lazy"
-                class="w-full object-cover transition-transform duration-500 cursor-pointer min-h-[50px] bg-muted min-w-[40px]"
                 :placeholder="placeholderImg"
+                class="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 cursor-pointer min-h-[60px]"
                 @click="openImageViewer(item)"
-                @error="handleImageError"
               />
+
+              <!-- Video -->
               <video
                 v-else-if="item.video"
-                :src="item.url + '/' + item.video"
+                :src="getMediaUrl(item, item.video)"
                 controls
-                class="w-full rounded-lg"
                 :poster="placeholderImg"
+                class="w-full rounded-xl"
                 @error="handleVideoError"
               />
 
-              <!-- Gradient Overlay - Always visible on mobile -->
+              <!-- Caption -->
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
-              />
-
-              <!-- Title and Link - Always visible on mobile -->
-              <div
-                class="absolute bottom-0 left-0 right-0 p-3 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300"
+                class="absolute bottom-0 left-0 right-0 p-4 flex flex-col gap-1 transform transition duration-300"
               >
-                <h3 class="text-white text-sm font-semibold line-clamp-1 mb-1">
+                <h3
+                  class="text-white text-sm md:text-base font-semibold tracking-tight line-clamp-1 drop-shadow"
+                >
                   {{ item.title }}
                 </h3>
+
                 <p
                   v-if="item.description"
                   class="text-gray-200 text-xs line-clamp-2"
@@ -172,11 +175,10 @@
                   {{ item.description }}
                 </p>
 
-                <!-- Small link to gallery -->
                 <NuxtLink
                   v-if="item.event_slug || item.project_slug"
                   :to="`/gallery/${item.event_slug}`"
-                  class="inline-flex items-center gap-1 mt-2 text-xs text-primary hover:text-primary/80 transition-colors"
+                  class="inline-flex items-center gap-1 mt-2 text-xs text-primary-300 hover:text-primary-200 transition-colors"
                   @click.stop
                 >
                   <UIcon
@@ -190,14 +192,14 @@
                 </NuxtLink>
               </div>
 
-              <!-- Uploader Info -->
+              <!-- Date -->
               <div
-                class="absolute top-2 left-2 flex items-center gap-1 backdrop-blur-sm px-2 py-1 rounded-lg shadow-lg"
+                class="absolute top-2 left-2 flex items-center gap-1 bg-black/40 backdrop-blur-md px-2 py-1 rounded-md"
               >
-                <UIcon name="i-lucide-clock" class="w-3 h-3 text-primary" />
-                <span class="text-[10px] text-white truncate max-w-[80px]">{{
-                  formatDate(item.created_at)
-                }}</span>
+                <UIcon name="i-lucide-clock" class="w-3 h-3 text-primary-300" />
+                <span class="text-[10px] text-white">
+                  {{ formatDate(item.created_at) }}
+                </span>
               </div>
             </div>
           </div>
@@ -252,13 +254,7 @@
     </template>
 
     <!-- Image Viewer -->
-    <LazyImageCard
-      v-model="showImageViewer"
-      :images="galleryImages"
-      :initial-index="currentImageIndex"
-      :title="currentImageTitle"
-      @close="showImageViewer = false"
-    />
+    <ImageCard v-model="showImageViewer" :item="selectedImg" />
   </div>
 </template>
 
@@ -270,16 +266,21 @@ import placeholderImg from "/placeholder.jpg";
 const endpoints = useEndpoints();
 const { get } = useApi();
 
-const limit = 10;
+const LIMIT = 10;
+const MAX_GALLERY_ITEMS = 50;
+
 const offset = ref(0);
 const totalCount = ref(0);
+
 const gallery = ref<any[]>([]);
 const loadingMore = ref(false);
+const selectedImg = ref(null);
 const showImageViewer = ref(false);
 const currentImageIndex = ref(0);
 const currentImageTitle = ref("");
-const filterType = ref("all");
 const galleryImages = ref<Array<{ url: string; caption?: string }>>([]);
+
+const filterType = ref("all");
 
 const filterOptions = [
   { label: "All", value: "all" },
@@ -291,86 +292,111 @@ const filterOptions = [
 
 const isFiltersDefault = computed(() => filterType.value === "all");
 
-// Fetch main gallery
+// MAIN GALLERY FETCH
 const { data, pending, error, refresh } = await useAsyncData(
   "gallery",
-  () => get(endpoints.gallery.list, { limit, offset: offset.value }),
+  () => get(endpoints.gallery.list, { limit: LIMIT, offset: offset.value }),
   {
-    default: () => ({ results: [], count: 0, has_more: false, next_offset: 0 }),
+    default: () => ({
+      results: [],
+      count: 0,
+      has_more: false,
+      next_offset: 0,
+    }),
   },
 );
 
-// Fetch featured images
+// FEATURED FETCH
 const { data: featuredData } = await useAsyncData(
   "featured-gallery",
   () => get(endpoints.gallery.featured, { limit: 10 }),
   { default: () => ({ results: [] }) },
 );
 
-// Process featured images
+// FEATURED IMAGES
 const featuredImgs = computed(() => {
   if (!featuredData.value?.results) return [];
+
   return featuredData.value.results.map((item: any) => ({
     ...item,
-    url: item.url + "/" + item.image,
+    url: `${item.url}`,
     caption: item.description || item.title,
   }));
 });
 
+// PROCESS GALLERY DATA
 watch(
   data,
   (val) => {
-    if (val?.results) {
-      totalCount.value = val.count || 0;
-      gallery.value = [...gallery.value, ...val.results];
+    if (!val?.results) return;
+
+    totalCount.value = val.count || 0;
+
+    const merged = [...gallery.value, ...val.results];
+
+    // keep only latest 50 items
+    if (merged.length > MAX_GALLERY_ITEMS) {
+      gallery.value = merged.slice(-MAX_GALLERY_ITEMS);
+    } else {
+      gallery.value = merged;
     }
   },
   { immediate: true },
 );
 
-// Filtered gallery
+// FILTERED GALLERY
 const filteredGallery = computed(() => {
-  if (!gallery.value.length) return [];
+  const items = gallery.value;
 
-  if (filterType.value === "all") return gallery.value;
-  if (filterType.value === "event")
-    return gallery.value.filter((i: any) => i.event_slug);
-  if (filterType.value === "project")
-    return gallery.value.filter((i: any) => i.project_slug);
-  return gallery.value.filter((i: any) => i.gallery_type === filterType.value);
+  if (!items.length) return [];
+
+  switch (filterType.value) {
+    case "event":
+      return items.filter((i: any) => i.event_slug);
+
+    case "project":
+      return items.filter((i: any) => i.project_slug);
+
+    case "image":
+    case "video":
+      return items.filter((i: any) => i.gallery_type === filterType.value);
+
+    default:
+      return items;
+  }
 });
 
 const hasMore = computed(() => data.value?.has_more || false);
 
+// LOAD MORE
 async function loadMore() {
   if (!hasMore.value || loadingMore.value) return;
+
   loadingMore.value = true;
-  offset.value = data.value?.next_offset || offset.value;
+
+  offset.value = data.value?.next_offset ?? offset.value;
+
   await refresh();
+
   loadingMore.value = false;
 }
 
+// IMAGE VIEWER
 function openImageViewer(item: any) {
-  // Build array of all images for viewer
-  const allImages = gallery.value
-    .filter((i: any) => i.image)
-    .map((i: any) => ({
-      url: i.url + "/" + i.image,
-      caption: i.title || i.description,
-    }));
-
-  galleryImages.value = allImages;
-  currentImageIndex.value = allImages.findIndex((img) => img.url === item.url);
-  currentImageTitle.value = item.title || "Gallery image";
+  console.log("cliked", item);
+  selectedImg.value = item;
   showImageViewer.value = true;
 }
 
+// RESET FILTERS
 function resetFilters() {
   filterType.value = "all";
 }
 
+// FORMAT DATE
 function formatDate(dateStr: string) {
   if (!dateStr) return "";
+
   try {
     return format(parseISO(dateStr), "MMM d, yyyy");
   } catch {
@@ -378,11 +404,13 @@ function formatDate(dateStr: string) {
   }
 }
 
+// IMAGE FALLBACK
 function handleImageError(e: Event) {
   const img = e.target as HTMLImageElement;
   img.src = placeholderImg;
 }
 
+// VIDEO FALLBACK
 function handleVideoError(e: Event) {
   const video = e.target as HTMLVideoElement;
   video.poster = placeholderImg;

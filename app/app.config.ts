@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://reflects-housewares-transport-museums.trycloudflare.com"
+    apiBase:"https://installation-closure-table-mentioned.trycloudflare.com"
   },
   global: {
    

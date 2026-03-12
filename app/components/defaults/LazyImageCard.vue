@@ -1,4 +1,6 @@
 <template>
+    {{ images }}
+
   <UModal
     v-model="isOpen"
     :ui="{
@@ -143,7 +145,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
 
 interface ImageItem {
   url: string;
