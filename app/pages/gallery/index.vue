@@ -383,7 +383,6 @@ async function loadMore() {
 
 // IMAGE VIEWER
 function openImageViewer(item: any) {
-  console.log("cliked", item);
   selectedImg.value = item;
   showImageViewer.value = true;
 }

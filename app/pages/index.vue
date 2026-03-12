@@ -125,19 +125,8 @@ const counts = ref({
   eventsYear: 20,
 });
 
-const groupImages = ref([
-  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1552664688-cf412ec27db2?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1543269664-7eef42226a21?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1520881363902-a0ff4e722963?w=640&h=640&fit=crop",
-  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=640&h=640&fit=crop",
-]);
+const groupImages = import.meta.glob('/assets/files/mut/*.{jpg,jpeg,png,webp}', { eager: true, as: 'url' })
+
 
 useSeoMeta({
   title: config.site.title,
