@@ -80,6 +80,16 @@ export default defineNuxtConfig({
       'vercel.com',
       'avatars.githubusercontent.com',
       'images.unsplash.com'
+    ],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "**"
+      },
+      {
+        protocol: "https",
+        hostname: "**"
+      }
     ]
   },
 
