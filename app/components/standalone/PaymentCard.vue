@@ -181,13 +181,13 @@ async function check_status() {
 
   try {
     const response = await get<{
-      status: "idle" | "pending" | "success" | "failed";
+      status: "idle" | "pending" | "completed" | "failed";
     }>(`${endpoints.payments.un_auth_status}`, {
       email: state.email,
       checkout_request_id: transaction_id.value
     });
 
-    if (response?.status === "success") {
+    if (response?.payment?.status === "completed") {
       status.value = "success";
       if (poller.value) {
         clearInterval(poller.value);
@@ -200,9 +200,11 @@ async function check_status() {
         color: "success",
         icon: "i-heroicons-check-circle",
       });
+      controlFlow(response?.actions)
+
     }
 
-    if (response?.status === "failed") {
+    if (response?.payment?.status === "failed") {
       status.value = "failed";
       if (poller.value) {
         clearInterval(poller.value);
@@ -211,6 +213,19 @@ async function check_status() {
     }
   } catch (error) {
     console.error("Status check failed:", error);
+  }
+}
+const router = useRouter()
+function controlFlow(actions:any){
+  if(!actions)return
+  if(actions?.can_login){
+     toast.add({
+        title: "redirecting to login...",
+        color: "success",
+        icon: "i-heroicons-check-circle",
+      });
+
+    router.push('/auth?w=login_type_setup')
   }
 }
 </script>

@@ -484,7 +484,7 @@
             <template #verify>
               <VerifyEmail
                 :email="form?.email || ''"
-                @success="activeStep.value = 2"
+                @success="activeStep = 2"
               />
             </template>
 

@@ -22,16 +22,19 @@
 
           <div class="flex items-center gap-1.5">
             <UButton
-              v-if="eventData?.registration_link"
-              :to="eventData.registration_link"
-              target="_blank"
-              color="primary"
+              v-if="eventData?.status"
+              :icon="getIcon(eventData?.status)"
               size="sm"
-              class="!px-3 !py-1.5 text-xs font-medium"
-            >
-              <UIcon name="i-lucide-ticket" class="w-3.5 h-3.5 mr-1.5" />
-              <span class="inline">Register</span>
-            </UButton>
+              :color="getColor(eventData?.status)"
+              :variant="eventData?.status === 'completed' ? 'outline' : 'solid'"
+              :disabled="
+                eventData?.status === 'ongoing' || eventData?.status === 'completed'
+              "
+              :label="getLabel(eventData?.status)"
+              :to="eventData?.registration_link || '#'"
+              target="_blank"
+              class=" w-full"
+            />
 
             <UButton
               color="neutral"
@@ -201,13 +204,13 @@
                       Location
                     </p>
                     <p class="font-semibold text-xs">
-                      {{ eventData.location || "TBA" }}
+                      {{ eventData?.location || "TBA" }}
                     </p>
                     <p
-                      v-if="eventData.venue"
+                      v-if="eventData?.venue"
                       class="text-[10px] text-gray-600 dark:text-gray-300 truncate"
                     >
-                      {{ eventData.venue }}
+                      {{ eventData?.venue }}
                     </p>
                   </div>
                 </div>
@@ -365,15 +368,21 @@
                     </p>
                   </div>
                   <UButton
-                    :to="eventData.registration_link"
-                    target="_blank"
-                    color="primary"
+                    v-if="eventData?.status"
+                    :icon="getIcon(eventData?.status)"
                     size="sm"
-                    class="!px-4 !py-2 text-xs font-medium"
-                    :disabled="!eventData.registration_link"
-                  >
-                    Register
-                  </UButton>
+                    :color="getColor(eventData?.status)"
+                    :variant="
+                      eventData?.status === 'completed' ? 'outline' : 'solid'
+                    "
+                    :disabled="
+                      eventData?.status === 'ongoing' || eventData?.status === 'completed'
+                    "
+                    :label="getLabel(eventData?.status)"
+                    :to="eventData?.registration_link || '#'"
+                    target="_blank"
+                    class=" w-full"
+                  />
                 </div>
               </div>
             </div>
@@ -467,15 +476,19 @@
                 </h3>
 
                 <UButton
-                  :to="eventData.registration_link"
+                  v-if="eventData?.status"
+                  :icon="getIcon(eventData?.status)"
+                  size="sm"
+                  :color="getColor(eventData?.status)"
+                  :variant="eventData?.status === 'completed' ? 'outline' : 'solid'"
+                  :disabled="
+                    eventData?.status === 'ongoing' || eventData?.status === 'completed'
+                  "
+                  :label="getLabel(eventData?.status)"
+                  :to="eventData?.registration_link || '#'"
                   target="_blank"
-                  color="primary"
-                  size="md"
-                  class="!py-2 text-sm font-medium w-full"
-                  :disabled="!eventData.registration_link"
-                >
-                  Register Now
-                </UButton>
+                  class=" w-full"
+                />
 
                 <p
                   class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 flex items-center justify-center gap-1"
@@ -822,4 +835,49 @@ const copyToClipboard = async (text: string) => {
     });
   }
 };
+
+function getColor(status: string) {
+  switch (status) {
+    case "ongoing":
+      return "success";
+    case "completed":
+      return "neutral";
+    case "canceled":
+      return "error";
+    default:
+      return "primary";
+  }
+}
+
+function getIcon(status: string) {
+  switch (status) {
+    case "ongoing":
+      return "i-lucide-play-circle";
+    case "completed":
+      return "i-lucide-check-circle";
+    case "canceled":
+      return "i-lucide-x-circle";
+    default:
+      return "i-lucide-ticket";
+  }
+}
+
+function getLabel(status: string) {
+  switch (status) {
+    case "ongoing":
+      return "Ongoing";
+    case "completed":
+      return `Ended ${getRelativeDate(eventData.value?.start_date)}`;
+    case "canceled":
+      return "Canceled";
+    default:
+      return "Register";
+  }
+}
+
+function getRelativeDate(dateStr: string) {
+  const date = parseISO(dateStr);
+  const distance = formatDistanceToNow(date, { addSuffix: true });
+  return distance;
+}
 </script>

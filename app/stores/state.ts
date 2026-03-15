@@ -223,8 +223,6 @@ export const useStateStore = defineStore('state', {
         const response = await post(endpoints.main.join, joinData)
 
         this.submitSuccess = true
-        this.resetJoinForm()
-
         return { success: true, data: response }
       } catch (error: any) {
         if (error.type === 'VALIDATION_ERROR') {

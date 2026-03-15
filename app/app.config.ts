@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://arrival-filme-ships-mazda.trycloudflare.com"
+    apiBase:"https://develop-extending-invision-pour.trycloudflare.com"
   },
   global: {
    
