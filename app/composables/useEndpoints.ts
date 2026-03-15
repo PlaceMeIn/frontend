@@ -2,9 +2,13 @@ export const useEndpoints = () => {
     const apiBase = useAppConfig().site.apiBase ? `${useAppConfig().site.apiBase}` : 'http://localhost:8000'
 
     return {
+        auth: {
+            verifyEmail: `${apiBase}/api/auth/verify-email/`,
+            resendVerification: `${apiBase}/api/auth/resend-code/`,
+        },
         main: {
             contact: `${apiBase}/api/contact-messages/`,
-            join: `${apiBase}/api/join/`,
+            join: `${apiBase}/api/auth/signup/`,
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,
@@ -30,16 +34,20 @@ export const useEndpoints = () => {
         },
         reviews: {
             list: `${apiBase}/api/testimonials`
-
         },
         projects: {
             list: `${apiBase}/api/projects/`
         },
-        gallery:{
-            list:`${apiBase}/api/galleries/`,
-            event:`${apiBase}/api/galleries/by-event/`,
-            featured:`${apiBase}/api/galleries/featured/`,
+        gallery: {
+            list: `${apiBase}/api/galleries/`,
+            event: `${apiBase}/api/galleries/by-event/`,
+            featured: `${apiBase}/api/galleries/featured/`,
             unliked: `${apiBase}/api/galleries/unlinked/`,
+        },
+        payments: {
+            membership_initiate: `${apiBase}/api/membership-payments/initiate/`,
+            status: (id: string) => `${apiBase}/api/event-payments/${id}/get-status/`,
+            event_initiate: `${apiBase}/api/event-payments/initiate/`,
         }
     };
 

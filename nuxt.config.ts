@@ -70,6 +70,7 @@ export default defineNuxtConfig({
       { path: '~/components', pathPrefix: false },
       { path: '~/components/defaults', pathPrefix: false },
       { path: '~/components/landing', pathPrefix: false },
+      { path: '~/components/standalone', pathPrefix: false },
       { path: '~/components/cool', pathPrefix: false }
     ]
   },
