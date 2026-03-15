@@ -25,6 +25,9 @@ export const useEndpoints = () => {
         utilities: {
 
         },
+        takeaways:{
+            list:`${apiBase}/api/takeaways/`,
+        },
         highlights: {
 
         },
@@ -46,7 +49,8 @@ export const useEndpoints = () => {
         },
         payments: {
             membership_initiate: `${apiBase}/api/membership-payments/initiate/`,
-            status: (id: string) => `${apiBase}/api/event-payments/${id}/get-status/`,
+            un_auth_status:`${apiBase}/api/membership-payments/check-status/`,
+            status: (checkout_request_id: string) => `${apiBase}/api/payments/status/${checkout_request_id}/`,
             event_initiate: `${apiBase}/api/event-payments/initiate/`,
         }
     };

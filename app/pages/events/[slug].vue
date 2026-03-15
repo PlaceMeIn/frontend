@@ -545,6 +545,45 @@
           </div>
         </div>
 
+        <section>
+          <UAccordion :items="accordionitems" type="multiple">
+            <template #content="{ item }">
+              <p class="pb-3.5 text-sm text-muted">
+                This is the {{ item.label }} panel.
+              </p>
+              <section id="takeaways" v-if="item.key === 'takeaways'">
+                <UModal
+                  fullscreen
+                  :overlay="false"
+                  title="Mut Tech Club Takeaways"
+                  description="Key take aways"
+                >
+                  <UButton
+                    icon="i-lucide-expand"
+                    color="neutral"
+                    variant="subtle"
+                  />
+
+                  <template #body>
+                    <TakeAways
+                      :id="eventData?.id"
+                      :type="'event'"
+                      class="h-full"
+                    />
+                  </template>
+                </UModal>
+                <TakeAways
+                  :id="eventData?.id"
+                  :type="'event'"
+                  class="h-[400px]"
+                />
+              </section>
+
+              <section v-if="item.key === 'gallery'" id="gallery"></section>
+            </template>
+          </UAccordion>
+        </section>
+
         <!-- Related -->
         <section id="related" class="scroll-mt-16">
           <HighlightUpcomingEvent
@@ -624,6 +663,20 @@ interface Event {
   speakers: Speaker[];
   created_at: string;
 }
+import type { AccordionItem } from "@nuxt/ui";
+
+const accordionitems: AccordionItem[] = [
+  {
+    label: "Takeaways",
+    key: "takeaways",
+    icon: "i-lucide-notebook-pen",
+  },
+  {
+    label: "Gallery",
+    key: "gallery",
+    icon: "i-lucide-images",
+  },
+];
 
 const sections = [
   { id: "overview", label: "Overview", icon: "i-lucide-eye" },
@@ -632,6 +685,16 @@ const sections = [
   { id: "details", label: "Details", icon: "i-lucide-list" },
   { id: "registration", label: "Register", icon: "i-lucide-ticket" },
   { id: "share", label: "Share", icon: "i-lucide-share-2" },
+  {
+    label: "Takeaways",
+    id: "takeaways",
+    icon: "i-lucide-notebook-pen",
+  },
+  {
+    label: "Gallery",
+    id: "gallery",
+    icon: "i-lucide-images",
+  },
   { id: "related", label: "Related", icon: "i-lucide-calendar-heart" },
 ];
 
