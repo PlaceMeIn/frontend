@@ -10,7 +10,7 @@
         <!-- Media -->
         <NuxtImg
           v-if="item.image"
-          :src="getMediaUrl(item, item.image)"
+          :src="item.image"
           :alt="item.title || 'Gallery image'"
           format="webp"
           loading="lazy"
@@ -20,7 +20,7 @@
 
         <video
           v-else-if="item.video"
-          :src="getMediaUrl(item, item.video)"
+          :src="item.video"
           controls
           :poster="placeholderImg"
           class="w-full max-h-[80vh] rounded-xl"

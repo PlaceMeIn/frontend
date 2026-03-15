@@ -60,7 +60,7 @@
                 height="234"
                 class="rounded-lg aspect-square object-cover min-w-[40px] min-h-[50px] bg-muted"
                 :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
-                :src="getMediaUrl(img, img.image)"
+                :src="item.image"
                 :alt="img.title"
                 :placeholder="placeholderImg"
                 @error="handleImageError"
@@ -139,7 +139,7 @@
               <!-- Image -->
               <NuxtImg
                 v-if="item.image"
-                :src="getMediaUrl(item, item.image)"
+                :src="item.image"
                 :alt="item.title || 'Gallery image'"
                 format="webp"
                 loading="lazy"
@@ -151,7 +151,7 @@
               <!-- Video -->
               <video
                 v-else-if="item.video"
-                :src="getMediaUrl(item, item.video)"
+                :src="item.video"
                 controls
                 :poster="placeholderImg"
                 class="w-full rounded-xl"

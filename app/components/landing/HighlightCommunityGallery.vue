@@ -24,7 +24,7 @@ const { data: featuredData } = await useAsyncData(
 
 const featuredImages = computed(() => {
   if (featuredData.value?.results?.length) {
-    return featuredData.value.results.map((item: any) => getMediaUrl(item, item.image))
+    return featuredData.value.results.map((item: any) => item.image)
   }
   return allImages
 })
