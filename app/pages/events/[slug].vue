@@ -28,12 +28,13 @@
               :color="getColor(eventData?.status)"
               :variant="eventData?.status === 'completed' ? 'outline' : 'solid'"
               :disabled="
-                eventData?.status === 'ongoing' || eventData?.status === 'completed'
+                eventData?.status === 'ongoing' ||
+                eventData?.status === 'completed'
               "
               :label="getLabel(eventData?.status)"
               :to="eventData?.registration_link || '#'"
               target="_blank"
-              class=" w-full"
+              class="w-full"
             />
 
             <UButton
@@ -376,12 +377,13 @@
                       eventData?.status === 'completed' ? 'outline' : 'solid'
                     "
                     :disabled="
-                      eventData?.status === 'ongoing' || eventData?.status === 'completed'
+                      eventData?.status === 'ongoing' ||
+                      eventData?.status === 'completed'
                     "
                     :label="getLabel(eventData?.status)"
                     :to="eventData?.registration_link || '#'"
                     target="_blank"
-                    class=" w-full"
+                    class="w-full"
                   />
                 </div>
               </div>
@@ -480,14 +482,17 @@
                   :icon="getIcon(eventData?.status)"
                   size="sm"
                   :color="getColor(eventData?.status)"
-                  :variant="eventData?.status === 'completed' ? 'outline' : 'solid'"
+                  :variant="
+                    eventData?.status === 'completed' ? 'outline' : 'solid'
+                  "
                   :disabled="
-                    eventData?.status === 'ongoing' || eventData?.status === 'completed'
+                    eventData?.status === 'ongoing' ||
+                    eventData?.status === 'completed'
                   "
                   :label="getLabel(eventData?.status)"
                   :to="eventData?.registration_link || '#'"
                   target="_blank"
-                  class=" w-full"
+                  class="w-full"
                 />
 
                 <p
@@ -564,35 +569,39 @@
               <p class="pb-3.5 text-sm text-muted">
                 This is the {{ item.label }} panel.
               </p>
-              <section id="takeaways" v-if="item.key === 'takeaways'">
-                <UModal
-                  fullscreen
-                  :overlay="false"
-                  title="Mut Tech Club Takeaways"
-                  description="Key take aways"
-                >
-                  <UButton
-                    icon="i-lucide-expand"
-                    color="neutral"
-                    variant="subtle"
-                  />
-
-                  <template #body>
-                    <TakeAways
-                      :id="eventData?.id"
-                      :type="'event'"
-                      class="h-full"
+              <section id="takeaways">
+                <div v-if="item.key === 'takeaways'">
+                  <UModal
+                    fullscreen
+                    :overlay="false"
+                    title="Mut Tech Club Takeaways"
+                    description="Key take aways"
+                  >
+                    <UButton
+                      icon="i-lucide-expand"
+                      color="neutral"
+                      variant="subtle"
                     />
-                  </template>
-                </UModal>
-                <TakeAways
-                  :id="eventData?.id"
-                  :type="'event'"
-                  class="h-[400px]"
-                />
+
+                    <template #body>
+                      <TakeAways
+                        :id="eventData?.id"
+                        :type="'event'"
+                        class="h-full"
+                      />
+                    </template>
+                  </UModal>
+                  <TakeAways
+                    :id="eventData?.id"
+                    :type="'event'"
+                    class="h-[400px]"
+                  />
+                </div>
               </section>
 
-              <section v-if="item.key === 'gallery'" id="gallery"></section>
+              <section id="gallery">
+                <div v-if="item.key === 'gallery'"></div>
+              </section>
             </template>
           </UAccordion>
         </section>
