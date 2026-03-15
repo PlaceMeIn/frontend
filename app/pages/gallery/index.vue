@@ -60,7 +60,7 @@
                 height="234"
                 class="rounded-lg aspect-square object-cover min-w-[40px] min-h-[50px] bg-muted"
                 :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
-                :src="item.image"
+                :src="img.image"
                 :alt="img.title"
                 :placeholder="placeholderImg"
                 @error="handleImageError"
