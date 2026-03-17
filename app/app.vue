@@ -55,21 +55,21 @@ const [{ data: navigation }, { data: files }] = await Promise.all([
 
 <template>
   <UApp>
-    <NuxtLayout>
-      <NuxtLoadingIndicator color="var(--ui-primary)" />
-      <UMain class="relative">
-        <NuxtPage />
-      </UMain>
-    </NuxtLayout>
+   <NuxtLayout>
+  <NuxtLoadingIndicator class="z-9999999" />
+  <UMain class="relative">
+    <NuxtPage />
+  </UMain>
 
-    <ClientOnly>
-      <LazyUContentSearch
-        :files="files"
-        :navigation="navigation"
-        shortcut="meta_k"
-        :links="navLinks"
-        :fuse="{ resultLimit: 42 }"
-      />
-    </ClientOnly>
+  <ClientOnly>
+    <LazyUContentSearch
+      :files="files"
+      :navigation="navigation"
+      shortcut="meta_k"
+      :links="navLinks"
+      :fuse="{ resultLimit: 42 }"
+    />
+  </ClientOnly>
+</NuxtLayout>
   </UApp>
 </template>

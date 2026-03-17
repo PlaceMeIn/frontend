@@ -60,6 +60,9 @@
 import { ref, computed } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import { useEndpoints } from "~/composables/useEndpoints";
+definePageMeta({
+  layout: 'auth'
+})
 
 interface LoginOption {
   type: "google" | "manual";

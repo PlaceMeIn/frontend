@@ -5,12 +5,14 @@ export const useEndpoints = () => {
         auth: {
             verifyEmail: `${apiBase}/api/auth/verify-email/`,
             resendVerification: `${apiBase}/api/auth/resend-code/`,
-            loginWithGoogle: `${apiBase}/api/auth/google/login/`
+            loginWithGoogle: `${apiBase}/api/auth/google/login/`,
+            login: `${apiBase}/auth/jwt/create/`
+
         },
         main: {
             contact: `${apiBase}/api/contact-messages/`,
             join: `${apiBase}/api/auth/signup/`,
-            joinDetails:``
+            joinDetails: ``
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,
@@ -27,8 +29,8 @@ export const useEndpoints = () => {
         utilities: {
 
         },
-        takeaways:{
-            list:`${apiBase}/api/takeaways/`,
+        takeaways: {
+            list: `${apiBase}/api/takeaways/`,
         },
         highlights: {
 
@@ -51,7 +53,7 @@ export const useEndpoints = () => {
         },
         payments: {
             membership_initiate: `${apiBase}/api/membership-payments/initiate/`,
-            un_auth_status:`${apiBase}/api/membership-payments/check-status/`,
+            un_auth_status: `${apiBase}/api/membership-payments/check-status/`,
             status: (checkout_request_id: string) => `${apiBase}/api/payments/status/${checkout_request_id}/`,
             event_initiate: `${apiBase}/api/event-payments/initiate/`,
         }
