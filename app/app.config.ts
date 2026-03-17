@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://develop-extending-invision-pour.trycloudflare.com"
+    apiBase:"https://arabia-pda-video-compatible.trycloudflare.com"
   },
   global: {
    

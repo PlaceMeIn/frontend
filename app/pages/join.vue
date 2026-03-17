@@ -490,10 +490,10 @@
 
             <template #pay>
               <PaymentCard
-                :amount="100"
+                :amount="joinData?.amount || default_pay_amount"
                 :email="form?.email"
                 :phone="form?.phone || null"
-                reference="ORDER-123"
+                reference="JOIN-MUTECH"
               />
             </template>
           </UStepper>
@@ -577,8 +577,7 @@
           <UIcon name="i-lucide-check-circle" class="text-6xl text-success" />
           <h3 class="text-xl font-semibold">Thank You for Applying!</h3>
           <p class="text-center text-muted">
-            Your application has been received. Our team will review it and
-            contact you within 3-5 business days.
+            Your application has been received. Continue tot Next step
           </p>
           <div class="bg-primary/10 p-4 rounded-lg w-full mt-2">
             <p class="text-sm text-center">
@@ -592,12 +591,11 @@
       <template #footer="{ close }">
         <div class="flex justify-end">
           <UButton
-            label="Close"
+            label="Next"
             color="success"
             variant="subtle"
             @click="
               close();
-              resetForm();
             "
           />
         </div>
@@ -618,6 +616,22 @@
 import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
 
+const default_pay_amount = 50
+const joinData = ref({})
+const loading  = ref(false)
+const error = ref(null)
+async function fetchJoinData() {
+  loading.value = true;
+
+  try {
+    const res:any = await useApi().get(useEndpoints().main.joinDetails, {});
+    joinData.value = res?.results? res.results : null;
+  } catch(err) {
+    error.value = err;
+  } finally {
+    loading.value = false;
+  }
+}
 const items: StepperItem[] = [
   {
     title: "Your Details",
@@ -633,7 +647,7 @@ const items: StepperItem[] = [
   },
   {
     title: "Complete Payment",
-    description: "Pay KES 50 to finish your registration.",
+    description: `Pay KES ${joinData.amoun || default_pay_amount} to finish your registration.`,
     icon: "i-lucide-credit-card",
     slot: "pay" as const,
   },

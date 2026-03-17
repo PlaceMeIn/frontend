@@ -48,7 +48,7 @@ const can_pay = computed(() => {
 const button_text = computed(() => {
   if (loading.value) return "Initiating STK Push...";
   if (is_pending.value) return "Waiting for PIN entry...";
-  return `Pay KES ${props.amount.toLocaleString()}`;
+  return `Pay KES ${state.amount.toLocaleString()}`;
 });
 
 const status_config = computed(() => {
@@ -128,11 +128,12 @@ async function pay() {
       throw new Error(response?.error.slice(0, 20));
     }
 
-    if (!response.checkout_request_id) {
+    if (!response.data?.checkout_request_id) {
       throw new Error("No transaction ID received");
     }
 
-    transaction_id.value = response.checkout_request_id || null;
+    transaction_id.value = response.data?.checkout_request_id || null;
+    state.amount = response?.data?.amount
     status.value = "pending";
 
     poller.value = setInterval(check_status, 2000);
@@ -150,7 +151,7 @@ async function pay() {
     toast.add({
       title: "STK Push failed",
       description:
-        error instanceof Error ? error.message : "Could not start payment",
+        error instanceof Error ?error ||  error.message : "Could not start payment",
       color: "error",
       icon: "i-heroicons-exclamation-triangle",
     });
@@ -187,7 +188,7 @@ async function check_status() {
       checkout_request_id: transaction_id.value
     });
 
-    if (response?.payment?.status === "completed") {
+    if (response?.data?.payment?.status === "completed") {
       status.value = "success";
       if (poller.value) {
         clearInterval(poller.value);
@@ -200,11 +201,11 @@ async function check_status() {
         color: "success",
         icon: "i-heroicons-check-circle",
       });
-      controlFlow(response?.actions)
+      controlFlow(response?.data?.actions)
 
     }
 
-    if (response?.payment?.status === "failed") {
+    if (response?.data?.payment?.status === "failed") {
       status.value = "failed";
       if (poller.value) {
         clearInterval(poller.value);
@@ -225,7 +226,7 @@ function controlFlow(actions:any){
         icon: "i-heroicons-check-circle",
       });
 
-    router.push('/auth?w=login_type_setup')
+    router.push('/auth/set_up')
   }
 }
 </script>
@@ -275,7 +276,7 @@ function controlFlow(actions:any){
               <span
                 class="text-2xl font-bold text-primary-600 dark:text-primary-400"
               >
-                KES {{ amount.toLocaleString() }}
+                KES {{ state?.amount.toLocaleString() }}
               </span>
             </div>
 

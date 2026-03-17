@@ -5,10 +5,12 @@ export const useEndpoints = () => {
         auth: {
             verifyEmail: `${apiBase}/api/auth/verify-email/`,
             resendVerification: `${apiBase}/api/auth/resend-code/`,
+            loginWithGoogle: `${apiBase}/api/auth/google/login/`
         },
         main: {
             contact: `${apiBase}/api/contact-messages/`,
             join: `${apiBase}/api/auth/signup/`,
+            joinDetails:``
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,

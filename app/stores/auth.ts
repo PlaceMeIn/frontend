@@ -33,6 +33,7 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null as string | null,
         user: null as User | null,
+        set_up:{} as any,
         redirectStack: [] as RedirectStackItem[],
         verificationStack: [] as VerificationStep[],
         refreshing: false,
@@ -383,7 +384,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async handleGoogleLogin(): Promise<void> {
-            const url = useEndpoints().auth.googleLogin
+            const url = await useApi().get(useEndpoints().auth.loginWithGoogle)
             this.setLastAttemptedRouteToCurrent()
 
             const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
@@ -398,13 +399,13 @@ export const useAuthStore = defineStore('auth', {
             const top = window.screenY + (window.innerHeight - height) / 2
 
             const popup = window.open(
-                url,
+                url?.auth_url,
                 'Google Login',
                 `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars`
             )
 
             if (!popup) {
-                window.location.href = url
+                window.location.href = url?.auth_url
             }
         },
 
