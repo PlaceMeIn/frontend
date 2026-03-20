@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://arabia-pda-video-compatible.trycloudflare.com"
+    apiBase:"https://follows-commentary-desire-subscribe.trycloudflare.com"
   },
   global: {
    

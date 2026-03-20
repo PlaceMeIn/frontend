@@ -202,6 +202,7 @@ async function check_status() {
         icon: "i-heroicons-check-circle",
       });
       controlFlow(response?.data?.actions)
+      useAuthStore().token = response?.data?.tokens?.refresh
 
     }
 
