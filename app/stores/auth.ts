@@ -32,8 +32,9 @@ interface RedirectStackItem {
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null as string | null,
+        refreshToken: null as string | null,
         user: null as User | null,
-        set_up:{} as any,
+        set_up: {} as any,
         redirectStack: [] as RedirectStackItem[],
         verificationStack: [] as VerificationStep[],
         refreshing: false,
@@ -120,27 +121,11 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await post(endpoints.auth.login, credentials)
 
-                if (response.success) {
+                if (response) {
+                    this.getUSer()
                     this.setUser(response.user, response.access_token)
 
-                    if (!response.user.is_email_verified) {
-                        this.addVerification({
-                            identifier: credentials.email,
-                            type: 'email',
-                            required: true,
-                            redirectAfter: this.nextRedirect?.path || '/dashboard'
-                        })
-                    }
-
-                    if (!response.user.is_phone_verified && response.user.phone_number) {
-                        this.addVerification({
-                            identifier: response.user.phone_number,
-                            type: 'phone',
-                            required: true,
-                            redirectAfter: this.nextRedirect?.path || '/dashboard'
-                        })
-                    }
-
+            
                     const redirect = this.popRedirect()
 
                     return {
@@ -158,6 +143,8 @@ export const useAuthStore = defineStore('auth', {
                 this.loading = false
             }
         },
+
+
 
         async register(payload: Record<string, any>) {
             const { post } = useApi()
@@ -248,13 +235,13 @@ export const useAuthStore = defineStore('auth', {
             return true
         },
 
-        async refreshToken() {
-            if (!this.token) {
+        async refresh_Token() {
+            if (!this.refreshToken) {
                 console.warn('No token available')
                 return false
             }
 
-            if (this.refreshing) return false
+            // if (this.refreshing) return false
 
             this.refreshing = true
 
@@ -263,14 +250,15 @@ export const useAuthStore = defineStore('auth', {
                 const endpoints = useEndpoints()
 
                 const response: any = await post(
-                    endpoints.auth.renewToken(),
-                    {},
+                    endpoints.auth.refreshToken,
+                    {
+                        "refresh":this.refreshToken
+                    },
                     true
                 )
 
-                if (response.success) {
-                    this.setUser(response.user, response.access_token)
-                    return true
+                if (response) {
+                    this.token = response?.access
                 }
 
                 return false
@@ -285,6 +273,44 @@ export const useAuthStore = defineStore('auth', {
                 this.refreshing = false
             }
         },
+
+        async getUSer() {
+            if (!this.token) {
+                console.warn('No token available')
+                return false
+            }
+
+            // if (this.refreshing) return false
+
+            this.refreshing = true
+
+            try {
+                const { get } = useApi()
+                const endpoints = useEndpoints()
+
+                const response: any = await get(
+                    endpoints.auth.userProfile,{},
+                    true
+                )
+
+                if (response) {
+                    this.user = response?.user
+                    useRouter().push("/events")
+                }
+
+                return false
+            } catch (error: any) {
+                if (error.response?.status === 401) {
+                    // Only clear AFTER confirmed invalid session
+                    this.clearUser()
+                }
+
+                return false
+            } finally {
+                this.refreshing = false
+            }
+        },
+
 
         async verifyEmail(credentials: { email: string; code: string }) {
             const { post } = useApi()

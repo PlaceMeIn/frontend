@@ -133,7 +133,7 @@ async function pay() {
     }
 
     transaction_id.value = response.data?.checkout_request_id || null;
-    state.amount = response?.data?.amount
+    state.amount = response?.data?.amount;
     status.value = "pending";
 
     poller.value = setInterval(check_status, 2000);
@@ -151,7 +151,9 @@ async function pay() {
     toast.add({
       title: "STK Push failed",
       description:
-        error instanceof Error ?error ||  error.message : "Could not start payment",
+        error instanceof Error
+          ? error || error.message
+          : "Could not start payment",
       color: "error",
       icon: "i-heroicons-exclamation-triangle",
     });
@@ -185,7 +187,7 @@ async function check_status() {
       status: "idle" | "pending" | "completed" | "failed";
     }>(`${endpoints.payments.un_auth_status}`, {
       email: state.email,
-      checkout_request_id: transaction_id.value
+      checkout_request_id: transaction_id.value,
     });
 
     if (response?.data?.payment?.status === "completed") {
@@ -201,9 +203,7 @@ async function check_status() {
         color: "success",
         icon: "i-heroicons-check-circle",
       });
-      controlFlow(response?.data?.actions)
-      useAuthStore().token = response?.data?.tokens?.refresh
-
+      controlFlow(response);
     }
 
     if (response?.data?.payment?.status === "failed") {
@@ -217,17 +217,21 @@ async function check_status() {
     console.error("Status check failed:", error);
   }
 }
-const router = useRouter()
-function controlFlow(actions:any){
-  if(!actions)return
-  if(actions?.can_login){
-     toast.add({
-        title: "redirecting to login...",
-        color: "success",
-        icon: "i-heroicons-check-circle",
-      });
+const router = useRouter();
+function controlFlow(res: any) {
+  if (!res) return;
+  useAuthStore().token = res?.tokens?.access;
+  useAuthStore().refreshToken = res?.tokens?.refresh;
+  useAuthStore().user = res?.data?.user;
 
-    router.push('/auth/set_up')
+  if (res?.data?.user?.can_login) {
+    toast.add({
+      title: "redirecting to login...",
+      color: "success",
+      icon: "i-heroicons-check-circle",
+    });
+
+    router.push("/auth/set_up");
   }
 }
 </script>

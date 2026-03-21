@@ -6,8 +6,13 @@ export const useEndpoints = () => {
             verifyEmail: `${apiBase}/api/auth/verify-email/`,
             resendVerification: `${apiBase}/api/auth/resend-code/`,
             loginWithGoogle: `${apiBase}/api/auth/google/login/`,
-            login: `${apiBase}/auth/jwt/create/`
-
+            login: `${apiBase}/auth/jwt/create/`,
+            setPassword: `${apiBase}/api/auth/set-password/`,
+            changePassword: `${apiBase}/api/auth/users/create/`,
+            initiateSetupPassword: `${apiBase}/api/auth/resend-password-setup/`,
+            initiateResetPassword: `${apiBase}/api/auth/resend-password-setup/`,
+            userProfile: `${apiBase}/api/users/me/`,
+            refreshToken: `${apiBase}/auth/jwt/refresh/`,
         },
         main: {
             contact: `${apiBase}/api/contact-messages/`,

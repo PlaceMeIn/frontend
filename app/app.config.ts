@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://follows-commentary-desire-subscribe.trycloudflare.com"
+    apiBase:"https://backend-render-pcx6.onrender.com"
   },
   global: {
    
