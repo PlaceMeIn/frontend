@@ -14,5 +14,12 @@ export const getMediaUrl = (item: any, mediaPath: string): string => {
   return `${baseUrl}${mediaPath}`;
 };
 
+
+export const formatMediaUrl = (url: string): string => {
+  if (!url) return url;
+
+  return  url.replace(/^http:\/\//i, "https://");
+};
+
 export const formatTimeAgo = (dateStr: string) =>
   formatDistanceToNow(parseISO(dateStr), { addSuffix: true });

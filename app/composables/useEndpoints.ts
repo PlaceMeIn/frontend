@@ -17,7 +17,10 @@ export const useEndpoints = () => {
         main: {
             contact: `${apiBase}/api/contact-messages/`,
             join: `${apiBase}/api/auth/signup/`,
-            joinDetails: ``
+            joinDetails: ``,
+            developers:`${apiBase}/api/project-developers/`,
+            developersStats:`${apiBase}/api/project-developers/statistics/`
+
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,

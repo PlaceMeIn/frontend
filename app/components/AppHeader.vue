@@ -46,9 +46,12 @@ const items = computed<NavigationMenuItem[]>(() => [
 ]);
 </script>
 
+<!-- mode="drawer" -->
+<!-- mode="slideover" -->
+
 <template>
   <UHeader
-    mode="drawer"
+    mode="slideover"
     title="MUT Tech Club"
     class="z-9999 border-b border-gray-200 dark:border-gray-800"
   >
@@ -61,22 +64,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     <template #right>
       <ColorModeButton class="hidden md:block mr-2" />
 
-      <UButton
-        icon="i-lucide-user-pen"
-        class="md:hidden"
-        size="sm"
-        to="/join"
-        aria-label="Join the Club"
-      />
-
-      <UButton
-        label="Join the Club"
-        icon="i-lucide-user-pen"
-        class="hidden md:flex"
-        size="sm"
-        color="primary"
-        to="/join"
-      />
+      <JoinMutButton />
     </template>
 
     <!-- Drawer body for mobile menu -->
@@ -90,15 +78,7 @@ const items = computed<NavigationMenuItem[]>(() => [
           class="-mx-2.5"
         />
         <ColorModeButton class="mt-2" />
-        <!-- Optional Join button inside drawer -->
-        <UButton
-          label="Join the Club"
-          icon="i-lucide-user-pen"
-          class="w-full"
-          size="sm"
-          color="primary"
-          to="/join"
-        />
+        <JoinMutButton :showName="true" :isHeaderOpen="true" />
       </div>
     </template>
   </UHeader>

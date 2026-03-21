@@ -48,6 +48,30 @@
             <span class="font-semibold text-base">{{ stat.label }}</span>
           </div>
         </div>
+        <UPageCard
+          to="/auth/login"
+          spotlight
+          class="mt-12 group transition-all duration-300 hover:scale-[1.02]"
+        >
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center gap-3">
+              <UIcon
+                name="i-lucide-arrow-right"
+                class="w-5 h-5 text-primary-500 transition-transform duration-300 group-hover:translate-x-1"
+              />
+              <span
+                class="text-base font-medium text-gray-700 dark:text-gray-200"
+              >
+                Have an account?
+              </span>
+            </div>
+            <span
+              class="text-lg font-semibold text-primary-600 dark:text-primary-400"
+            >
+              Login
+            </span>
+          </div>
+        </UPageCard>
       </div>
     </section>
 
@@ -594,9 +618,7 @@
             label="Next"
             color="success"
             variant="subtle"
-            @click="
-              close();
-            "
+            @click="close()"
           />
         </div>
       </template>
@@ -616,17 +638,17 @@
 import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
 
-const default_pay_amount = 50
-const joinData = ref({})
-const loading  = ref(false)
-const error = ref(null)
+const default_pay_amount = 50;
+const joinData = ref({});
+const loading = ref(false);
+const error = ref(null);
 async function fetchJoinData() {
   loading.value = true;
 
   try {
-    const res:any = await useApi().get(useEndpoints().main.joinDetails, {});
-    joinData.value = res?.results? res.results : null;
-  } catch(err) {
+    const res: any = await useApi().get(useEndpoints().main.joinDetails, {});
+    joinData.value = res?.results ? res.results : null;
+  } catch (err) {
     error.value = err;
   } finally {
     loading.value = false;
