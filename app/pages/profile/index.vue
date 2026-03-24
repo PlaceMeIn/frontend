@@ -5,10 +5,12 @@
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold tracking-tight">Profile</h1>
-          <p class="text-sm text-muted-foreground">Manage your account information</p>
+          <p class="text-sm text-muted-foreground">
+            Manage your account information
+          </p>
         </div>
-        <UButton 
-          variant="outline" 
+        <UButton
+          variant="outline"
           icon="i-lucide-settings"
           @click="isEditModalOpen = true"
         >
@@ -16,33 +18,52 @@
         </UButton>
       </div>
 
-      <div class="grid lg:grid-cols-3 gap-6">
+      <div v-if="pending" class="flex justify-center py-12">
+        <UIcon name="i-lucide-loader-2" class="animate-spin text-2xl" />
+      </div>
+
+      <div v-else-if="error" class="text-center py-12 text-red-500">
+        <p>Failed to load profile data</p>
+        <UButton variant="ghost" size="sm" class="mt-2" @click="refresh">
+          Try again
+        </UButton>
+      </div>
+
+      <div v-else class="grid lg:grid-cols-3 gap-6">
         <!-- Sidebar -->
         <div class="lg:col-span-1 space-y-6">
           <UCard>
             <div class="text-center space-y-4">
-              <UAvatar 
-                :src="profile.user?.profile_picture" 
-                :alt="profile.full_name"
+              <UAvatar
+                :src="user?.profile_picture"
+                :alt="user?.full_name"
                 size="3xl"
                 class="mx-auto ring-4 ring-primary/10"
               />
-              
+
               <div>
-                <h2 class="text-xl font-semibold">{{ profile.full_name }}</h2>
-                <p class="text-sm text-muted-foreground">{{ profile.email }}</p>
+                <h2 class="text-xl font-semibold">
+                  {{ user?.full_name || "Not provided" }}
+                </h2>
+                <p class="text-sm text-muted-foreground">
+                  {{ user?.email || "Not provided" }}
+                </p>
               </div>
 
               <div class="flex flex-wrap gap-2 justify-center">
-                <UBadge v-if="profile.user?.is_verified" color="success" variant="soft">
+                <UBadge v-if="user?.is_verified" color="success" variant="soft">
                   <UIcon name="i-lucide-badge-check" class="mr-1" />
                   Verified
                 </UBadge>
-                <UBadge v-if="profile.is_verified_member" color="primary" variant="soft">
+                <UBadge
+                  v-if="user?.is_verified_member"
+                  color="primary"
+                  variant="soft"
+                >
                   <UIcon name="i-lucide-users" class="mr-1" />
                   Member
                 </UBadge>
-                <UBadge v-if="profile.user?.is_active" color="success" variant="soft">
+                <UBadge v-if="user?.is_active" color="success" variant="soft">
                   <UIcon name="i-lucide-circle" class="mr-1 size-2" />
                   Active
                 </UBadge>
@@ -50,7 +71,8 @@
 
               <div class="pt-4 border-t dark:border-gray-800">
                 <div class="text-sm text-muted-foreground">
-                  Member since {{ formatDate(profile.created_at) }}
+                  Member since
+                  {{ formatDate(user?.created_at || user?.date_joined) }}
                 </div>
               </div>
             </div>
@@ -65,26 +87,36 @@
             <div class="space-y-3">
               <div>
                 <p class="text-xs text-muted-foreground">Phone Number</p>
-                <p class="text-sm">{{ profile.phone_number || 'Not provided' }}</p>
+                <p class="text-sm">
+                  {{ user?.phone_number || "Not provided" }}
+                </p>
               </div>
               <div>
                 <p class="text-xs text-muted-foreground">Email</p>
-                <p class="text-sm">{{ profile.email }}</p>
+                <p class="text-sm">{{ user?.email || "Not provided" }}</p>
               </div>
               <div>
                 <p class="text-xs text-muted-foreground">GitHub</p>
-                <p v-if="profile.github_link" class="text-sm">
-                  <ULink :to="profile.github_link" target="_blank" class="text-primary">
-                    {{ profile.github_link }}
+                <p v-if="user?.github_link" class="text-sm">
+                  <ULink
+                    :to="user.github_link"
+                    target="_blank"
+                    class="text-primary"
+                  >
+                    {{ user.github_link }}
                   </ULink>
                 </p>
                 <p v-else class="text-sm text-muted-foreground">Not provided</p>
               </div>
               <div>
                 <p class="text-xs text-muted-foreground">Portfolio</p>
-                <p v-if="profile.portfolio_website" class="text-sm">
-                  <ULink :to="profile.portfolio_website" target="_blank" class="text-primary">
-                    {{ profile.portfolio_website }}
+                <p v-if="user?.portfolio_website" class="text-sm">
+                  <ULink
+                    :to="user.portfolio_website"
+                    target="_blank"
+                    class="text-primary"
+                  >
+                    {{ user.portfolio_website }}
                   </ULink>
                 </p>
                 <p v-else class="text-sm text-muted-foreground">Not provided</p>
@@ -104,11 +136,13 @@
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
                 <p class="text-xs text-muted-foreground">Course</p>
-                <p class="text-sm">{{ profile.course || 'Not specified' }}</p>
+                <p class="text-sm">{{ user?.course || "Not specified" }}</p>
               </div>
               <div>
                 <p class="text-xs text-muted-foreground">Year of Study</p>
-                <p class="text-sm">{{ profile.year_of_study || 'Not specified' }}</p>
+                <p class="text-sm">
+                  {{ user?.year_of_study || "Not specified" }}
+                </p>
               </div>
             </div>
           </UCard>
@@ -121,187 +155,224 @@
             </h3>
             <div class="space-y-4">
               <div>
-                <p class="text-xs text-muted-foreground mb-2">Technical Skills</p>
+                <p class="text-xs text-muted-foreground mb-2">
+                  Technical Skills
+                </p>
                 <div class="flex flex-wrap gap-2">
-                  <template v-if="profile.technical_skills">
-                    <UBadge v-for="skill in parseSkills(profile.technical_skills)" :key="skill" variant="soft">
+                  <template v-if="user?.technical_skills">
+                    <UBadge
+                      v-for="skill in parseSkills(user.technical_skills)"
+                      :key="skill"
+                      variant="soft"
+                    >
                       {{ skill }}
                     </UBadge>
                   </template>
-                  <p v-else class="text-sm text-muted-foreground">No skills added yet</p>
+                  <p v-else class="text-sm text-muted-foreground">
+                    No skills added yet
+                  </p>
                 </div>
               </div>
               <div>
-                <p class="text-xs text-muted-foreground mb-2">Areas of Interest</p>
+                <p class="text-xs text-muted-foreground mb-2">
+                  Areas of Interest
+                </p>
                 <div class="flex flex-wrap gap-2">
-                  <template v-if="profile.areas_of_interest">
-                    <UBadge v-for="interest in parseSkills(profile.areas_of_interest)" :key="interest" variant="soft">
+                  <template v-if="user?.areas_of_interest">
+                    <UBadge
+                      v-for="interest in parseSkills(user.areas_of_interest)"
+                      :key="interest"
+                      variant="soft"
+                    >
                       {{ interest }}
                     </UBadge>
                   </template>
-                  <p v-else class="text-sm text-muted-foreground">No interests added yet</p>
+                  <p v-else class="text-sm text-muted-foreground">
+                    No interests added yet
+                  </p>
                 </div>
               </div>
             </div>
           </UCard>
 
           <!-- Support Tickets -->
-          <UCard v-if="profile.support_tickets?.length">
+          <UCard v-if="user?.support_tickets?.length">
             <h3 class="font-semibold mb-4 flex items-center gap-2">
               <UIcon name="i-lucide-ticket" class="size-4" />
               Support Tickets
             </h3>
             <div class="space-y-3">
-              <div v-for="ticket in profile.support_tickets" :key="ticket.id" class="p-3 rounded-lg border dark:border-gray-800">
+              <div
+                v-for="ticket in user.support_tickets"
+                :key="ticket.id"
+                class="p-3 rounded-lg border dark:border-gray-800"
+              >
                 <div class="flex items-start justify-between">
                   <div>
-                    <p class="font-medium text-sm">{{ ticket.title }}</p>
-                    <p class="text-xs text-muted-foreground">{{ ticket.category }}</p>
+                    <p class="font-medium text-sm">{{ ticket?.title }}</p>
+                    <p class="text-xs text-muted-foreground">
+                      {{ ticket?.category }}
+                    </p>
                   </div>
-                  <UBadge :color="getStatusColor(ticket.status)" variant="soft" size="sm">
-                    {{ ticket.status }}
+                  <UBadge
+                    :color="getStatusColor(ticket?.status)"
+                    variant="soft"
+                    size="sm"
+                  >
+                    {{ ticket?.status }}
                   </UBadge>
                 </div>
                 <p class="text-xs text-muted-foreground mt-2">
-                  Created {{ formatDate(ticket.created_at) }}
+                  Created {{ formatDate(ticket?.created_at) }}
                 </p>
               </div>
             </div>
           </UCard>
 
           <!-- Suggestions -->
-          <UCard v-if="profile.suggestions?.length">
+          <UCard v-if="user?.suggestions?.length">
             <h3 class="font-semibold mb-4 flex items-center gap-2">
               <UIcon name="i-lucide-lightbulb" class="size-4" />
               Your Suggestions
             </h3>
             <div class="space-y-3">
-              <div v-for="suggestion in profile.suggestions" :key="suggestion.id" class="p-3 rounded-lg border dark:border-gray-800">
+              <div
+                v-for="suggestion in user.suggestions"
+                :key="suggestion.id"
+                class="p-3 rounded-lg border dark:border-gray-800"
+              >
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
-                    <p class="font-medium text-sm">{{ suggestion.title }}</p>
-                    <p class="text-xs text-muted-foreground">{{ suggestion.category }}</p>
+                    <p class="font-medium text-sm">{{ suggestion?.title }}</p>
+                    <p class="text-xs text-muted-foreground">
+                      {{ suggestion?.category }}
+                    </p>
                   </div>
                   <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1 text-xs">
                       <UIcon name="i-lucide-thumbs-up" class="size-3" />
-                      {{ suggestion.votes_up }}
+                      {{ suggestion?.votes_up || 0 }}
                     </div>
                     <div class="flex items-center gap-1 text-xs">
                       <UIcon name="i-lucide-thumbs-down" class="size-3" />
-                      {{ suggestion.votes_down }}
+                      {{ suggestion?.votes_down || 0 }}
                     </div>
                   </div>
                 </div>
-                <div v-if="suggestion.admin_feedback" class="mt-2 p-2 rounded bg-primary/5 dark:bg-primary/10">
+                <div
+                  v-if="suggestion?.admin_feedback"
+                  class="mt-2 p-2 rounded bg-primary/5 dark:bg-primary/10"
+                >
                   <p class="text-xs font-medium">Admin Feedback:</p>
-                  <p class="text-xs text-muted-foreground">{{ suggestion.admin_feedback }}</p>
+                  <p class="text-xs text-muted-foreground">
+                    {{ suggestion.admin_feedback }}
+                  </p>
                 </div>
                 <div class="mt-2 flex items-center justify-between">
-                  <UBadge :color="getSuggestionStatusColor(suggestion.status)" variant="soft" size="sm">
-                    {{ suggestion.status }}
+                  <UBadge
+                    :color="getSuggestionStatusColor(suggestion?.status)"
+                    variant="soft"
+                    size="sm"
+                  >
+                    {{ suggestion?.status }}
                   </UBadge>
                   <p class="text-xs text-muted-foreground">
-                    {{ formatDate(suggestion.created_at) }}
+                    {{ formatDate(suggestion?.created_at) }}
                   </p>
                 </div>
               </div>
             </div>
           </UCard>
+
+          <!-- Empty State -->
+          <UCard
+            v-if="!user?.support_tickets?.length && !user?.suggestions?.length"
+          >
+            <div class="text-center py-8">
+              <UIcon
+                name="i-lucide-inbox"
+                class="text-4xl text-muted-foreground mb-3"
+              />
+              <p class="text-sm text-muted-foreground">No activity yet</p>
+              <p class="text-xs text-muted-foreground">
+                Your support tickets and suggestions will appear here
+              </p>
+            </div>
+          </UCard>
         </div>
       </div>
     </div>
+
+    <!-- Edit Profile Modal -->
+    <UModal v-model="isEditModalOpen">
+      <UCard>
+        <template #header>
+          <h3 class="text-lg font-semibold">Edit Profile</h3>
+        </template>
+        <p class="text-sm text-muted-foreground">
+          Edit functionality coming soon
+        </p>
+        <template #footer>
+          <UButton color="primary" @click="isEditModalOpen = false"
+            >Close</UButton
+          >
+        </template>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
 <script lang="ts" setup>
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: "default", middleware: "auth" });
 
-interface Profile {
-  id: string
-  full_name: string
-  email: string
-  phone_number: string | null
-  course: string
-  year_of_study: string
-  technical_skills: string
-  areas_of_interest: string
-  github_link: string | null
-  portfolio_website: string | null
-  is_verified_member: boolean
-  created_at: string
-  updated_at: string
-  user: {
-    id: string
-    email: string
-    full_name: string
-    is_active: boolean
-    is_verified: boolean
-    date_joined: string
-    profile_picture: string
-    is_superuser: boolean
-    google_id: string | null
-  }
-  support_tickets: Array<{
-    id: string
-    title: string
-    category: string
-    status: string
-    created_at: string
-    admin_response: string | null
-    resolved: boolean
-  }>
-  suggestions: Array<{
-    id: string
-    title: string
-    category: string
-    status: string
-    votes_up: number
-    votes_down: number
-    created_at: string
-    admin_feedback: string | null
-  }>
-  saved_projects: any[]
-  created_projects: any[]
-  event_attendances: any[]
-  reviews: any[]
-  takeaways: any[]
-  likes: any[]
-}
+const endpoints = useEndpoints();
+const { get } = useApi();
+const isEditModalOpen = ref(false);
 
-const { data: profile, error } = await useFetch<{ success: boolean; data: Profile }>('/api/profile')
+const {
+  data: user,
+  pending,
+  error,
+  refresh,
+} = await useAsyncData("profile", async () => {
+  const response: any = await get(endpoints.user.profile, {}, true);
+  return response?.user || response?.data?.user || {};
+});
 
-const isEditModalOpen = ref(false)
+const formatDate = (date?: string) => {
+  if (!date) return "Recently";
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
+const parseSkills = (skills?: string) => {
+  if (!skills) return [];
+  return skills
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
 
-const parseSkills = (skills: string) => {
-  return skills.split(',').map(s => s.trim()).filter(Boolean)
-}
-
-const getStatusColor = (status: string) => {
+const getStatusColor = (status?: string) => {
   const colors: Record<string, string> = {
-    'Open': 'warning',
-    'In Progress': 'info',
-    'Resolved': 'success',
-    'Closed': 'secondary'
-  }
-  return colors[status] || 'default'
-}
+    Open: "warning",
+    "In Progress": "info",
+    Resolved: "success",
+    Closed: "secondary",
+  };
+  return colors[status || ""] || "default";
+};
 
-const getSuggestionStatusColor = (status: string) => {
+const getSuggestionStatusColor = (status?: string) => {
   const colors: Record<string, string> = {
-    'Under Review': 'warning',
-    'Approved': 'success',
-    'Implemented': 'primary',
-    'Declined': 'error'
-  }
-  return colors[status] || 'default'
-}
+    "Under Review": "warning",
+    Approved: "success",
+    Implemented: "primary",
+    Declined: "error",
+  };
+  return colors[status || ""] || "default";
+};
 </script>
