@@ -98,9 +98,11 @@ export const useAuthStore = defineStore('auth', {
             this.verificationStack = []
         },
 
-        setUser(user: User, token?: string) {
+        setUser(user: User, token?: string,refreshToken?:string) {
             this.user = user
             if (token) this.token = token
+            if (refreshToken) this.refreshToken = refreshToken
+
         },
 
         clearUser() {
@@ -492,7 +494,7 @@ export const useAuthStore = defineStore('auth', {
 
 
     },
-    persist: {
+   persist: {
         storage: piniaPluginPersistedstate.localStorage(),
         serializer: {
             serialize: JSON.stringify,

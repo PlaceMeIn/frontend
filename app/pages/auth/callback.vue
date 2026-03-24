@@ -1,74 +1,73 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '~/stores/auth'
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "~/stores/auth";
 definePageMeta({
-  layout: 'auth',
-})
+  layout: "auth",
+});
 
-const route = useRoute()
-const router = useRouter()
-const auth = useAuthStore()
+const route = useRoute();
+const router = useRouter();
+const auth = useAuthStore();
 
-const status = ref<'loading' | 'success' | 'error'>('loading')
-const message = ref('Signing you in securely…')
+const status = ref<"loading" | "success" | "error">("loading");
+const message = ref("Signing you in securely…");
 
 onMounted(() => {
   try {
     if (route.query.data) {
-      const decoded = JSON.parse(atob(route.query.data as string))
-      if(decoded.success){
-        auth.user = decoded.user
-        auth.token = decoded?.token?.access
-        auth.refreshToken = decoded.tokens?.refresh
+      const decoded = JSON.parse(atob(route.query.data as string));
+      if (decoded.success) {
+        auth.setUser(
+          decoded.user,
+          decoded?.token?.access,
+          (auth.refreshToken = decoded.tokens?.refresh),
+        );
+
+        auth.refresh_Token();
       }
 
       // auth.setUser(decoded.user, decoded.access_token)
-      status.value = 'success'
-      message.value = 'Login successful. Redirecting…'
+      status.value = "success";
+      message.value = "Login successful. Redirecting…";
 
       // Popup flow
       if (window.opener && !window.opener.closed) {
         window.opener.postMessage(
-          { type: 'google-login-success' },
-          window.location.origin
-        )
-        window.close()
-        return
+          { type: "google-login-success" },
+          window.location.origin,
+        );
+        window.close();
+        return;
       }
 
       // Normal redirect
-      const redirect = auth.popRedirect()
-      router.replace(redirect?.path || '/events')
-      return
+      const redirect = auth.popRedirect();
+      router.replace(redirect?.path || "/events");
+      return;
     }
 
-    throw new Error('Invalid authentication response')
+    throw new Error("Invalid authentication response");
   } catch (err) {
-    console.error(err)
-    status.value = 'error'
-    message.value = 'Authentication failed. Redirecting…'
+    console.error(err);
+    status.value = "error";
+    message.value = "Authentication failed. Redirecting…";
 
     setTimeout(() => {
-      router.replace('/auth/login')
-    }, 2000)
+      router.replace("/auth/login");
+    }, 2000);
   }
-})
+});
 </script>
 
 <template>
   <UApp>
-    <div
-      class="min-h-screen flex items-start justify-center mt-40
-              px-6"
-    >
+    <div class="min-h-screen flex items-start justify-center mt-40 px-6">
       <div
-        class="w-full max-w-md text-center space-y-6
-               rounded-3xl border border-gray-200 dark:border-gray-800
-               bg-white dark:bg-gray-900 p-10 shadow-sm"
+        class="w-full max-w-md text-center space-y-6 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-10 shadow-sm"
       >
         <!-- Logo -->
-        <AppLogo :size="5"/>
+        <AppLogo :size="5" />
 
         <!-- Status Icon -->
         <div class="flex justify-center">
