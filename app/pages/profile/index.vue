@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen p-6 md:p-8">
     <div class="max-w-7xl mx-auto space-y-6">
-      <!-- Header -->
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold tracking-tight">Profile</h1>
@@ -22,11 +21,12 @@
         <UIcon name="i-lucide-loader-2" class="animate-spin text-2xl" />
       </div>
 
-      <div v-else-if="error" class="text-center py-12 text-red-500">
-        <p>Failed to load profile data</p>
-        <UButton variant="ghost" size="sm" class="mt-2" @click="refresh">
-          Try again
-        </UButton>
+      <div v-else-if="error" class="text-center py-12">
+        <div class="text-red-500 mb-2">
+          <UIcon name="i-lucide-alert-circle" class="text-3xl mx-auto" />
+          <p class="mt-2">Failed to load profile data</p>
+        </div>
+        <UButton variant="ghost" size="sm" @click="refresh">Try again</UButton>
       </div>
 
       <div v-else class="grid lg:grid-cols-3 gap-6">
@@ -70,15 +70,14 @@
               </div>
 
               <div class="pt-4 border-t dark:border-gray-800">
-                <div class="text-sm text-muted-foreground">
+                <p class="text-sm text-muted-foreground">
                   Member since
                   {{ formatDate(user?.created_at || user?.date_joined) }}
-                </div>
+                </p>
               </div>
             </div>
           </UCard>
 
-          <!-- Contact Info -->
           <UCard>
             <h3 class="font-semibold mb-4 flex items-center gap-2">
               <UIcon name="i-lucide-phone" class="size-4" />
@@ -103,7 +102,7 @@
                     target="_blank"
                     class="text-primary"
                   >
-                    {{ user.github_link }}
+                    {{ formatUrl(user.github_link) }}
                   </ULink>
                 </p>
                 <p v-else class="text-sm text-muted-foreground">Not provided</p>
@@ -116,7 +115,7 @@
                     target="_blank"
                     class="text-primary"
                   >
-                    {{ user.portfolio_website }}
+                    {{ formatUrl(user.portfolio_website) }}
                   </ULink>
                 </p>
                 <p v-else class="text-sm text-muted-foreground">Not provided</p>
@@ -127,7 +126,6 @@
 
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- Academic Info -->
           <UCard>
             <h3 class="font-semibold mb-4 flex items-center gap-2">
               <UIcon name="i-lucide-graduation-cap" class="size-4" />
@@ -147,7 +145,6 @@
             </div>
           </UCard>
 
-          <!-- Skills & Interests -->
           <UCard>
             <h3 class="font-semibold mb-4 flex items-center gap-2">
               <UIcon name="i-lucide-code-2" class="size-4" />
@@ -197,10 +194,15 @@
 
           <!-- Support Tickets -->
           <UCard v-if="user?.support_tickets?.length">
-            <h3 class="font-semibold mb-4 flex items-center gap-2">
-              <UIcon name="i-lucide-ticket" class="size-4" />
-              Support Tickets
-            </h3>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold flex items-center gap-2">
+                <UIcon name="i-lucide-ticket" class="size-4" />
+                Support Tickets
+              </h3>
+              <UBadge size="xs" variant="soft"
+                >{{ user.support_tickets.length }} total</UBadge
+              >
+            </div>
             <div class="space-y-3">
               <div
                 v-for="ticket in user.support_tickets"
@@ -208,22 +210,22 @@
                 class="p-3 rounded-lg border dark:border-gray-800"
               >
                 <div class="flex items-start justify-between">
-                  <div>
-                    <p class="font-medium text-sm">{{ ticket?.title }}</p>
+                  <div class="flex-1">
+                    <p class="font-medium text-sm">{{ ticket.title }}</p>
                     <p class="text-xs text-muted-foreground">
-                      {{ ticket?.category }}
+                      {{ ticket.category }}
                     </p>
                   </div>
                   <UBadge
-                    :color="getStatusColor(ticket?.status)"
+                    :color="getStatusColor(ticket.status)"
                     variant="soft"
                     size="sm"
                   >
-                    {{ ticket?.status }}
+                    {{ ticket.status }}
                   </UBadge>
                 </div>
                 <p class="text-xs text-muted-foreground mt-2">
-                  Created {{ formatDate(ticket?.created_at) }}
+                  {{ formatRelativeTime(ticket.created_at) }}
                 </p>
               </div>
             </div>
@@ -231,10 +233,15 @@
 
           <!-- Suggestions -->
           <UCard v-if="user?.suggestions?.length">
-            <h3 class="font-semibold mb-4 flex items-center gap-2">
-              <UIcon name="i-lucide-lightbulb" class="size-4" />
-              Your Suggestions
-            </h3>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold flex items-center gap-2">
+                <UIcon name="i-lucide-lightbulb" class="size-4" />
+                Your Suggestions
+              </h3>
+              <UBadge size="xs" variant="soft"
+                >{{ user.suggestions.length }} total</UBadge
+              >
+            </div>
             <div class="space-y-3">
               <div
                 v-for="suggestion in user.suggestions"
@@ -243,24 +250,24 @@
               >
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
-                    <p class="font-medium text-sm">{{ suggestion?.title }}</p>
+                    <p class="font-medium text-sm">{{ suggestion.title }}</p>
                     <p class="text-xs text-muted-foreground">
-                      {{ suggestion?.category }}
+                      {{ suggestion.category }}
                     </p>
                   </div>
                   <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1 text-xs">
                       <UIcon name="i-lucide-thumbs-up" class="size-3" />
-                      {{ suggestion?.votes_up || 0 }}
+                      {{ suggestion.votes_up }}
                     </div>
                     <div class="flex items-center gap-1 text-xs">
                       <UIcon name="i-lucide-thumbs-down" class="size-3" />
-                      {{ suggestion?.votes_down || 0 }}
+                      {{ suggestion.votes_down }}
                     </div>
                   </div>
                 </div>
                 <div
-                  v-if="suggestion?.admin_feedback"
+                  v-if="suggestion.admin_feedback"
                   class="mt-2 p-2 rounded bg-primary/5 dark:bg-primary/10"
                 >
                   <p class="text-xs font-medium">Admin Feedback:</p>
@@ -270,14 +277,14 @@
                 </div>
                 <div class="mt-2 flex items-center justify-between">
                   <UBadge
-                    :color="getSuggestionStatusColor(suggestion?.status)"
+                    :color="getSuggestionStatusColor(suggestion.status)"
                     variant="soft"
                     size="sm"
                   >
-                    {{ suggestion?.status }}
+                    {{ suggestion.status }}
                   </UBadge>
                   <p class="text-xs text-muted-foreground">
-                    {{ formatDate(suggestion?.created_at) }}
+                    {{ formatRelativeTime(suggestion.created_at) }}
                   </p>
                 </div>
               </div>
@@ -302,42 +309,49 @@
         </div>
       </div>
     </div>
-
-    <!-- Edit Profile Modal -->
-    <UModal v-model="isEditModalOpen">
-      <UCard>
-        <template #header>
-          <h3 class="text-lg font-semibold">Edit Profile</h3>
-        </template>
-        <p class="text-sm text-muted-foreground">
-          Edit functionality coming soon
-        </p>
-        <template #footer>
-          <UButton color="primary" @click="isEditModalOpen = false"
-            >Close</UButton
-          >
-        </template>
-      </UCard>
-    </UModal>
   </div>
+  <UModal v-model:open="isEditModalOpen" title="Edit Profile">
+    <UButton label="Open" color="neutral" variant="subtle" />
+
+    <template #body>
+      <Placeholder class="h-48 m-4" />
+      <p class="text-sm text-muted-foreground">
+        Edit functionality coming soon
+      </p>
+    </template>
+  </UModal>
 </template>
 
 <script lang="ts" setup>
-definePageMeta({ layout: "default", middleware: "auth" });
+definePageMeta({ layout: "default" });
 
 const endpoints = useEndpoints();
 const { get } = useApi();
+const auth = useAuthStore();
+
+const user = ref<any>(null);
+const pending = ref(false);
+const error = ref<string | null>(null);
 const isEditModalOpen = ref(false);
 
-const {
-  data: user,
-  pending,
-  error,
-  refresh,
-} = await useAsyncData("profile", async () => {
-  const response: any = await get(endpoints.user.profile, {}, true);
-  return response?.user || response?.data?.user || {};
-});
+const loadProfile = async () => {
+  if (!auth.token) return;
+
+  pending.value = true;
+  error.value = null;
+
+  try {
+    const res = await get(endpoints.user.profile, {}, true);
+    user.value = res?.user || res?.data?.user || {};
+  } catch (err) {
+    error.value = "Failed to fetch profile";
+    console.error("Profile load error:", err);
+  } finally {
+    pending.value = false;
+  }
+};
+
+const refresh = () => loadProfile();
 
 const formatDate = (date?: string) => {
   if (!date) return "Recently";
@@ -346,6 +360,26 @@ const formatDate = (date?: string) => {
     month: "long",
     day: "numeric",
   });
+};
+
+const formatRelativeTime = (date?: string) => {
+  if (!date) return "";
+  const now = new Date();
+  const past = new Date(date);
+  const diffMs = now.getTime() - past.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  return formatDate(date);
+};
+
+const formatUrl = (url: string) => {
+  return url.replace(/(https?:\/\/)/, "").replace(/\/$/, "");
 };
 
 const parseSkills = (skills?: string) => {
@@ -375,4 +409,13 @@ const getSuggestionStatusColor = (status?: string) => {
   };
   return colors[status || ""] || "default";
 };
+
+watch(
+  () => auth.token,
+  (token) => {
+    if (token) loadProfile();
+    else user.value = null;
+  },
+  { immediate: true },
+);
 </script>

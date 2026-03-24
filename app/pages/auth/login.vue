@@ -10,7 +10,7 @@ const isLoading = ref(false);
 const isGoogleLoading = ref(false);
 
 const fields: AuthFormField[] = [
-  { name: "email", type: "email", label: "Email", placeholder: "Enter your email", required: true },
+  { name: "email", type: "email", label: "Email", placeholder: "Enter your email", required: true , autocomplete: "email" },
   { name: "password", type: "password", label: "Password", placeholder: "Enter your password", required: true },
   { name: "remember", type: "checkbox", label: "Remember me" },
 ];
@@ -77,6 +77,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
         :providers="providers"
         :loading="isLoading"
         title="Welcome back!"
+
         icon="i-lucide-lock"
         @submit="onSubmit"
       >
