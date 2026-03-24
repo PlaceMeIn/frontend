@@ -12,7 +12,7 @@ const endpoints = useEndpoints();
 const user = ref({} as any);
 const { get } = useApi();
 
-const response: any = await get(endpoints.auth.userProfile, {}, true);
+const response: any = await get(endpoints.user.profile, {}, true);
 
 if (response) {
   user.value = response?.user;

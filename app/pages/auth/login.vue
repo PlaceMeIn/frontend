@@ -6,6 +6,9 @@ definePageMeta({ layout: "auth" });
 
 const authStore = useAuthStore();
 
+const isLoading = ref(false);
+const isGoogleLoading = ref(false);
+
 const fields: AuthFormField[] = [
   { name: "email", type: "email", label: "Email", placeholder: "Enter your email", required: true },
   { name: "password", type: "password", label: "Password", placeholder: "Enter your password", required: true },
@@ -16,9 +19,16 @@ const providers = [
   {
     label: "Google",
     icon: "i-simple-icons-google",
-    onClick: () => {
-      toast.add({ title: "Google", description: "Login with Google" });
-      authStore.handleGoogleLogin();
+    onClick: async () => {
+      isGoogleLoading.value = true;
+      try {
+        toast.add({ title: "Google", description: "Login with Google" });
+        await authStore.handleGoogleLogin();
+      } catch (err) {
+        error.value = err instanceof Error ? err.message : "Google login failed";
+      } finally {
+        isGoogleLoading.value = false;
+      }
     },
   },
 ];
@@ -33,10 +43,27 @@ type Schema = typeof schema extends v.Validator<infer T> ? T : never;
 const error = ref<string | null>(null);
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-    console.log(payload.data)
-  const res = await authStore.login({email:payload.data.email, password:payload.data.password, remember:payload.data.remember});
-  if (!res.success) {
-    error.value = res.message;
+  // Clear previous error
+  error.value = null;
+  
+  // Set loading state
+  isLoading.value = true;
+  
+  try {
+    console.log(payload.data);
+    const res = await authStore.login({
+      email: payload.data.email, 
+      password: payload.data.password, 
+      remember: payload.data.remember
+    });
+    
+    if (!res.success) {
+      error.value = res.message;
+    }
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : "Login failed";
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>
@@ -48,6 +75,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
         :schema="schema"
         :fields="fields"
         :providers="providers"
+        :loading="isLoading"
         title="Welcome back!"
         icon="i-lucide-lock"
         @submit="onSubmit"
@@ -65,6 +93,22 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
         <template #footer>
           By signing in, you agree to our
           <ULink to="#" class="text-primary font-medium">Terms of Service</ULink>.
+        </template>
+        
+        <template #providers>
+          <div class="flex flex-col gap-2">
+            <UButton
+              v-for="provider in providers"
+              :key="provider.label"
+              :icon="provider.icon"
+              :loading="provider.label === 'Google' && isGoogleLoading"
+              :disabled="isLoading || isGoogleLoading"
+              block
+              @click="provider.onClick"
+            >
+              {{ provider.label }}
+            </UButton>
+          </div>
         </template>
       </UAuthForm>
     </UPageCard>

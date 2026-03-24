@@ -8,7 +8,9 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://backend-render-pcx6.onrender.com",
+    // apiBase:"https://backend-render-pcx6.onrender.com",
+    apiBase:"https://scientist-brunswick-missing-superintendent.trycloudflare.com",
+
     contact:{
       emails:{
         support:"support.tech@mut.ac.ke",

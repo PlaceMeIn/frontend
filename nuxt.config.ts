@@ -71,7 +71,8 @@ export default defineNuxtConfig({
       { path: '~/components/defaults', pathPrefix: false },
       { path: '~/components/landing', pathPrefix: false },
       { path: '~/components/standalone', pathPrefix: false },
-      { path: '~/components/cool', pathPrefix: false }
+      { path: '~/components/cool', pathPrefix: false },
+      { path: '~/components/auth', pathPrefix: false }
     ]
   },
 

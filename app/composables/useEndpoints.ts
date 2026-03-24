@@ -8,9 +8,9 @@ export const useEndpoints = () => {
             loginWithGoogle: `${apiBase}/api/auth/google/login/`,
             login: `${apiBase}/auth/jwt/create/`,
             setPassword: `${apiBase}/api/auth/set-password/`,
-            changePassword: `${apiBase}/api/auth/users/create/`,
+            changePassword: `${apiBase}/api/auth/reset-password/`,
             initiateSetupPassword: `${apiBase}/api/auth/resend-password-setup/`,
-            initiateResetPassword: `${apiBase}/api/auth/resend-password-setup/`,
+            initiateChangePassword: `${apiBase}/api/auth/forgot-password/`,
             userProfile: `${apiBase}/api/users/me/`,
             refreshToken: `${apiBase}/auth/jwt/refresh/`,
         },
@@ -18,9 +18,10 @@ export const useEndpoints = () => {
             contact: `${apiBase}/api/contact-messages/`,
             join: `${apiBase}/api/auth/signup/`,
             joinDetails: ``,
-            developers:`${apiBase}/api/project-developers/`,
-            developersStats:`${apiBase}/api/project-developers/statistics/`
-
+            developers: `${apiBase}/api/project-developers/`,
+            developersStats: `${apiBase}/api/project-developers/statistics/`,
+            homme_gallery: `${apiBase}/api/galleries/home/`,
+            home_data: `${apiBase}/api/home/`
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,
@@ -64,6 +65,15 @@ export const useEndpoints = () => {
             un_auth_status: `${apiBase}/api/membership-payments/check-status/`,
             status: (checkout_request_id: string) => `${apiBase}/api/payments/status/${checkout_request_id}/`,
             event_initiate: `${apiBase}/api/event-payments/initiate/`,
+        },
+        user: {
+            profile: `${apiBase}/api/users/my-profile/`,
+            user: (id: string) => `${apiBase}/api/users/${id}/full-profile/`,
+        },
+        engineering: {
+            founders: `${apiBase}/api/developers/founders/`,
+            contributers: `${apiBase}/api/deveopers/contributers/`,
+            statistics: `${apiBase}/api/developers/statistics/`
         }
     };
 

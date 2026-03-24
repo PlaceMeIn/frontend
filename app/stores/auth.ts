@@ -98,7 +98,7 @@ export const useAuthStore = defineStore('auth', {
             this.verificationStack = []
         },
 
-        setUser(user: User, token?: string,refreshToken?:string) {
+        setUser(user: User, token?: string, refreshToken?: string) {
             this.user = user
             if (token) this.token = token
             if (refreshToken) this.refreshToken = refreshToken
@@ -125,14 +125,14 @@ export const useAuthStore = defineStore('auth', {
 
                 if (response) {
                     this.getUSer()
-                    this.setUser(response.user, response.access_token)
-
-            
+                    this.setUser(response.user, response.access, response?.refresh)
+                    this.refresh_Token()
+                    this.getUSer()
                     const redirect = this.popRedirect()
 
                     return {
                         success: true,
-                        redirectTo: redirect?.path || '/dashboard',
+                        redirectTo: redirect?.path || '/events',
                         requiresVerification: this.pendingVerification.length > 0
                     }
                 }
@@ -254,7 +254,7 @@ export const useAuthStore = defineStore('auth', {
                 const response: any = await post(
                     endpoints.auth.refreshToken,
                     {
-                        "refresh":this.refreshToken
+                        "refresh": this.refreshToken
                     },
                     true
                 )
@@ -285,19 +285,22 @@ export const useAuthStore = defineStore('auth', {
             // if (this.refreshing) return false
 
             this.refreshing = true
+            const router = useRouter()
 
             try {
                 const { get } = useApi()
                 const endpoints = useEndpoints()
 
                 const response: any = await get(
-                    endpoints.auth.userProfile,{},
+                    endpoints.auth.userProfile, {},
                     true
                 )
 
                 if (response) {
                     this.user = response?.user
-                    useRouter().push("/events")
+                    const redirect = this.popRedirect()
+
+                    router.push(redirect?.to ?? "/events")
                 }
 
                 return false
@@ -494,7 +497,7 @@ export const useAuthStore = defineStore('auth', {
 
 
     },
-   persist: {
+    persist: {
         storage: piniaPluginPersistedstate.localStorage(),
         serializer: {
             serialize: JSON.stringify,

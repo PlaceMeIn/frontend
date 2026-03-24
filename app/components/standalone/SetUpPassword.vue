@@ -325,7 +325,7 @@ const requestCode = async () => {
     isRequestingCode.value = true;
     
     const endpoint = isForgotPassword.value 
-      ? endpoints.auth.initiateResetPassword 
+      ? endpoints.auth.initiateChangePassword 
       : endpoints.auth.initiateSetupPassword;
     
     await post(endpoint, { email: formState.value.email });
@@ -359,7 +359,7 @@ const handlePasswordSetup = async () => {
     };
     
     const endpoint = isForgotPassword.value 
-      ? endpoints.auth.resetPassword 
+      ? endpoints.auth.changePassword 
       : endpoints.auth.setPassword;
     
     await post(endpoint, payload, true);
