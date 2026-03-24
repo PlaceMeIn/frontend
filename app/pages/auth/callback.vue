@@ -15,10 +15,15 @@ const message = ref('Signing you in securely…')
 
 onMounted(() => {
   try {
-    if (route.query.success === '1' && route.query.data) {
+    if (route.query.data) {
       const decoded = JSON.parse(atob(route.query.data as string))
+      if(decoded.success){
+        auth.user = decoded.user
+        auth.token = decoded?.token?.access
+        auth.refreshToken = decoded.tokens?.refresh
+      }
 
-      auth.setUser(decoded.user, decoded.access_token)
+      // auth.setUser(decoded.user, decoded.access_token)
       status.value = 'success'
       message.value = 'Login successful. Redirecting…'
 
