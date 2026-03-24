@@ -67,7 +67,7 @@ export const useEndpoints = () => {
             event_initiate: `${apiBase}/api/event-payments/initiate/`,
         },
         user: {
-            profile: `${apiBase}/api/users/my-profile/`,
+            profile: `${apiBase}/api/users/my-full-profile/`,
             user: (id: string) => `${apiBase}/api/users/${id}/full-profile/`,
         },
         engineering: {
