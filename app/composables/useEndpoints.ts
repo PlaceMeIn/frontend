@@ -68,7 +68,11 @@ export const useEndpoints = () => {
         },
         user: {
             profile: `${apiBase}/api/users/my-full-profile/`,
-            user: (id: string) => `${apiBase}/api/users/${id}/full-profile/`,
+            updateProfile: `${apiBase}/api/users/update-profile/`,
+            user: (id: string) => `${apiBase}/api/users/${id}/`,
+            community : `${apiBase}/api/users/`,
+            suggestions: `${apiBase}/api/users/suggestions/`,
+            tickets: `${apiBase}/api/users/my-tickets/`
         },
         engineering: {
             founders: `${apiBase}/api/developers/founders/`,

@@ -74,7 +74,7 @@
               variant="ghost"
               icon="i-lucide-user"
               label="Profile"
-              to="/profile"
+              to="/account"
             />
             <UButton
               variant="ghost"
