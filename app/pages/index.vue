@@ -2,6 +2,10 @@
 import type { PageFeatureProps } from "@nuxt/ui";
 import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
+const{get} = useApi()
+
+
+const { status, data: statsData } = await useLazyAsyncData('stats', () => get(useEndpoints().main.home_data))
 
 const sections = [
   { id: "hero", label: "Hero" },
@@ -15,6 +19,8 @@ const sections = [
   { id: "partners", label: "Partners" },
   { id: "cta", label: "Join Us" },
 ];
+
+
 
 const features = ref<PageFeatureProps[]>([
   {
@@ -37,7 +43,7 @@ const features = ref<PageFeatureProps[]>([
       color: "warning",
       variant: "soft",
     },
-    to: "/programs",
+    to: "",
   },
   {
     title: "Innovation First",
@@ -62,7 +68,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "primary",
       variant: "soft",
     },
-    to: "/focus/ai",
+    to: "/projects/ai",
   },
   {
     title: "Web Development",
@@ -73,7 +79,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "success",
       variant: "soft",
     },
-    to: "/focus/web",
+    to: "/projects/web",
   },
   {
     title: "Cybersecurity",
@@ -84,7 +90,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "error",
       variant: "soft",
     },
-    to: "/focus/security",
+    to: "/projects/security",
   },
   {
     title: "Data Science",
@@ -95,7 +101,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "info",
       variant: "soft",
     },
-    to: "/focus/data",
+    to: "/projects/data",
   },
   {
     title: "Cloud Computing",
@@ -106,7 +112,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "secondary",
       variant: "soft",
     },
-    to: "/focus/cloud",
+    to: "/projects/cloud",
   },
 ]);
 
@@ -261,7 +267,7 @@ useSeoMeta({
                   class="flex justify-center items-center text-3xl font-bold text-primary"
                 >
                   <ClientOnly
-                    ><CountUp :endVal="counts?.activeMembers || 0"
+                    ><CountUp :endVal="statsData?.statistics?.id === 1 ? statsData?.statistics.value : 0"
                   /></ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
@@ -273,7 +279,7 @@ useSeoMeta({
                   class="flex justify-center items-center text-3xl font-bold text-primary"
                 >
                   <ClientOnly
-                    ><CountUp :endVal="counts?.projects || 0"
+                    ><CountUp :endVal="statsData?.statistics?.id === 2 ? statsData.statistics?.value : 0"
                   /></ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
@@ -285,7 +291,7 @@ useSeoMeta({
                   class="flex justify-center items-center text-3xl font-bold text-primary"
                 >
                   <ClientOnly
-                    ><CountUp :endVal="counts?.eventsYear || 0"
+                    ><CountUp :endVal="statsData?.statistics?.id === 3 ? statsData?.statistics?.value : 0"
                   /></ClientOnly>
                   <span class="ml-1">+</span>
                 </div>

@@ -1,9 +1,6 @@
 <template>
-  <div class="p-4 space-y-12">
+  <div class="p-4 space-y-12 max-w-5xl m-auto">
 
-    <!-- ======================
-         Statistics Overview
-    ======================= -->
     <section>
       <h2 class="text-xl font-semibold mb-4">Statistics Overview</h2>
 
@@ -45,11 +42,8 @@
       </template>
     </section>
 
-    <!-- ======================
-         Founders
-    ======================= -->
     <section>
-      <h3 class="text-lg font-semibold mb-4">Founders</h3>
+      <h3 class="text-lg font-semibold mb-4">Developers</h3>
 
       <div v-if="pendingFounders" class="text-center py-4">
         <UIcon name="i-lucide-loader-2" class="animate-spin text-xl" />
@@ -140,17 +134,9 @@
           :key="dev.id"
           class="p-4 flex gap-4 items-center"
         >
-          <UAvatar
-            size="lg"
-            :src="dev.profile_picture_url"
-            :alt="dev.name"
-          />
-
+      
           <div>
-            <p class="font-semibold">{{ dev.name }}</p>
-            <p class="text-sm text-muted">{{ dev.course }}</p>
-            <p class="text-xs text-muted">{{ dev.academic_year }}</p>
-            <p class="text-xs text-primary-600">{{ dev.scope_display }}</p>
+           {{ dev }}
           </div>
         </UCard>
       </div>
