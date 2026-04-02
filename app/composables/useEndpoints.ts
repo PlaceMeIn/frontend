@@ -1,3 +1,5 @@
+import { slug } from "valibot";
+
 export const useEndpoints = () => {
     const apiBase = useAppConfig().site.apiBase ? `${useAppConfig().site.apiBase}` : 'http://localhost:8000'
 
@@ -56,7 +58,8 @@ export const useEndpoints = () => {
         },
         gallery: {
             list: `${apiBase}/api/galleries/`,
-            event: `${apiBase}/api/galleries/by-event/`,
+            slug: (slug: string) => `${apiBase}/api/galleries/${slug}/`,
+            event: `${apiBase}/api/galleries/search-by-event/`,
             featured: `${apiBase}/api/galleries/featured/`,
             unliked: `${apiBase}/api/galleries/unlinked/`,
         },
