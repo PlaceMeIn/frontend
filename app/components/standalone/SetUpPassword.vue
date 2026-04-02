@@ -2,9 +2,15 @@
   <div class="mx-auto max-w-md p-2">
     <!-- Header -->
     <div class="mb-6 text-center">
-      <h2 class="text-3xl font-bold">{{ isForgotPassword ? 'Reset Password' : 'Set Up Password' }}</h2>
+      <h2 class="text-3xl font-bold">
+        {{ isForgotPassword ? "Reset Password" : "Set Up Password" }}
+      </h2>
       <p class="mt-2 text-sm text-muted">
-        {{ isForgotPassword ? 'Enter your email to receive a verification code' : 'Create a strong password for your account' }}
+        {{
+          isForgotPassword
+            ? "Enter your email to receive a verification code"
+            : "Create a strong password for your account"
+        }}
       </p>
     </div>
 
@@ -12,9 +18,9 @@
     <UCard class="w-full">
       <UForm :state="formState" @submit="handlePasswordSetup" class="space-y-5">
         <!-- Email Field -->
-        <UFormField 
-          label="Email Address" 
-          required 
+        <UFormField
+          label="Email Address"
+          required
           name="email"
           :error="emailError"
         >
@@ -24,14 +30,16 @@
             type="email"
             :disabled="isEmailDisabled"
             size="md"
+            class="w-full"
+            suggested="email"
           />
         </UFormField>
 
         <!-- Verification Code Section -->
-        <div class="space-y-3">
-          <UFormField 
-            label="Verification Code" 
-            required 
+        <div class="space-y-3" v-if="!isForgotPassword">
+          <UFormField
+            label="Verification Code"
+            required
             name="token"
             :error="tokenError"
           >
@@ -43,7 +51,7 @@
               size="md"
             />
           </UFormField>
-          
+
           <div class="flex items-center justify-between gap-2">
             <UButton
               :loading="isRequestingCode"
@@ -55,82 +63,102 @@
             >
               {{ codeRequestButtonText }}
             </UButton>
-            
-            <span v-if="codeSent" class="text-xs text-success flex items-center gap-1">
+
+            <span
+              v-if="codeSent"
+              class="text-xs text-success flex items-center gap-1"
+            >
               <UIcon name="i-heroicons-check-circle" />
               Sent!
             </span>
           </div>
-          
+
           <p v-if="codeSent && formState.email" class="text-xs text-muted">
             Code sent to {{ maskEmail(formState.email) }}
           </p>
         </div>
 
-        <!-- Password Field -->
-        <UFormField 
-          label="Password" 
-          required 
-          name="password"
-          :error="passwordError"
-        >
-          <UInput
-            v-model="formState.password"
-            type="password"
-            placeholder="Create a strong password"
-            size="md"
-          />
-          
-          <!-- Password Strength Indicator -->
-          <div v-if="formState.password" class="mt-2 space-y-1">
-            <div class="flex gap-1">
-              <div 
-                v-for="i in 4" 
-                :key="i"
-                class="h-1 flex-1 rounded-full transition-all"
-                :class="getStrengthColor(i)"
-              />
-            </div>
-            <p class="text-xs" :class="getStrengthTextColor()">
-              {{ getStrengthMessage() }}
-            </p>
-          </div>
-          
-          <!-- Password Requirements -->
-          <div class="mt-2 space-y-1 text-xs">
-            <p class="font-medium text-muted">Password must contain:</p>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-1">
-              <div :class="getRequirementClass(formState.password.length >= 8)">
-                ✓ {{ formState.password.length >= 8 ? '' : 'At least ' }}8 characters
-              </div>
-              <div :class="getRequirementClass(/[A-Z]/.test(formState.password))">
-                ✓ Uppercase letter
-              </div>
-              <div :class="getRequirementClass(/[0-9]/.test(formState.password))">
-                ✓ Number
-              </div>
-              <div :class="getRequirementClass(/[^A-Za-z0-9]/.test(formState.password))">
-                ✓ Special character
-              </div>
-            </div>
-          </div>
-        </UFormField>
+        <div v-if="!isForgotPassword">
+          <!-- Password Field -->
+          <UFormField
+            label="Password"
+            required
+            name="password"
+            :error="passwordError"
+          >
+            <UInput
+              v-model="formState.password"
+              type="password"
+              placeholder="Create a strong password"
+              size="md"
+              class="w-full"
+            />
 
-        <!-- Confirm Password Field -->
-        <UFormField 
-          label="Confirm Password" 
-          required 
-          name="confirmPassword"
-          :error="confirmPasswordError"
-        >
-          <UInput
-            v-model="formState.confirmPassword"
-            type="password"
-            placeholder="Confirm your password"
-            size="md"
-          />
-        </UFormField>
+            <!-- Password Strength Indicator -->
+            <div v-if="formState.password" class="mt-2 space-y-1">
+              <div class="flex gap-1">
+                <div
+                  v-for="i in 4"
+                  :key="i"
+                  class="h-1 flex-1 rounded-full transition-all"
+                  :class="getStrengthColor(i)"
+                />
+              </div>
+              <p class="text-xs" :class="getStrengthTextColor()">
+                {{ getStrengthMessage() }}
+              </p>
+            </div>
 
+            <!-- Password Requirements -->
+            <div class="mt-2 space-y-1 text-xs">
+              <p class="font-medium text-muted">Password must contain:</p>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                <div
+                  :class="getRequirementClass(formState.password.length >= 8)"
+                >
+                  ✓ {{ formState.password.length >= 8 ? "" : "At least " }}8
+                  characters
+                </div>
+                <div
+                  :class="getRequirementClass(/[A-Z]/.test(formState.password))"
+                >
+                  ✓ Uppercase letter
+                </div>
+                <div
+                  :class="getRequirementClass(/[0-9]/.test(formState.password))"
+                >
+                  ✓ Number
+                </div>
+                <div
+                  :class="
+                    getRequirementClass(/[^A-Za-z0-9]/.test(formState.password))
+                  "
+                >
+                  ✓ Special character
+                </div>
+              </div>
+            </div>
+          </UFormField>
+
+          <!-- Confirm Password Field -->
+          <UFormField
+            label="Confirm Password"
+            required
+            name="confirmPassword"
+            :error="confirmPasswordError"
+          >
+            <UInput
+              v-model="formState.confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              size="md"
+              class="w-full"
+            />
+          </UFormField>
+        </div>
+        <div v-else class="text-sm text-muted">
+          <p>A link will be sent to your email to reset your password.</p>
+        </div>
         <!-- Submit Button -->
         <UButton
           type="submit"
@@ -141,7 +169,7 @@
           size="lg"
           class="mt-2"
         >
-          {{ isForgotPassword ? 'Reset Password' : 'Set Password' }}
+          {{ isForgotPassword ? "Reset Password" : "Set Password" }}
         </UButton>
       </UForm>
     </UCard>
@@ -182,11 +210,13 @@ const countdown = ref(0);
 let countdownInterval: NodeJS.Timeout | null = null;
 
 // Computed: Validation
-const isValidEmail = (email: string) => /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
 
 const emailError = computed(() => {
   if (!formState.value.email) return "";
-  if (!isValidEmail(formState.value.email)) return "Please enter a valid email address";
+  if (!isValidEmail(formState.value.email))
+    return "Please enter a valid email address";
   return "";
 });
 
@@ -210,13 +240,15 @@ const isPasswordStrong = computed(() => {
 
 const passwordError = computed(() => {
   if (!formState.value.password) return "";
-  if (!isPasswordStrong.value) return "Password must meet all requirements above";
+  if (!isPasswordStrong.value)
+    return "Password must meet all requirements above";
   return "";
 });
 
 const confirmPasswordError = computed(() => {
   if (!formState.value.confirmPassword) return "";
-  if (formState.value.password !== formState.value.confirmPassword) return "Passwords do not match";
+  if (formState.value.password !== formState.value.confirmPassword)
+    return "Passwords do not match";
   return "";
 });
 
@@ -281,13 +313,19 @@ const codeRequestButtonText = computed(() => {
 });
 
 const isFormValid = computed(() => {
-  return (
-    isPasswordStrong.value &&
-    formState.value.password === formState.value.confirmPassword &&
-    formState.value.email.trim() !== "" &&
-    isValidEmail(formState.value.email) &&
-    formState.value.token.length === 6
-  );
+  if (isForgotPassword.value) {
+    return (
+      formState.value.email.trim() !== "" && isValidEmail(formState.value.email)
+    );
+  } else {
+    return (
+      isPasswordStrong.value &&
+      formState.value.password === formState.value.confirmPassword &&
+      formState.value.email.trim() !== "" &&
+      isValidEmail(formState.value.email) &&
+      formState.value.token.length === 6
+    );
+  }
 });
 
 const isEmailDisabled = computed(() => {
@@ -298,15 +336,16 @@ const isEmailDisabled = computed(() => {
 const maskEmail = (email: string) => {
   const [local, domain] = email.split("@");
   if (!domain) return email;
-  const maskedLocal = local.length > 3 
-    ? local.slice(0, 2) + "***" + local.slice(-1)
-    : local[0] + "***";
+  const maskedLocal =
+    local.length > 3
+      ? local.slice(0, 2) + "***" + local.slice(-1)
+      : local[0] + "***";
   return `${maskedLocal}@${domain}`;
 };
 
 const startCountdown = (seconds: number) => {
   if (countdownInterval) clearInterval(countdownInterval);
-  
+
   countdown.value = seconds;
   countdownInterval = setInterval(() => {
     if (countdown.value > 0) {
@@ -323,19 +362,21 @@ const requestCode = async () => {
 
   try {
     isRequestingCode.value = true;
-    
-    const endpoint = isForgotPassword.value 
-      ? endpoints.auth.initiateChangePassword 
+
+    const endpoint = isForgotPassword.value
+      ? endpoints.auth.initiateChangePassword
       : endpoints.auth.initiateSetupPassword;
-    
+
     await post(endpoint, { email: formState.value.email });
-    
+
     codeSent.value = true;
     startCountdown(60);
-    
   } catch (error) {
     console.error("Failed to send code:", error);
-    toast.add({ title: "Failed to send code. Please try again.", color: "error" });
+    toast.add({
+      title: "Failed to send code. Please try again.",
+      color: "error",
+    });
     codeSent.value = false;
   } finally {
     isRequestingCode.value = false;
@@ -347,36 +388,39 @@ const handlePasswordSetup = async () => {
 
   try {
     isSubmitting.value = true;
-    
+
     const payload = {
       id: authStore?.user?.id,
       email: formState.value.email,
-      token: Array.isArray(formState.value.token) 
-        ? formState.value.token.join("") 
+      token: Array.isArray(formState.value.token)
+        ? formState.value.token.join("")
         : formState.value.token,
       password: formState.value.password,
       confirm_password: formState.value.confirmPassword,
     };
-    
-    const endpoint = isForgotPassword.value 
-      ? endpoints.auth.changePassword 
-      : endpoints.auth.setPassword;
-    
+
+    const endpoint = isForgotPassword.value
+      ? endpoints.auth.initiateChangePassword
+      : endpoints.auth.initiateSetupPassword;
+
     await post(endpoint, payload, true);
-    
-    toast.add({ 
-      title: isForgotPassword.value ? "Password reset successfully!" : "Password set up successfully!", 
-      color: "success" 
+
+    toast.add({
+      title: isForgotPassword.value
+        ? "Password reset successfully!"
+        : "Password set up successfully!",
+      color: "success",
     });
-    
+
     await navigateTo("/auth/login");
-    
   } catch (error) {
     console.error("Password setup failed:", error);
-    toast.add({ 
-      title: isForgotPassword.value ? "Failed to reset password" : "Password setup failed", 
+    toast.add({
+      title: isForgotPassword.value
+        ? "Failed to reset password"
+        : "Password setup failed",
       description: "Please check your code and try again",
-      color: "error" 
+      color: "error",
     });
   } finally {
     isSubmitting.value = false;
@@ -386,11 +430,11 @@ const handlePasswordSetup = async () => {
 // Lifecycle
 onMounted(async () => {
   await authStore.refresh_Token();
-  
+
   if (authStore?.user?.email) {
     formState.value.email = authStore.user.email;
   }
-  
+
   // Auto-send code if email is pre-filled (for setup mode)
   if (formState.value.email && !isForgotPassword.value) {
     setTimeout(() => requestCode(), 500);

@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 
 let refreshTimer: ReturnType<typeof setInterval> | null = null
+let refreshRequest: Promise<boolean> | null = null
+let crossTabListenerInitialized = false
 
 interface VerificationStep {
   identifier: string
@@ -112,6 +114,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.refreshToken = null
       this.error = null
+      this.stopAutoRefresh()
       this.clearRedirects()
       this.clearVerifications()
     },
@@ -236,51 +239,54 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async refresh_Token() {
-        console.log('Attempting token refresh…')
-
-        console.log('Current refresh token:', this.refreshToken)  
-        console.log("user's current authentication status:", this.user)  
       if (!this.refreshToken) {
-        console.warn('No token available')
+        this.stopAutoRefresh()
         return false
       }
 
-      // if (this.refreshing) return false
+      if (refreshRequest) {
+        return refreshRequest
+      }
 
-      this.refreshing = true
+      refreshRequest = (async () => {
+        this.refreshing = true
 
-      try {
-        const { post } = useApi()
-        const endpoints = useEndpoints()
+        try {
+          const { post } = useApi()
+          const endpoints = useEndpoints()
 
-        const response: any = await post(
-          endpoints.auth.refreshToken,
-          {
-            refresh: this.refreshToken
-          },
-          true
-        )
+          const response: any = await post(
+            endpoints.auth.refreshToken,
+            {
+              refresh: this.refreshToken
+            }
+          )
 
-        if (response) {
-          this.token = response?.access
-          if (response?.refresh) {
-            this.refreshToken = response.refresh
+          if (response?.access) {
+            this.token = response.access
+
+            if (response?.refresh) {
+              this.refreshToken = response.refresh
+            }
+
+            this.startAutoRefresh()
+            return true
           }
-          this.startAutoRefresh()
-          return true
-        }
 
-        return false
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          // Only clear AFTER confirmed invalid session
-          this.clearUser()
-        }
+          return false
+        } catch (error: any) {
+          if (error.response?.status === 401) {
+            this.clearUser()
+          }
 
-        return false
-      } finally {
-        this.refreshing = false
-      }
+          return false
+        } finally {
+          this.refreshing = false
+          refreshRequest = null
+        }
+      })()
+
+      return refreshRequest
     },
 
     async getUSer(redirectAfterLoad = true) {
@@ -442,10 +448,12 @@ export const useAuthStore = defineStore('auth', {
     },
 
     startAutoRefresh() {
+      if (!this.refreshToken) return
+
       if (refreshTimer) clearInterval(refreshTimer)
 
       refreshTimer = setInterval(() => {
-        this.refresh_Token()
+        void this.refresh_Token()
       }, 20 * 60 * 1000)
     },
 
@@ -461,6 +469,9 @@ export const useAuthStore = defineStore('auth', {
     },
 
     initCrossTabListener() {
+      if (crossTabListenerInitialized) return
+
+      crossTabListenerInitialized = true
       window.addEventListener('storage', (event: StorageEvent) => {
         if (event.key === 'auth') {
           if (event.newValue) {
@@ -470,8 +481,7 @@ export const useAuthStore = defineStore('auth', {
               this.token = data.token || null
               this.refreshToken = data.refreshToken || null
 
-              if (this.token) {
-                this.refresh_Token()
+              if (this.token && this.refreshToken) {
                 this.startAutoRefresh()
               } else {
                 this.stopAutoRefresh()
@@ -487,6 +497,11 @@ export const useAuthStore = defineStore('auth', {
     },
     async init() {
       this.initCrossTabListener()
+
+      if (!this.refreshToken) {
+        this.stopAutoRefresh()
+        return
+      }
 
       const success = await this.refresh_Token()
       if (success) {

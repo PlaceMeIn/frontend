@@ -1,11 +1,5 @@
 <template>
   <div class="max-w-md mx-auto space-y-6">
-    <div class="text-center space-y-2">
-      <h1 class="text-2xl font-bold tracking-tight">Change your password</h1>
-      <p class="text-sm text-muted-foreground">
-        {{ uid && token ? 'Create a new password for your account' : 'Enter your email to receive reset instructions' }}
-      </p>
-    </div>
 
     <PasswordInputCard
       v-if="uid && token"
