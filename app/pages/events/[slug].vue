@@ -31,7 +31,7 @@
                 eventData?.status === 'ongoing' ||
                 eventData?.status === 'completed'
               "
-              :label="getLabel(eventData?.status)"
+              :label="getLabel(eventData?.status, eventData?.start_date || '')"
               :to="eventData?.registration_link || '#'"
               target="_blank"
               class="w-full"
@@ -380,7 +380,7 @@
                       eventData?.status === 'ongoing' ||
                       eventData?.status === 'completed'
                     "
-                    :label="getLabel(eventData?.status)"
+                    :label="getLabel(eventData?.status, eventData?.start_date || '')"
                     :to="eventData?.registration_link || '#'"
                     target="_blank"
                     class="w-full"
@@ -489,7 +489,7 @@
                     eventData?.status === 'ongoing' ||
                     eventData?.status === 'completed'
                   "
-                  :label="getLabel(eventData?.status)"
+                  :label="getLabel(eventData?.status || '', eventData?.start_date || '')"
                   :to="eventData?.registration_link || '#'"
                   target="_blank"
                   class="w-full"
@@ -845,48 +845,5 @@ const copyToClipboard = async (text: string) => {
   }
 };
 
-function getColor(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "success";
-    case "completed":
-      return "neutral";
-    case "canceled":
-      return "error";
-    default:
-      return "primary";
-  }
-}
 
-function getIcon(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "i-lucide-play-circle";
-    case "completed":
-      return "i-lucide-check-circle";
-    case "canceled":
-      return "i-lucide-x-circle";
-    default:
-      return "i-lucide-ticket";
-  }
-}
-
-function getLabel(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "Ongoing";
-    case "completed":
-      return `Ended ${getRelativeDate(eventData.value?.start_date)}`;
-    case "canceled":
-      return "Canceled";
-    default:
-      return "Register";
-  }
-}
-
-function getRelativeDate(dateStr: string) {
-  const date = parseISO(dateStr);
-  const distance = formatDistanceToNow(date, { addSuffix: true });
-  return distance;
-}
 </script>

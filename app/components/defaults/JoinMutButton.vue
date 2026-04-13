@@ -1,15 +1,25 @@
 <template>
   <div class="flex items-center">
-    <!-- Guest حالت -->
-    <UButton
-      v-if="!authStore?.user?.email"
-      :label="showName || !screen.isMobile.value ? 'Join the Club' : undefined"
-      icon="i-lucide-user-pen"
-      size="sm"
-      color="primary"
-      class="w-full"
-      to="/join"
-    />
+    <UFieldGroup v-if="!authStore?.user?.email">
+      <UTooltip text="Sign up or log in to the club!" placement="bottom">
+        <UButton
+          :label="
+            showName || !screen.isMobile.value ? 'Join the Club' : undefined
+          "
+          icon="i-lucide-user-plus"
+          size="sm"
+          color="primary"
+          class="w-full"
+          to="/join"
+        />
+        <UButton
+          color="neutral"
+          variant="outline"
+          icon="i-lucide-log-in"
+          to="/auth/login"
+        />
+      </UTooltip>
+    </UFieldGroup>
 
     <!-- Authenticated User -->
     <UPopover v-else arrow>
@@ -34,14 +44,12 @@
           <div class="flex items-center gap-1 text-xs">
             <UIcon
               name="i-lucide-badge-check"
-              :class="authStore.user?.is_verified ? 'text-green-500' : 'text-red-500'"
+              :class="
+                authStore.user?.is_verified ? 'text-green-500' : 'text-red-500'
+              "
             />
             <span class="text-muted">
-              {{
-                authStore.user?.is_verified
-                  ? "Active member"
-                  : "Unverified"
-              }}
+              {{ authStore.user?.is_verified ? "Active member" : "Unverified" }}
             </span>
           </div>
         </div>

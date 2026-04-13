@@ -131,7 +131,7 @@
         :color="getColor(event.status)"
         :variant="event.status === 'completed'?'outline':'solid'"
         :disabled="event.status === 'ongoing' || event.status === 'completed'"
-        :label="getLabel(event.status)"
+        :label="getLabel(event.status, event.start_date || null)"
         :to="event?.registration_link || '#'"
         target="_blank"
         class="mt-2 sm:mt-3 w-full"
@@ -169,44 +169,7 @@ interface Event {
 const props = defineProps<{
   event?: Event;
 }>();
-function getColor(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "success";
-    case "completed":
-      return "neutral";
-    case "canceled":
-      return "error";
-    default:
-      return "primary";
-  }
-}
 
-function getIcon(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "i-lucide-play-circle";
-    case "completed":
-      return "i-lucide-check-circle";
-    case "canceled":
-      return "i-lucide-x-circle";
-    default:
-      return "i-lucide-notebook-pen";
-  }
-}
-
-function getLabel(status: string) {
-  switch (status) {
-    case "ongoing":
-      return "Ongoing";
-    case "completed":
-      return `Ended ${getRelativeDate(props?.event?.start_date)}`;
-    case "canceled":
-      return "Canceled";
-    default:
-      return "Register";
-  }
-}
 
 // Display relative date like "3 days ago" or "in 5 days"
 function getRelativeDate(dateStr: string) {

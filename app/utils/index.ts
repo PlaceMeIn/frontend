@@ -1,10 +1,3 @@
-import {
-  format,
-  formatDistanceToNow,
-  parseISO,
-  differenceInDays,
-} from "date-fns";
-
 
 export const getMediaUrl = (item: any, mediaPath: string): string => {
   if (!item?.url) return mediaPath;
@@ -21,5 +14,3 @@ export const formatMediaUrl = (url: string): string => {
   return  url.replace(/^http:\/\//i, "https://");
 };
 
-export const formatTimeAgo = (dateStr: string) =>
-  formatDistanceToNow(parseISO(dateStr), { addSuffix: true });
