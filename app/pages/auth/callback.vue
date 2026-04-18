@@ -43,7 +43,7 @@ onMounted(() => {
 
       // Normal redirect
       const redirect = auth.popRedirect();
-      router.replace(redirect?.path || "/events");
+      router.replace(redirect?.path || "/account");
       return;
     }
 

@@ -8,11 +8,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // If not authenticated and trying to access protected route
   if (!authStore.isLoggedIn && to.path.startsWith('/account')) {
+    // Store the intended destination before redirecting to login
+    authStore.pushRedirect(to)
     return navigateTo('/auth/login')
   }
 
-  // If authenticated and trying to access login/register, redirect 
+  // If authenticated and trying to access login/register, redirect to account
   if (authStore.isLoggedIn && (to.path === '/auth/login' || to.path === '/auth/register')) {
-    return navigateTo('/events')
+    return navigateTo('/account')
   }
 })

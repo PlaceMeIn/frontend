@@ -73,6 +73,7 @@ export const useEndpoints = () => {
             un_auth_status: `${apiBase}/api/membership-payments/check-status/`,
             status: (checkout_request_id: string) => `${apiBase}/api/payments/status/${checkout_request_id}/`,
             event_initiate: `${apiBase}/api/event-payments/initiate/`,
+            my_payments: `${apiBase}/api/event-payments/my-payments/`
         },
         user: {
             profile: `${apiBase}/api/users/my-full-profile/`,

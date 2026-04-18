@@ -57,7 +57,11 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       remember: payload.data.remember
     });
     
-    if (!res.success) {
+    if (res.success) {
+      // Navigate to the intended destination or account page
+      const redirectUrl = res.redirectTo || '/account';
+      await navigateTo(redirectUrl);
+    } else {
       error.value = res.message;
     }
   } catch (err) {

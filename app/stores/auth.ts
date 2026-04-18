@@ -141,7 +141,7 @@ export const useAuthStore = defineStore('auth', {
 
           return {
             success: true,
-            redirectTo: redirect?.path || '/events',
+            redirectTo: redirect?.path || '/account',
             requiresVerification: this.pendingVerification.length > 0
           }
         }
@@ -314,7 +314,7 @@ export const useAuthStore = defineStore('auth', {
 
           if (redirectAfterLoad) {
             const redirect = this.popRedirect()
-            router.push(redirect?.path || '/events')
+            router.push(redirect?.path || '/account')
           }
 
           return true
