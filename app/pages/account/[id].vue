@@ -310,6 +310,45 @@
           </UCard>
 
           <UCard>
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="flex items-center gap-2 font-semibold">
+                <UIcon
+                  name="i-lucide-chart-column"
+                  class="size-4"
+                />
+                Community Activity
+              </h3>
+              <UBadge
+                size="xs"
+                variant="soft"
+              >
+                Updated {{ formatRelativeTime(user.updated_at) }}
+              </UBadge>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div
+                v-for="item in activityItems"
+                :key="item.label"
+                class="rounded-xl border bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-900"
+              >
+                <div class="flex items-center gap-2">
+                  <UIcon
+                    :name="item.icon"
+                    class="size-4 text-primary"
+                  />
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ item.label }}
+                  </p>
+                </div>
+                <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ item.count }}
+                </p>
+              </div>
+            </div>
+          </UCard>
+
+          <UCard>
             <h3 class="mb-4 flex items-center gap-2 font-semibold">
               <UIcon
                 name="i-lucide-user-round-search"
@@ -333,6 +372,14 @@
                 </p>
                 <p class="break-all text-sm text-gray-900 dark:text-white">
                   {{ user.user?.id || 'Not provided' }}
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  Last Updated
+                </p>
+                <p class="text-sm text-gray-900 dark:text-white">
+                  {{ formatDate(user.updated_at) }}
                 </p>
               </div>
               <div>
@@ -413,6 +460,12 @@
                 <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   {{ formatRelativeTime(ticket.created_at) }}
                 </p>
+                <p
+                  v-if="ticket.admin_response"
+                  class="mt-2 rounded-md bg-primary/5 p-2 text-xs text-gray-600 dark:bg-primary/10 dark:text-gray-300"
+                >
+                  {{ ticket.admin_response }}
+                </p>
               </div>
             </div>
           </UCard>
@@ -487,6 +540,8 @@ type SupportTicket = {
   category: string
   status: string
   created_at: string
+  admin_response?: string | null
+  resolved?: boolean
 }
 
 type Suggestion = {
@@ -503,10 +558,13 @@ type Suggestion = {
 type NestedUser = {
   id?: string
   email?: string | null
+  full_name?: string | null
   is_active?: boolean
   is_verified?: boolean
   date_joined?: string | null
   profile_picture?: string | null
+  is_superuser?: boolean
+  google_id?: string | null
 }
 
 type ProfileResponse = {
@@ -524,11 +582,24 @@ type ProfileResponse = {
   is_verified?: boolean
   is_active?: boolean
   created_at?: string | null
+  updated_at?: string | null
   date_joined?: string | null
   profile_picture?: string | null
   user?: NestedUser
+  saved_projects?: unknown[]
+  created_projects?: unknown[]
+  event_attendances?: unknown[]
+  reviews?: unknown[]
+  takeaways?: unknown[]
+  likes?: unknown[]
   support_tickets?: SupportTicket[]
   suggestions?: Suggestion[]
+}
+
+type ProfileEnvelope = {
+  success?: boolean
+  data?: ProfileResponse | { user?: ProfileResponse }
+  user?: ProfileResponse
 }
 
 const route = useRoute()
@@ -537,21 +608,47 @@ const { get } = useApi()
 
 const profileId = computed(() => String(route.params.id || ''))
 
+const isProfileResponse = (value: unknown): value is ProfileResponse => {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  return ['phone_number', 'course', 'technical_skills', 'created_at', 'updated_at', 'support_tickets', 'suggestions']
+    .some(key => key in (value as Record<string, unknown>))
+}
+
 const {
   data,
   pending,
   error,
   refresh
-} = await useAsyncData<ProfileResponse>(
+} = await useAsyncData<ProfileResponse | null>(
   () => `profile-${profileId.value}`,
   async () => {
-    const response = await get<any>(
+    const response = await get<ProfileEnvelope>(
       endpoints.user.user(profileId.value),
       {},
       true
     )
 
-    return response?.user || response?.data?.user || response?.data || response
+    const directData = response?.data
+    const nestedData = response?.data && typeof response.data === 'object' && 'user' in response.data
+      ? (response.data as { user?: ProfileResponse }).user
+      : undefined
+
+    if (isProfileResponse(directData)) {
+      return directData
+    }
+
+    if (isProfileResponse(nestedData)) {
+      return nestedData
+    }
+
+    if (isProfileResponse(response?.user)) {
+      return response.user
+    }
+
+    return isProfileResponse(response) ? response : null
   },
   {
     watch: [profileId]
@@ -559,6 +656,39 @@ const {
 )
 
 const user = computed(() => data.value)
+
+const activityItems = computed(() => [
+  {
+    label: 'Saved Projects',
+    icon: 'i-lucide-bookmark',
+    count: user.value?.saved_projects?.length || 0
+  },
+  {
+    label: 'Created Projects',
+    icon: 'i-lucide-folder-git-2',
+    count: user.value?.created_projects?.length || 0
+  },
+  {
+    label: 'Event Attendances',
+    icon: 'i-lucide-calendar-check-2',
+    count: user.value?.event_attendances?.length || 0
+  },
+  {
+    label: 'Reviews',
+    icon: 'i-lucide-message-square-quote',
+    count: user.value?.reviews?.length || 0
+  },
+  {
+    label: 'Takeaways',
+    icon: 'i-lucide-notebook-pen',
+    count: user.value?.takeaways?.length || 0
+  },
+  {
+    label: 'Likes',
+    icon: 'i-lucide-heart',
+    count: user.value?.likes?.length || 0
+  }
+])
 
 const formatDate = (date?: string | null) => {
   if (!date) {

@@ -2,22 +2,33 @@
   <div class="flex items-center">
     <UFieldGroup v-if="!authStore?.user?.email">
       <UTooltip text="Sign up or log in to the club!" placement="bottom">
-        <UButton
-          :label="
-            showName || !screen.isMobile.value ? 'Join the Club' : undefined
-          "
-          icon="i-lucide-user-plus"
-          size="sm"
-          color="primary"
-          class="w-full"
-          to="/join"
-        />
-        <UButton
-          color="neutral"
-          variant="outline"
-          icon="i-lucide-log-in"
-          to="/auth/login"
-        />
+        <UPopover>
+          <UButton label="Sign In" color="neutral" variant="subtle" />
+          <template #content>
+            <div class="p-3 space-y-2">
+              <UButton
+                :label="
+                  showName || !screen.isMobile.value
+                    ? 'Join the Club'
+                    : 'Join'
+                "
+                icon="i-lucide-user-plus"
+                size="sm"
+                color="primary"
+                class="w-full"
+                to="/join"
+              />
+              <UButton
+                color="neutral"
+                variant="outline"
+                icon="i-lucide-log-in"
+                to="/auth/login"
+                class="w-full"
+                label="Log In"
+              />
+            </div>
+          </template>
+        </UPopover>
       </UTooltip>
     </UFieldGroup>
 

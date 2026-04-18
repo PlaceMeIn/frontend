@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
+const screen = useScreenSize();
 
 defineProps<{
   links: NavigationMenuItem[];
@@ -12,36 +13,80 @@ const items = computed<NavigationMenuItem[]>(() => [
     label: "Home",
     to: "/",
     active: route.path === "/",
+    icon: screen.isMobile.value ? "i-heroicons-home-solid" : undefined,
   },
   {
     label: "About",
     to: "/about",
     active: route.path.startsWith("/about"),
+    icon: screen.isMobile.value
+      ? "i-heroicons-information-circle-solid"
+      : undefined,
   },
   {
     label: "Projects",
     to: "/projects",
     active: route.path.startsWith("/projects"),
+    icon: screen.isMobile.value ? "i-heroicons-code-solid" : undefined,
   },
   {
     label: "Events",
     to: "/events",
     active: route.path.startsWith("/events"),
+    icon: screen.isMobile.value ? "i-heroicons-calendar-solid" : undefined,
   },
   {
     label: "Leadership",
     to: "/leadership",
     active: route.path.startsWith("/leadership"),
+    icon: screen.isMobile.value ? "i-heroicons-users-solid" : undefined,
   },
   {
     label: "Resources",
     to: "/resources",
     active: route.path.startsWith("/resources"),
+    icon: screen.isMobile.value ? "i-heroicons-document-text-solid" : undefined,
   },
   {
-    label: "Contact",
-    to: "/contact",
-    active: route.path.startsWith("/contact"),
+    label: "More",
+    icon: "i-lucide-more-horizontal",
+    children: [
+      {
+        label: "Contact",
+        to: "/contact",
+        active: route.path.startsWith("/contact"),
+        icon: "i-heroicons-phone-solid",
+        description: "Get in touch with us for any inquiries or collaborations.",
+      },
+      {
+        label: "feedback",
+        description: "We would love to hear your thoughts and suggestions to improve our club.",
+        to: "/feedback",
+        icon: "i-lucide-message-square",
+      },
+      {
+        label: "community",
+        description:
+          "Join our community of developers and stay updated with the latest news and events.",
+        icon: "i-lucide-users",
+        to: "/community"
+      },
+      {
+        label: "Gallery",
+         description:
+          "Explore our gallery to see photos and videos from our past events and projects.",
+        icon: "i-lucide-image",
+        to: "/gallery"
+      },
+      {
+        label: "Reviews",
+        icon: "i-lucide-star",
+         description:
+          "Read reviews from our members and see what they have to say about their experience with our club.",
+        to: "/reviews"
+      },
+     
+    ],
   },
 ]);
 </script>

@@ -218,7 +218,7 @@ const emit = defineEmits<{
   cancel: []
 }>()
 
-const { post } = useApi()
+const { post,put } = useApi()
 const endpoints = useEndpoints()
 const toast = useToast()
 
@@ -287,7 +287,7 @@ const handleSubmit = async (event: FormSubmitEvent<FormState>) => {
   }
 
   try {
-    const response = await post(endpoints.user.updateProfile, payload, true)
+    const response = await put(endpoints.user.updateProfile, payload, true)
 
     toast.add({
       title: 'Profile updated',

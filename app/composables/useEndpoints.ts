@@ -23,7 +23,12 @@ export const useEndpoints = () => {
             developers: `${apiBase}/api/project-developers/`,
             developersStats: `${apiBase}/api/project-developers/statistics/`,
             homme_gallery: `${apiBase}/api/galleries/home/`,
-            home_data: `${apiBase}/api/home/`
+            home_data: `${apiBase}/api/home/`,
+            config_info: `${apiBase}/api/config/`,
+            home_gallery: `${apiBase}/api/galleries/home/`,
+            update_suggestions: `${apiBase}/api/suggestions/`,
+            get_suggestions: `${apiBase}/api/suggestions/`,
+            vote_suggestion: `${apiBase}/api/suggestions/vote/` // ?suggestion_id=123
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,
@@ -73,7 +78,7 @@ export const useEndpoints = () => {
             profile: `${apiBase}/api/users/my-full-profile/`,
             updateProfile: `${apiBase}/api/users/update-profile/`,
             user: (id: string) => `${apiBase}/api/users/${id}/`,
-            community : `${apiBase}/api/users/`,
+            community: `${apiBase}/api/users/`,
             suggestions: `${apiBase}/api/users/suggestions/`,
             tickets: `${apiBase}/api/users/my-tickets/`
         },

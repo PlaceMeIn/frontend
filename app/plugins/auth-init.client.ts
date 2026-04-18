@@ -12,17 +12,17 @@ export default defineNuxtPlugin((nuxtApp) => {
     })
 
     // Watch for user loading, then refresh token
-    watch(
-        () => auth.user,
-        async (newUser) => {
-            if (newUser) {
-                console.log('User loaded → refreshing token…')
-                await auth.refreshToken()
-            }
-        },
-        {
-            immediate: false,   // don't run on plugin load or SSR hydration
-            deep: false,
-        }
-    )
+    // watch(
+    //     () => auth.user,
+    //     async (newUser) => {
+    //         if (newUser) {
+    //             console.log('User loaded → refreshing token…')
+    //             await auth.refresh_Token()
+    //         }
+    //     },
+    //     {
+    //         immediate: false,   // don't run on plugin load or SSR hydration
+    //         deep: false,
+    //     }
+    // )
 })

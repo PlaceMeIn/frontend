@@ -2,10 +2,16 @@
 import type { PageFeatureProps } from "@nuxt/ui";
 import HighlightUpcomingEvent from "~/components/landing/HighlightUpcomingEvent.vue";
 import HightlightFeaturedProject from "~/components/landing/HighlightFeaturedProject.vue";
-const{get} = useApi()
+const { get } = useApi();
 
+const { status, data: statsData } = await useLazyAsyncData("stats", () =>
+  get(useEndpoints().main.home_data),
+);
 
-const { status, data: statsData } = await useLazyAsyncData('stats', () => get(useEndpoints().main.home_data))
+const { status: galleryStatus, data: galleryData } = await useLazyAsyncData(
+  "gallery",
+  () => get(useEndpoints().main.home_gallery),
+);
 
 const sections = [
   { id: "hero", label: "Hero" },
@@ -19,8 +25,6 @@ const sections = [
   { id: "partners", label: "Partners" },
   { id: "cta", label: "Join Us" },
 ];
-
-
 
 const features = ref<PageFeatureProps[]>([
   {
@@ -68,7 +72,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "primary",
       variant: "soft",
     },
-    to: "/projects/ai",
+    to: "/projects?type=ai",
   },
   {
     title: "Web Development",
@@ -79,7 +83,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "success",
       variant: "soft",
     },
-    to: "/projects/web",
+    to: "/projects?type=web",
   },
   {
     title: "Cybersecurity",
@@ -90,7 +94,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "error",
       variant: "soft",
     },
-    to: "/projects/security",
+    to: "/projects?type=security",
   },
   {
     title: "Data Science",
@@ -101,7 +105,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "info",
       variant: "soft",
     },
-    to: "/projects/data",
+    to: "/projects?type=data",
   },
   {
     title: "Cloud Computing",
@@ -112,7 +116,7 @@ const focusAreas = ref<PageFeatureProps[]>([
       color: "secondary",
       variant: "soft",
     },
-    to: "/projects/cloud",
+    to: "/projects?type=cloud",
   },
 ]);
 
@@ -131,8 +135,10 @@ const counts = ref({
   eventsYear: 20,
 });
 
-const groupImages = import.meta.glob('/assets/files/mut/*.{jpg,jpeg,png,webp}', { eager: true, as: 'url' })
-
+const groupImages = import.meta.glob(
+  "/assets/files/mut/*.{jpg,jpeg,png,webp}",
+  { eager: true, as: "url" },
+);
 
 useSeoMeta({
   title: config.site.title,
@@ -166,7 +172,7 @@ useSeoMeta({
           class="hidden md:block absolute right-0 top-0 w-[40%] h-full object-cover shadow-lg"
           data-aos="fade-left"
           data-aos-duration="1200"
-            loading="lazy" 
+          loading="lazy"
         />
 
         <!-- Hero Image (mobile/tablet) -->
@@ -176,8 +182,7 @@ useSeoMeta({
           class="block md:hidden absolute top-0 left-0 w-full h-[200px] object-cover shadow-lg"
           data-aos="fade-up"
           data-aos-duration="1200"
-            loading="lazy" 
-
+          loading="lazy"
         />
       </div>
 
@@ -262,40 +267,23 @@ useSeoMeta({
               data-aos="fade-up"
               data-aos-delay="400"
             >
-              <div class="text-center" data-aos="zoom-in">
+              <div
+                v-for="st in statsData?.statistics || []"
+                :key="st.id"
+                class="text-center"
+                data-aos="zoom-in"
+              >
                 <div
                   class="flex justify-center items-center text-3xl font-bold text-primary"
                 >
-                  <ClientOnly
-                    ><CountUp :endVal="statsData?.statistics?.id === 1 ? statsData?.statistics.value : 0"
-                  /></ClientOnly>
+                  <ClientOnly><CountUp :endVal="st?.value || 0" /></ClientOnly>
                   <span class="ml-1">+</span>
                 </div>
-                <p class="text-sm text-muted">Active Members</p>
+                <p class="text-sm text-muted">{{ st?.label }}</p>
               </div>
 
-              <div class="text-center" data-aos="zoom-in" data-aos-delay="100">
-                <div
-                  class="flex justify-center items-center text-3xl font-bold text-primary"
-                >
-                  <ClientOnly
-                    ><CountUp :endVal="statsData?.statistics?.id === 2 ? statsData.statistics?.value : 0"
-                  /></ClientOnly>
-                  <span class="ml-1">+</span>
-                </div>
-                <p class="text-sm text-muted">Projects Built</p>
-              </div>
-
-              <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
-                <div
-                  class="flex justify-center items-center text-3xl font-bold text-primary"
-                >
-                  <ClientOnly
-                    ><CountUp :endVal="statsData?.statistics?.id === 3 ? statsData?.statistics?.value : 0"
-                  /></ClientOnly>
-                  <span class="ml-1">+</span>
-                </div>
-                <p class="text-sm text-muted">Events / Year</p>
+              <div v-if="status">
+                <LoaderSpinnner class="mx-auto" />
               </div>
             </div>
           </div>
@@ -308,19 +296,18 @@ useSeoMeta({
           >
             <UCarousel
               v-slot="{ item }"
-              :items="groupImages || []"
+              :items="galleryData?.results || groupImages"
               loop
               dots
               :autoplay="{ delay: 4500 }"
               wheel-gestures
-              class="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
+              class="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg md:rounded-l-xl"
             >
               <img
-                :src="item || '/placeholder.jpg'"
-                  loading="lazy" 
-
+                :src="item?.image || item || '/placeholder.jpg'"
+                loading="lazy"
                 alt="Students collaborating"
-                class="w-full h-[260px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover rounded-lg md:rounded-none shadow-lg"
+                class="w-full h-[260px] sm:h-[280px] md:h-[340px] lg:h-[380px] object-cover rounded-lg md:rounded-l-xl shadow-lg"
               />
             </UCarousel>
           </div>
@@ -430,7 +417,7 @@ useSeoMeta({
         aria-label="Featured Project"
         data-aos="fade-up"
       >
-        <HightlightFeaturedProject  :limit="6"/>
+        <HightlightFeaturedProject :limit="6" />
       </section>
 
       <section
@@ -440,7 +427,7 @@ useSeoMeta({
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        <HighlightUpcomingEvent  :limit="6"/>
+        <HighlightUpcomingEvent :limit="6" />
       </section>
 
       <section
@@ -494,8 +481,7 @@ useSeoMeta({
               :src="partner?.image || '/placeholder.jpg'"
               :alt="partner?.label"
               class="w-16 h-12 object-contain"
-                loading="lazy" 
-
+              loading="lazy"
             />
 
             <p class="text-lg font-semibold">
