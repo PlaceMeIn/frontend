@@ -29,6 +29,31 @@
       </div>
     </section>
 
+    <!-- SEARCH -->
+    <section class="py-10 scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="text-3xl font-bold">Find the right resource</h2>
+            <p class="text-muted mt-2 max-w-2xl">
+              Search across learning paths, repositories, workshops, and certifications.
+            </p>
+          </div>
+
+          <div class="w-full md:w-1/2">
+            <UInput
+              v-model="searchQuery"
+              placeholder="Search learning resources..."
+              icon="i-lucide-search"
+              size="lg"
+              class="w-full"
+              @update:model-value="handleSearchChange"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- LEARNING PATHS -->
     <section id="learning-paths" class="py-24 scroll-mt-20">
       <div class="max-w-6xl mx-auto px-6 text-center">
@@ -67,7 +92,21 @@
               :key="learning?.name || i"
               data-aos="zoom-in"
               :data-aos-delay="i * 100"
+              class="relative"
             >
+              <button
+                type="button"
+                @click.stop="toggleSaveResource(learning)"
+                :title="isSavedResource(learning) ? 'Remove saved resource' : 'Save resource'"
+                class="absolute right-4 top-4 z-10 rounded-full p-2 bg-white/95 text-gray-600 shadow-sm border border-gray-200 hover:bg-primary-50 transition dark:bg-slate-900 dark:text-gray-200 dark:border-slate-700"
+              >
+                <UIcon
+                  :name="'i-lucide-bookmark'"
+                  :class="isSavedResource(learning) ? 'text-primary' : 'text-gray-500 dark:text-gray-300'"
+                  class="w-4 h-4"
+                />
+              </button>
+
               <StLearningPathCard :learning="learning" />
             </div>
           </div>
@@ -109,7 +148,21 @@
               :key="repo?.name || i"
               data-aos="fade-up"
               :data-aos-delay="i * 100"
+              class="relative"
             >
+              <button
+                type="button"
+                @click.stop="toggleSaveResource(repo)"
+                :title="isSavedResource(repo) ? 'Remove saved resource' : 'Save resource'"
+                class="absolute right-4 top-4 z-10 rounded-full p-2 bg-white/95 text-gray-600 shadow-sm border border-gray-200 hover:bg-primary-50 transition dark:bg-slate-900 dark:text-gray-200 dark:border-slate-700"
+              >
+                <UIcon
+                  :name="'i-lucide-bookmark'"
+                  :class="isSavedResource(repo) ? 'text-primary' : 'text-gray-500 dark:text-gray-300'"
+                  class="w-4 h-4"
+                />
+              </button>
+
               <ClubRepositoryCard :repo="repo" />
             </div>
           </div>
@@ -149,10 +202,23 @@
             <div
               v-for="(workshop, i) in recordedWorkshops"
               :key="workshop?.title || i"
-              class="flex gap-5 items-start"
+              class="relative flex gap-5 items-start"
               data-aos="fade-right"
               :data-aos-delay="i * 100"
             >
+              <button
+                type="button"
+                @click.stop="toggleSaveResource(workshop)"
+                :title="isSavedResource(workshop) ? 'Remove saved resource' : 'Save resource'"
+                class="absolute right-4 top-4 z-10 rounded-full p-2 bg-white/95 text-gray-600 shadow-sm border border-gray-200 hover:bg-primary-50 transition dark:bg-slate-900 dark:text-gray-200 dark:border-slate-700"
+              >
+                <UIcon
+                  :name="'i-lucide-bookmark'"
+                  :class="isSavedResource(workshop) ? 'text-primary' : 'text-gray-500 dark:text-gray-300'"
+                  class="w-4 h-4"
+                />
+              </button>
+
               <WorkshopCard :workshop="workshop" />
             </div>
           </div>
@@ -198,7 +264,21 @@
               :key="certification?.name || i"
               data-aos="zoom-in"
               :data-aos-delay="i * 100"
+              class="relative"
             >
+              <button
+                type="button"
+                @click.stop="toggleSaveResource(certification)"
+                :title="isSavedResource(certification) ? 'Remove saved resource' : 'Save resource'"
+                class="absolute right-4 top-4 z-10 rounded-full p-2 bg-white/95 text-gray-600 shadow-sm border border-gray-200 hover:bg-primary-50 transition dark:bg-slate-900 dark:text-gray-200 dark:border-slate-700"
+              >
+                <UIcon
+                  :name="'i-lucide-bookmark'"
+                  :class="isSavedResource(certification) ? 'text-primary' : 'text-gray-500 dark:text-gray-300'"
+                  class="w-4 h-4"
+                />
+              </button>
+
               <RecommendedCertificationCard :certification="certification" />
             </div>
           </div>
@@ -258,6 +338,9 @@ useSeoPage({
     "Access curated learning resources, tutorials, and e-learning materials from MUT Tech Club to help you grow your skills in programming, development, and emerging technologies.",
 });
 
+const route = useRoute();
+const router = useRouter();
+const searchQuery = ref(route.query.search?.toString() ?? '');
 const structuredLearnings = ref<any[]>([]);
 const repos = ref<any[]>([]);
 const recordedWorkshops = ref<any[]>([]);
@@ -268,10 +351,94 @@ const loadingRepos = ref(false);
 const loadingWorkshops = ref(false);
 const loadingCertifications = ref(false);
 
+const savedResourceKeys = ref<string[]>([]);
+const savedResourcesKey = 'mut-tech-club.savedResources';
+
 const learningsError = ref(false);
 const reposError = ref(false);
 const workshopsError = ref(false);
 const certificationsError = ref(false);
+
+let searchTimeout: NodeJS.Timeout;
+
+const loadSavedResources = () => {
+  if (!process.client) return;
+  try {
+    const saved = localStorage.getItem(savedResourcesKey);
+    const parsed = saved ? JSON.parse(saved) : [];
+    if (Array.isArray(parsed)) {
+      savedResourceKeys.value = parsed;
+    }
+  } catch {
+    savedResourceKeys.value = [];
+  }
+};
+
+const persistSavedResources = () => {
+  if (!process.client) return;
+  localStorage.setItem(savedResourcesKey, JSON.stringify(savedResourceKeys.value));
+};
+
+const getResourceKey = (resource: any) => {
+  return resource?.link || resource?.title || resource?.name || '';
+};
+
+const isSavedResource = (resource: any) => {
+  const key = getResourceKey(resource);
+  return key ? savedResourceKeys.value.includes(key) : false;
+};
+
+const toggleSaveResource = (resource: any) => {
+  const key = getResourceKey(resource);
+  if (!key) return;
+
+  const existingIndex = savedResourceKeys.value.indexOf(key);
+  if (existingIndex === -1) {
+    savedResourceKeys.value.push(key);
+  } else {
+    savedResourceKeys.value.splice(existingIndex, 1);
+  }
+
+  persistSavedResources();
+};
+
+const updateRouteSearch = (value: string) => {
+  const trimmed = value?.trim() || undefined;
+  const current = route.query.search?.toString();
+  if (current === trimmed) return;
+
+  router.replace({
+    query: {
+      ...route.query,
+      search: trimmed,
+    },
+  });
+};
+
+const handleSearchChange = () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    updateRouteSearch(searchQuery.value);
+    fetchLearnings();
+    fetchRepos();
+    fetchRecordedWorkshops();
+    fetchCertifications();
+  }, 400);
+};
+
+const fetchAllResources = () => {
+  fetchLearnings();
+  fetchRepos();
+  fetchRecordedWorkshops();
+  fetchCertifications();
+};
+
+const matchesQuery = (item: any, query: string) => {
+  if (!query) return true;
+  const normalized = query.trim().toLowerCase();
+  const itemString = JSON.stringify(item).toLowerCase();
+  return itemString.includes(normalized);
+};
 
 const defaultLearnings: any[] = [];
 const defaultRepos: any[] = [];
@@ -287,10 +454,16 @@ const fetchLearnings = async () => {
   try {
     const res = await get(endpoints.resources.main, {
       resource_type: "learning_path",
+      ...(searchQuery.value ? { search: searchQuery.value } : {})
     });
     structuredLearnings.value = res?.results?.length
       ? res.results
       : defaultLearnings;
+
+    if (!searchQuery.value) return;
+    structuredLearnings.value = structuredLearnings.value.filter(item =>
+      matchesQuery(item, searchQuery.value)
+    );
   } catch {
     structuredLearnings.value = defaultLearnings;
     learningsError.value = true;
@@ -305,8 +478,12 @@ const fetchRepos = async () => {
   try {
     const res = await get(endpoints.resources.main, {
       resource_type: "repository",
+      ...(searchQuery.value ? { search: searchQuery.value } : {})
     });
     repos.value = res?.results?.length ? res.results : defaultRepos;
+
+    if (!searchQuery.value) return;
+    repos.value = repos.value.filter(item => matchesQuery(item, searchQuery.value));
   } catch {
     repos.value = defaultRepos;
     reposError.value = true;
@@ -321,10 +498,16 @@ const fetchRecordedWorkshops = async () => {
   try {
     const res = await get(endpoints.resources.main, {
       resource_type: "workshop",
+      ...(searchQuery.value ? { search: searchQuery.value } : {})
     });
     recordedWorkshops.value = res?.results?.length
       ? res.results
       : defaultWorkshops;
+
+    if (!searchQuery.value) return;
+    recordedWorkshops.value = recordedWorkshops.value.filter(item =>
+      matchesQuery(item, searchQuery.value)
+    );
   } catch {
     recordedWorkshops.value = defaultWorkshops;
     workshopsError.value = true;
@@ -339,10 +522,16 @@ const fetchCertifications = async () => {
   try {
     const res = await get(endpoints.resources.main, {
       resource_type: "certification",
+      ...(searchQuery.value ? { search: searchQuery.value } : {})
     });
     certifications.value = res?.results?.length
       ? res.results
       : defaultCertifications;
+
+    if (!searchQuery.value) return;
+    certifications.value = certifications.value.filter(item =>
+      matchesQuery(item, searchQuery.value)
+    );
   } catch {
     certifications.value = defaultCertifications;
     certificationsError.value = true;
@@ -351,10 +540,18 @@ const fetchCertifications = async () => {
   }
 };
 
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    const value = newSearch?.toString() ?? '';
+    if (value === searchQuery.value) return;
+    searchQuery.value = value;
+    fetchAllResources();
+  }
+);
+
 onMounted(() => {
-  fetchLearnings();
-  fetchRepos();
-  fetchRecordedWorkshops();
-  fetchCertifications();
+  loadSavedResources();
+  fetchAllResources();
 });
 </script>

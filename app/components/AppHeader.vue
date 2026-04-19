@@ -56,36 +56,46 @@ const items = computed<NavigationMenuItem[]>(() => [
         to: "/contact",
         active: route.path.startsWith("/contact"),
         icon: "i-heroicons-phone-solid",
-        description: "Get in touch with us for any inquiries or collaborations.",
+        description:
+          "Get in touch with us for any inquiries or collaborations.",
       },
-      {
-        label: "feedback",
-        description: "We would love to hear your thoughts and suggestions to improve our club.",
-        to: "/feedback",
-        icon: "i-lucide-message-square",
-      },
+
       {
         label: "community",
         description:
           "Join our community of developers and stay updated with the latest news and events.",
         icon: "i-lucide-users",
-        to: "/community"
+        to: "/community",
       },
       {
         label: "Gallery",
-         description:
+        description:
           "Explore our gallery to see photos and videos from our past events and projects.",
         icon: "i-lucide-image",
-        to: "/gallery"
+        to: "/gallery",
       },
       {
         label: "Reviews",
         icon: "i-lucide-star",
-         description:
+        description:
           "Read reviews from our members and see what they have to say about their experience with our club.",
-        to: "/reviews"
+        to: "/reviews",
       },
-     
+      {
+        label: "Support",
+        icon: "i-lucide-life-buoy",
+        description:
+          "Need help? Contact our support team for assistance with any issues or questions you may have.",
+        to: "/support",
+      },
+      {
+        label: "Suggestion",
+        description:
+          "We would love to hear your thoughts and suggestions to improve our club.",
+        to: "/suggestion",
+        icon: "i-lucide-message-square",
+      },
+      {},
     ],
   },
 ]);

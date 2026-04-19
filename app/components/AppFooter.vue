@@ -32,6 +32,11 @@ const columns = [
         to: "/reviews",
       },
       {
+        label:"Terms & Policies",
+        to: "/terms"
+      },
+
+      {
         label: "Suggestions",
         to: "/suggestions",
       },
@@ -61,6 +66,18 @@ const columns = [
         label: "Contact",
         to: "/contact",
       },
+      {
+        label: "Support",
+        to: "/support",
+      },
+      {
+        label: "Community",
+        to: "/community",
+      },
+      {
+        label:"Enginering",
+        to: "/engineering"
+      }
     ],
   },
   {

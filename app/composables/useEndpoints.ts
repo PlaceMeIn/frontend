@@ -28,7 +28,9 @@ export const useEndpoints = () => {
             home_gallery: `${apiBase}/api/galleries/home/`,
             update_suggestions: `${apiBase}/api/suggestions/`,
             get_suggestions: `${apiBase}/api/suggestions/`,
-            vote_suggestion: `${apiBase}/api/suggestions/vote/` // ?suggestion_id=123
+            vote_suggestion: `${apiBase}/api/suggestions/vote/`, // ?suggestion_id=123
+            support: `${apiBase}/api/support-ticket/create/`,
+            terms: `${apiBase}/api/terms/`,
         },
         leadership: {
             team: `${apiBase}/api/leadership/`,

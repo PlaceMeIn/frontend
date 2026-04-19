@@ -14,7 +14,11 @@ export default defineAppConfig({
     contact:{
       emails:{
         support:"support.tech@mut.ac.ke",
-        contact:[]
+        general:"general@mut.ac.ke"
+      },
+      phones:{
+        support:"+254 700 000 000",
+        general:"+254 700 000 001"
       }
     }
   },
