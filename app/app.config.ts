@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://backend-r/ender-pcx6.onrender.com",
+    apiBase:"https://backend-render-pcx6.onrender.com",
     // apiBase:"http://192.168.100.7:8080",
 
     contact:{
