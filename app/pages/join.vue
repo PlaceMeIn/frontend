@@ -514,7 +514,7 @@
 
             <template #pay>
               <PaymentCard
-                :amount="joinData?.amount || default_pay_amount"
+                :amount="configInfo.membership_fee || default_pay_amount"
                 :email="form?.email"
                 :phone="form?.phone || null"
                 reference="JOIN-MUTECH"
@@ -638,10 +638,13 @@
 import { computed, ref, reactive } from "vue";
 import * as v from "valibot";
 
-const default_pay_amount = 50;
+const endpoints = useEndpoints();
+const { get } = useApi();
 const joinData = ref({});
 const loading = ref(false);
 const error = ref(null);
+const {status:loadingStatus,data:configInfo,error:loadingError} = await useAsyncData("support-info", () => get(endpoints.main.config_info));
+
 async function fetchJoinData() {
   loading.value = true;
 
@@ -669,11 +672,12 @@ const items: StepperItem[] = [
   },
   {
     title: "Complete Payment",
-    description: `Pay KES ${joinData.amoun || default_pay_amount} to finish your registration.`,
+    description: `Pay KES ${configInfo?.membership_fee || default_pay_amount} to finish your registration.`,
     icon: "i-lucide-credit-card",
     slot: "pay" as const,
   },
 ];
+const default_pay_amount = configInfo?.membership_fee || '--'; 
 
 function onProgramCreate(item: string) {
   programs.value.push({ value: item, label: "item" });

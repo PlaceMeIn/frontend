@@ -55,7 +55,20 @@ export const useEndpoints = () => {
         },
         events: {
             list: `${apiBase}/api/events/`,
-            past: `${apiBase}/api/events/past/list`
+            past: `${apiBase}/api/events/past/list`,
+            register: '/api/event-attendances/register/',
+
+        },
+        eventPayments: {
+            initiate: '/api/event-payments/initiate/',
+            checkStatus: '/api/event-payments/check-status/',
+            simulate: '/api/event-payments/simulate/',
+            myPayments: '/api/event-payments/my-payments/',
+        },
+        eventAttendances: {
+            register: '/api/event-attendances/register/',
+            myRegistrations: '/api/event-attendances/my-registrations/',
+            // ... other attendance endpoints
         },
         reviews: {
             list: `${apiBase}/api/testimonials`
