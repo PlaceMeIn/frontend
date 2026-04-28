@@ -25,6 +25,7 @@ export default defineNuxtConfig({
         'https://techclub.mut.ac.ke',
         'https://mut-tech-club.vercel.app',
         'http://localhost:3000',
+        'http://localhost:3001',
         'https://app.tera-in.top',
 
       ],

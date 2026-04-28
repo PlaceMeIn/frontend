@@ -1,137 +1,217 @@
 <template>
-  <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <div class="w-full max-w-md m-auto p-1 space-y-4">
     <!-- Loading State -->
-    <div v-if="loading" class="text-center py-8">
-      <UIcon name="i-heroicons-arrow-path" class="animate-spin w-8 h-8 mx-auto text-primary" />
-      <p class="mt-2 text-gray-600">Processing your registration...</p>
+    <div v-if="loading" class="flex items-center justify-center py-16">
+      <div class="text-center">
+        <UIcon name="i-heroicons-arrow-path" class="animate-spin w-8 h-8 mx-auto text-primary mb-2" />
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Processing your registration...</p>
+      </div>
     </div>
 
     <!-- Error Display -->
-    <div v-if="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-      <div class="flex items-center gap-2 text-red-600">
-        <UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5" />
-        <span class="text-sm">{{ error }}</span>
-      </div>
-      <button 
-        v-if="error.includes('simulation')"
-        @click="simulatePayment" 
-        class="mt-2 text-sm text-primary hover:underline"
-      >
-        Click here to simulate payment
-      </button>
-    </div>
-
-    <!-- Registration Form -->
-    <form v-else @submit.prevent="handleRegistration" class="space-y-4">
-      <!-- Event Details Section -->
-      <div class="mb-4 pb-4 border-b border-gray-200">
-        <h3 class="font-semibold text-gray-800">{{ event.title }}</h3>
-        <p class="text-sm text-gray-500 mt-1">{{ event.event_type_display }}</p>
-        <p class="text-sm text-gray-600 mt-2">{{ event.start_date | formatDate }}</p>
-        <p class="text-sm text-gray-600">{{ event.location }}</p>
-      </div>
-
-      <!-- Price Display for Paid Events -->
-      <div v-if="event.is_paid_event" class="mb-4 p-3 bg-yellow-50 rounded-lg">
-        <div class="flex justify-between items-center">
-          <span class="font-medium text-gray-700">Ticket Price:</span>
-          <span class="text-xl font-bold text-primary">KES {{ event.ticket_price }}</span>
-        </div>
-        <p class="text-xs text-gray-500 mt-1">Payment via M-Pesa required</p>
-      </div>
-
-      <!-- Free Event Message -->
-      <div v-else class="mb-4 p-3 bg-green-50 rounded-lg">
-        <div class="flex items-center gap-2 text-green-700">
-          <UIcon name="i-heroicons-check-circle" class="w-5 h-5" />
-          <span class="text-sm">This is a free event!</span>
-        </div>
-      </div>
-
-      <!-- Phone Number (Required for Paid Events) -->
-      <div v-if="event.is_paid_event">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Phone Number <span class="text-red-500">*</span>
-        </label>
-        <UInput
-          v-model="phoneNumber"
-          type="tel"
-          placeholder="e.g., 0712345678 or 254712345678"
-          :ui="{ wrapper: 'w-full' }"
-          size="lg"
-          required
-        />
-        <p class="text-xs text-gray-500 mt-1">Enter the M-Pesa registered phone number</p>
-      </div>
-
-      <!-- Submit Button -->
-      <UButton
-        type="submit"
-        :loading="submitting"
-        :disabled="submitting || (event.is_paid_event && !phoneNumber)"
-        color="primary"
-        size="lg"
-        block
-      >
-        <template #leading>
-          <UIcon v-if="event.is_paid_event" name="i-heroicons-credit-card" />
-          <UIcon v-else name="i-heroicons-check-badge" />
-        </template>
-        {{ event.is_paid_event ? `Pay KES ${event.ticket_price} & Register` : 'Register for Event' }}
-      </UButton>
-
-      <!-- Already Registered Message -->
-      <div v-if="alreadyRegistered" class="mt-4 text-center text-sm text-green-600">
-        <UIcon name="i-heroicons-check-circle" class="inline w-4 h-4 mr-1" />
-        You are already registered for this event!
-      </div>
-    </form>
-
-    <!-- Payment Status Modal -->
-    <UModal v-model="showPaymentModal" :prevent-close="paymentProcessing">
-      <div class="p-6">
-        <div class="text-center">
-          <div v-if="paymentProcessing" class="mb-4">
-            <UIcon name="i-heroicons-arrow-path" class="animate-spin w-12 h-12 mx-auto text-primary" />
-          </div>
-          <div v-else-if="paymentSuccess" class="mb-4">
-            <UIcon name="i-heroicons-check-circle" class="w-12 h-12 mx-auto text-green-500" />
-          </div>
-          <div v-else class="mb-4">
-            <UIcon name="i-heroicons-x-circle" class="w-12 h-12 mx-auto text-red-500" />
-          </div>
-          
-          <h3 class="text-lg font-semibold mb-2">{{ paymentModalTitle }}</h3>
-          <p class="text-gray-600">{{ paymentModalMessage }}</p>
-          
-          <div v-if="paymentCheckoutId && !paymentSuccess && !paymentProcessing" class="mt-4">
-            <p class="text-sm text-gray-500">Checkout ID: {{ paymentCheckoutId }}</p>
-            <UButton @click="checkPaymentStatus" color="primary" variant="outline" size="sm" class="mt-2">
-              Check Payment Status
-            </UButton>
-          </div>
-          
+    <UAlert
+      v-if="error && !showPaymentStatus"
+      :title="'Registration Error'"
+      color="error"
+      variant="soft"
+      icon="i-heroicons-exclamation-triangle"
+    >
+      <template #default>
+        <div class="space-y-2">
+          <p class="text-sm">{{ error }}</p>
           <UButton 
-            v-if="!paymentProcessing && !paymentSuccess" 
-            @click="closePaymentModal" 
-            color="gray" 
-            variant="outline" 
-            class="mt-4"
+            v-if="error.includes('simulation')"
+            @click="simulatePayment" 
+            color="error"
+            variant="ghost"
+            size="sm"
+          >
+            Click here to simulate payment
+          </UButton>
+        </div>
+      </template>
+    </UAlert>
+
+    <!-- Payment Status Display (Inline) -->
+    <UPageCard
+      v-if="showPaymentStatus"
+      :spotlight="{ gradient: 'from-primary-500 via-primary-500 to-primary-600' }"
+      class="w-full"
+    >
+      <template #header>
+        <div class="text-center pt-4">
+          <div class="mb-4">
+            <UIcon
+              v-if="paymentProcessing"
+              name="i-heroicons-arrow-path"
+              class="animate-spin w-12 h-12 mx-auto text-primary"
+            />
+            <UIcon
+              v-else-if="paymentSuccess"
+              name="i-heroicons-check-circle"
+              class="w-12 h-12 mx-auto text-green-500"
+            />
+            <UIcon
+              v-else
+              name="i-heroicons-x-circle"
+              class="w-12 h-12 mx-auto text-red-500"
+            />
+          </div>
+        </div>
+      </template>
+
+      <div class="space-y-4">
+        <!-- Message -->
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            {{ paymentModalTitle }}
+          </h3>
+          <p class="text-sm text-gray-700 dark:text-gray-300">{{ paymentModalMessage }}</p>
+        </div>
+
+        <!-- Checkout ID (if available) -->
+        <div v-if="paymentCheckoutId && !paymentSuccess && !paymentProcessing" class="space-y-2">
+          <p class="text-xs text-gray-600 dark:text-gray-400 text-center">
+            Checkout ID: <span class="font-mono">{{ paymentCheckoutId }}</span>
+          </p>
+          <UButton
+            @click="checkPaymentStatus"
+            color="primary"
+            variant="outline"
+            size="sm"
+            block
+          >
+            Check Payment Status
+          </UButton>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+          <UButton
+            v-if="!paymentProcessing && !paymentSuccess"
+            @click="closePaymentModal"
+            color="gray"
+            variant="ghost"
+            block
           >
             Close
           </UButton>
-          
-          <UButton 
-            v-if="paymentSuccess" 
-            @click="closePaymentModal" 
-            color="primary" 
-            class="mt-4"
+          <UButton
+            v-if="paymentSuccess"
+            @click="closePaymentModal"
+            color="primary"
+            block
           >
             Done
           </UButton>
         </div>
       </div>
-    </UModal>
+    </UPageCard>
+
+    <!-- Registration Form -->
+    <UPageCard
+      v-if="!loading && !showPaymentStatus"
+      :spotlight="{ gradient: 'from-primary-400 via-transparent to-primary-500' }"
+    >
+      <div class="space-y-6">
+        <!-- Event Details Section -->
+        <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+          <h3 class="font-semibold text-lg text-gray-900 dark:text-white">{{ event.title }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ event.event_type_display }}</p>
+          <div class="mt-3 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-calendar" class="w-4 h-4" />
+              <span>{{ formatDate(event.start_date) }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-map-pin" class="w-4 h-4" />
+              <span>{{ event.location }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Display for Paid Events -->
+        <UAlert
+          v-if="event.is_paid_event"
+          :title="'Ticket Information'"
+          color="amber"
+          variant="soft"
+          icon="i-heroicons-banknotes"
+        >
+          <template #default>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-medium">Ticket Price:</span>
+                <span class="text-lg font-bold text-primary">KES {{ event.ticket_price }}</span>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Payment via M-Pesa required</p>
+            </div>
+          </template>
+        </UAlert>
+
+        <!-- Free Event Message -->
+        <UAlert
+          v-else
+          :title="'Free Event'"
+          color="success"
+          variant="soft"
+          icon="i-heroicons-check-circle"
+        >
+          <template #default>
+            <p class="text-sm">This is a free event! No payment required.</p>
+          </template>
+        </UAlert>
+
+        <!-- Phone Number (Required for Paid Events) -->
+        <div v-if="event.is_paid_event" class="space-y-2">
+          <UFormGroup
+            label="Phone Number"
+            name="phoneNumber"
+            :required="true"
+          >
+            <UInput
+              v-model="phoneNumber"
+              type="tel"
+              icon="i-heroicons-phone"
+              placeholder="e.g., 0712345678 or 254712345678"
+              size="lg"
+              required
+            />
+          </UFormGroup>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Enter the M-Pesa registered phone number</p>
+        </div>
+
+        <!-- Already Registered Message -->
+        <UAlert
+          v-if="alreadyRegistered"
+          :title="'Already Registered'"
+          color="success"
+          variant="soft"
+          icon="i-heroicons-check-badge"
+        >
+          <template #default>
+            <p class="text-sm">You are already registered for this event!</p>
+          </template>
+        </UAlert>
+
+        <!-- Submit Button -->
+        <UButton
+          v-if="!alreadyRegistered"
+          @click="handleRegistration"
+          :loading="submitting"
+          :disabled="submitting || (event.is_paid_event && !phoneNumber)"
+          color="primary"
+          size="lg"
+          block
+        >
+          <template #leading>
+            <UIcon v-if="event.is_paid_event" name="i-heroicons-credit-card" />
+            <UIcon v-else name="i-heroicons-check-badge" />
+          </template>
+          {{ event.is_paid_event ? `Pay KES ${event.ticket_price} & Register` : 'Register for Event' }}
+        </UButton>
+      </div>
+    </UPageCard>
   </div>
 </template>
 
@@ -164,8 +244,8 @@ const submitting = ref(false)
 const phoneNumber = ref('')
 const alreadyRegistered = ref(props.event.user_is_registered || false)
 
-// Payment Modal State
-const showPaymentModal = ref(false)
+// Payment Status State
+const showPaymentStatus = ref(false)
 const paymentProcessing = ref(false)
 const paymentSuccess = ref(false)
 const paymentCheckoutId = ref<string | null>(null)
@@ -210,6 +290,8 @@ const handleRegistration = async () => {
   
   submitting.value = true
   error.value = null
+
+  alert('Registration started') // Debug alert
   
   try {
     if (props.event.is_paid_event) {
@@ -260,7 +342,7 @@ const initiateEventPayment = async () => {
   if (res?.data?.checkout_request_id) {
     paymentCheckoutId.value = res.data.checkout_request_id
     paymentProcessing.value = true
-    showPaymentModal.value = true
+    showPaymentStatus.value = true
     paymentModalTitle.value = 'Processing Payment'
     paymentModalMessage.value = 'Please check your phone and enter your M-Pesa PIN to complete payment.'
     
@@ -269,7 +351,7 @@ const initiateEventPayment = async () => {
   } else if (res?.checkout_request_id) {
     paymentCheckoutId.value = res.checkout_request_id
     paymentProcessing.value = true
-    showPaymentModal.value = true
+    showPaymentStatus.value = true
     paymentModalTitle.value = 'Processing Payment'
     paymentModalMessage.value = 'Please check your phone and enter your M-Pesa PIN to complete payment.'
     
@@ -405,12 +487,12 @@ const showSuccessModal = (title: string, message: string) => {
   paymentProcessing.value = false
   paymentModalTitle.value = title
   paymentModalMessage.value = message
-  showPaymentModal.value = true
+  showPaymentStatus.value = true
 }
 
-// Close payment modal
+// Close payment status
 const closePaymentModal = () => {
-  showPaymentModal.value = false
+  showPaymentStatus.value = false
   paymentProcessing.value = false
   paymentSuccess.value = false
   paymentCheckoutId.value = null

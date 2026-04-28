@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { navLinks } from '~/utils/links'
+
 const colorMode = useColorMode()
 
 const color = computed(() => colorMode.value === 'dark' ? '#020618' : 'white')
@@ -19,7 +21,6 @@ useHead({
 
 const config = useAppConfig();
 
-
 useSeoMeta({
   title: config.site.title,
   ogTitle: config.site.title,
@@ -34,23 +35,9 @@ useSeoMeta({
   twitterCard: 'summary_large_image'
 })
 
-const [{ data: navigation }, { data: files }] = await Promise.all([
-  useAsyncData('navigation', () => {
-    return Promise.all([
-      queryCollectionNavigation('blog')
-    ])
-  }, {
-    transform: data => data.flat()
-  }),
-  useLazyAsyncData('search', () => {
-    return Promise.all([
-      queryCollectionSearchSections('blog')
-    ])
-  }, {
-    server: false,
-    transform: data => data.flat()
-  })
-])
+// Initialize empty data for content search
+const navigation = ref([])
+const files = ref([])
 </script>
 
 <template>

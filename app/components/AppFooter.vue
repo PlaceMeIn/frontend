@@ -46,10 +46,6 @@ const columns = [
     label: "Features",
     children: [
       {
-        label: "Contests",
-        to: "/contests",
-      },
-      {
         label: "Resources",
         to: "/resources",
       },

@@ -85,7 +85,7 @@
             </div>
           </div>
 
-          <UDivider />
+          <USeparator />
 
           <!-- Actions -->
           <div class="flex flex-col gap-1">

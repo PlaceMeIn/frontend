@@ -678,7 +678,7 @@
     </div>
 
     <!-- Image Viewer Modal -->
-    <LazyImageCard
+    <GalleryImageCard
       v-if="showImageViewer"
       :images="galleryImages"
       :initial-index="currentImageIndex"
