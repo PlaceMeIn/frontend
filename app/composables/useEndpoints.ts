@@ -20,8 +20,8 @@ export const useEndpoints = () => {
             contact: `${apiBase}/api/contact-messages/`,
             join: `${apiBase}/api/auth/signup/`,
             joinDetails: ``,
-            developers: `${apiBase}/api/project-developers/`,
-            developersStats: `${apiBase}/api/project-developers/statistics/`,
+            developers: `${apiBase}/api/developers/`,
+            developersStats: `${apiBase}/api/developers/statistics/`,
             homme_gallery: `${apiBase}/api/galleries/home/`,
             home_data: `${apiBase}/api/home/`,
             config_info: `${apiBase}/api/config/`,
@@ -56,18 +56,18 @@ export const useEndpoints = () => {
         events: {
             list: `${apiBase}/api/events/`,
             past: `${apiBase}/api/events/past/list`,
-            register: '/api/event-attendances/register/',
+            register: `${apiBase}/api/event-attendances/register/`,
 
         },
         eventPayments: {
-            initiate: '/api/event-payments/initiate/',
-            checkStatus: '/api/event-payments/check-status/',
-            simulate: '/api/event-payments/simulate/',
-            myPayments: '/api/event-payments/my-payments/',
+            initiate: `${apiBase}/api/event-payments/initiate/`,
+            checkStatus: `${apiBase}/api/event-payments/check-status/`,
+            simulate: `${apiBase}/api/event-payments/simulate/`,
+            myPayments: `${apiBase}/api/event-payments/my-payments/`,
         },
         eventAttendances: {
-            register: '/api/event-attendances/register/',
-            myRegistrations: '/api/event-attendances/my-registrations/',
+            register: `${apiBase}/api/event-attendances/register/`,
+            myRegistrations: `${apiBase}/api/event-attendances/my-registrations/`,
             // ... other attendance endpoints
         },
         reviews: {
@@ -99,8 +99,8 @@ export const useEndpoints = () => {
             tickets: `${apiBase}/api/users/my-tickets/`
         },
         engineering: {
-            founders: `${apiBase}/api/developers/founders/`,
-            contributers: `${apiBase}/api/deveopers/contributers/`,
+            coreDevelopers: `${apiBase}/api/developers/`,
+            contributers: `${apiBase}/api/developers/contributors/`,
             statistics: `${apiBase}/api/developers/statistics/`
         }
     };

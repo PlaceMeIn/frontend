@@ -163,7 +163,7 @@
         </UAlert>
 
         <!-- Phone Number (Required for Paid Events) -->
-        <div v-if="event.is_paid_event" class="space-y-2">
+        <div v-if="event.is_paid_event && !alreadyRegistered" class="space-y-2">
           <UFormGroup
             label="Phone Number"
             name="phoneNumber"
@@ -291,7 +291,6 @@ const handleRegistration = async () => {
   submitting.value = true
   error.value = null
 
-  alert('Registration started') // Debug alert
   
   try {
     if (props.event.is_paid_event) {
@@ -308,14 +307,16 @@ const handleRegistration = async () => {
 
 // Free Event Registration
 const registerForFreeEvent = async () => {
+
   const res: any = await useApi().post(
     useEndpoints().eventAttendances.register,
     {
       event_id: props.event.id,
-      phone_number: null
+      phone_number: "080808"
     },
     true // with auth
   )
+
   
   if (res?.attendance) {
     props.onSuccess?.(res)
@@ -331,7 +332,7 @@ const initiateEventPayment = async () => {
   const formattedPhone = formatPhoneNumber(phoneNumber.value)
   
   const res: any = await useApi().post(
-    useEndpoints().eventPayments.initiate,
+    useEndpoints().events.register,
     {
       event_id: props.event.id,
       phone_number: formattedPhone
