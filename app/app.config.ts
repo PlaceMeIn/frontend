@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon:"",
     url:"",
     sourceLink:"https://github.com/PlaceMeIn",
-    apiBase:"https://response-finishing-dennis-zoloft.trycloudflare.com",
+    apiBase:"https://destiny-maui-gaps-latin.trycloudflare.com",
     // apiBase:"http://192.168.100.7:8080",
 
     contact:{
