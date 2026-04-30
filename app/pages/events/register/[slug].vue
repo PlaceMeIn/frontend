@@ -257,12 +257,11 @@ const handleRegistrationError = (err: string) => {
 
 
 useSeoPage({
-  title: data.value
-    ? ` Register for ${data.value.title} |  Register Events`
+  title: slug.value
+    ? ` Register for ${slug.value} |  Register Events`
     : "Event Details",
-  description: data.value?.description,
-  image: data.value?.image || data.value?.image_url,
-});
+  description: ` Register for ${slug.value}... |  Register Events`,
+  image: data.value?.image || data.value?.image_url,});
 </script>
 
 <style scoped>

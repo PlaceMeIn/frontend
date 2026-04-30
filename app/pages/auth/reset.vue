@@ -26,7 +26,7 @@ const handlePasswordSetup = async (password: string) => {
   try {
     isSubmitting.value = true
     
-    await $fetch(useEndpoints().auth.changePassword, {
+   const res =  await $fetch(useEndpoints().auth.changePassword, {
       method: 'POST',
       body: {
         uid: uid.value,
@@ -37,7 +37,7 @@ const handlePasswordSetup = async (password: string) => {
     })
     
     toast.add({ 
-      title: "Password reset successfully!", 
+      title: res.message || "Password reset successful", 
       description: "You can now log in with your new password",
       color: "success" 
     })

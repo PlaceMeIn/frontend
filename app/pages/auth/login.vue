@@ -93,7 +93,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
           <ULink to="/auth/reset" class="text-primary font-medium" tabindex="-1">Forgot password?</ULink>
         </template>
         <template #validation>
-          <UAlert v-if="error" color="error" icon="i-lucide-info" :title="error" />
+          <UAlert v-if="error" color="error" icon="i-lucide-info" :title="error" class="w-full break-words" />
         </template>
         <template #footer>
           By signing in, you agree to our

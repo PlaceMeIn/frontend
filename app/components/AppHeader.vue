@@ -89,10 +89,10 @@ const items = computed<NavigationMenuItem[]>(() => [
         to: "/support",
       },
       {
-        label: "Suggestion",
+        label: "Suggestions",
         description:
           "We would love to hear your thoughts and suggestions to improve our club.",
-        to: "/suggestion",
+        to: "/suggestions",
         icon: "i-lucide-message-square",
       },
       {},

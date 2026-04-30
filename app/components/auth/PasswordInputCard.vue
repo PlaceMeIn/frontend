@@ -1,43 +1,32 @@
 <!-- components/PasswordSetupForm.vue -->
 <template>
+
+   <div>
+      <h1 class="text-bold text-3xl">Create Password</h1>
+      <p class="text-muted">Choose a strong password to secure your account.</p>
+    </div>
   <UCard class="w-full">
+
     <UForm :state="formState" @submit="handleSubmit" class="space-y-5">
-      <UFormField 
-        label="Password" 
-        required 
-        name="password"
-        :error="passwordError"
-      >
-        <UInput
-          v-model="formState.password"
-          :type="showPassword ? 'text' : 'password'"
-          placeholder="Create a strong password"
-          size="md"
-        >
+      <UFormField label="Password" required name="password" :error="passwordError">
+        <UInput v-model="formState.password" :type="showPassword ? 'text' : 'password'"
+          placeholder="Create a strong password" size="md">
           <template #trailing>
-            <UButton
-              variant="ghost"
-              size="xs"
-              :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-              @click="showPassword = !showPassword"
-            />
+            <UButton variant="ghost" size="xs" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              @click="showPassword = !showPassword" />
           </template>
         </UInput>
-        
+
         <div v-if="formState.password" class="mt-2 space-y-2">
           <div class="flex gap-1">
-            <div 
-              v-for="i in 4" 
-              :key="i"
-              class="h-1 flex-1 rounded-full transition-all duration-300"
-              :class="getStrengthColor(i)"
-            />
+            <div v-for="i in 4" :key="i" class="h-1 flex-1 rounded-full transition-all duration-300"
+              :class="getStrengthColor(i)" />
           </div>
           <p class="text-xs font-medium" :class="getStrengthTextColor()">
             {{ getStrengthMessage() }}
           </p>
         </div>
-        
+
         <div class="mt-3 space-y-1.5 text-xs">
           <p class="font-medium text-muted">Password must contain:</p>
           <div class="grid grid-cols-2 gap-x-4 gap-y-1.5">
@@ -57,38 +46,17 @@
         </div>
       </UFormField>
 
-      <UFormField 
-        label="Confirm Password" 
-        required 
-        name="confirmPassword"
-        :error="confirmPasswordError"
-      >
-        <UInput
-          v-model="formState.confirmPassword"
-          :type="showConfirmPassword ? 'text' : 'password'"
-          placeholder="Confirm your password"
-          size="md"
-        >
+      <UFormField label="Confirm Password" required name="confirmPassword" :error="confirmPasswordError">
+        <UInput v-model="formState.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
+          placeholder="Confirm your password" size="md">
           <template #trailing>
-            <UButton
-              variant="ghost"
-              size="xs"
-              :icon="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-              @click="showConfirmPassword = !showConfirmPassword"
-            />
+            <UButton variant="ghost" size="xs" :icon="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              @click="showConfirmPassword = !showConfirmPassword" />
           </template>
         </UInput>
       </UFormField>
 
-      <UButton
-        type="submit"
-        color="primary"
-        :loading="loading"
-        :disabled="!isFormValid"
-        block
-        size="lg"
-        class="mt-2"
-      >
+      <UButton type="submit" color="primary" :loading="loading" :disabled="!isFormValid" block size="lg" class="mt-2">
         {{ submitLabel }}
       </UButton>
     </UForm>
@@ -145,9 +113,9 @@ const confirmPasswordError = computed(() => {
 })
 
 const isFormValid = computed(() => {
-  return isPasswordStrong.value && 
-         formState.password === formState.confirmPassword &&
-         formState.password.length > 0
+  return isPasswordStrong.value &&
+    formState.password === formState.confirmPassword &&
+    formState.password.length > 0
 })
 
 const getPasswordStrength = () => {

@@ -272,55 +272,9 @@ useSeoPage({
 const defaultAvatar =
   "https://ui-avatars.com/api/?background=6366f1&color=fff&name=Member";
 
-// Keep your hold data structures as fallbacks
-const exec_team_hold = [
-  {
-    user_profile: {
-      full_name: "James Mwangi",
-      course: "Computer Science",
-      year_of_study: "4",
-      user: {
-        profile_picture:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
-      },
-    },
-    title: "Chairperson",
-    bio: "4th year Computer Science student passionate about React and Node.js. Led development of 3 major campus projects.",
-  },
-  // ... rest of your hold data transformed similarly
-];
 
-const departmentLeads_hold = [
-  {
-    user_profile: {
-      full_name: "David Otieno",
-      course: "Computer Science",
-      year_of_study: "3",
-      user: {
-        profile_picture:
-          "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=faces",
-      },
-    },
-    title: "Web development lead",
-  },
-  // ... rest transformed similarly
-];
 
-const faculty_advisors_hold = [
-  {
-    user_profile: {
-      full_name: "Dr. John Kariuki",
-      user: {
-        profile_picture:
-          "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=faces",
-      },
-    },
-    title: "Faculty Advisor",
-    department_display: "School Of Computing & IT",
-    bio: "Artificial Intelligence & Machine Learning",
-  },
-  // ... rest transformed similarly
-];
+
 
 const executiveTeam = ref<any[]>([]);
 const departmentLeads = ref<any[]>([]);
@@ -345,9 +299,9 @@ async function fetchTeam() {
     const res = await get(endpoints.leadership.team, {
       position_type: "executive",
     });
-    executiveTeam.value = res?.results?.length ? res.results : exec_team_hold;
+    executiveTeam.value = res?.results?.length ? res.results : [];
   } catch {
-    executiveTeam.value = exec_team_hold;
+    executiveTeam.value = [];
     teamError.value = true;
   } finally {
     loadingTeam.value = false;
@@ -364,9 +318,9 @@ async function fetchLeads() {
     });
     departmentLeads.value = res?.results?.length
       ? res.results
-      : departmentLeads_hold;
+      : [];
   } catch {
-    departmentLeads.value = departmentLeads_hold;
+    departmentLeads.value = [];
     leadsError.value = true;
   } finally {
     loadingLeads.value = false;
@@ -381,9 +335,9 @@ async function fetchFaculty() {
     const res = await get(endpoints.leadership.faculty, {
       position_type: "faculty_advisor",
     });
-    faculty.value = res?.results?.length ? res.results : faculty_advisors_hold;
+    faculty.value = res?.results?.length ? res.results : [];
   } catch {
-    faculty.value = faculty_advisors_hold;
+    faculty.value = [];
     facultyError.value = true;
   } finally {
     loadingFaculty.value = false;

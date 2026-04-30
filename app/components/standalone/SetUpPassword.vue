@@ -403,12 +403,10 @@ const handlePasswordSetup = async () => {
       ? endpoints.auth.initiateChangePassword
       : endpoints.auth.initiateSetupPassword;
 
-    await post(endpoint, payload, true);
+    const res:any = await post(endpoint, payload, true);
 
     toast.add({
-      title: isForgotPassword.value
-        ? "Password reset successfully!"
-        : "Password set up successfully!",
+      title: res.message || (isForgotPassword.value ? "Password reset successfully!" : "Password set up successfully!"),
       color: "success",
     });
 
