@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen bg-gray-50 dark:bg-neutral-950">
+  <section class="min-h-screen ">
 
     <!-- Loading -->
     <div v-if="pending" class="flex min-h-screen items-center justify-center">

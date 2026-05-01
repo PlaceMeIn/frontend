@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
+  <div class="min-h-screen">
 
     <!-- Loading skeleton -->
     <div v-if="pending" class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -542,6 +542,14 @@ const loadProfile = async () => {
     pending.value = false
   }
 }
+
+
+useSeoPage({
+  title: `${profileData.value?.full_name|| 'User' } - Profile | ${useAppConfig().site.title}`,
+  description: `View the profile of ${profileData.value?.full_name || '---'}, a member of our community.`,
+  image:profileData.value?.profile_picture || profileData.value?.user?.profile_picture || undefined,
+})
+
 
 // Share profile function
 const shareProfile = async () => {

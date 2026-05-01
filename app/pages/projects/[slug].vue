@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
+  <div class="min-h-screen ">
     <!-- Sticky Action Bar -->
     <div
       class="sticky top-15 z-40 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-gray-200 dark:border-neutral-800"

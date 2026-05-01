@@ -153,7 +153,7 @@
           <div v-for="(review, index) in reviews" :key="review.id" class="group"
             data-aos="fade-up" :data-aos-delay="index * 100">
             
-            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-primary-900/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+            <div class=" rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-primary-900/20 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
               
               <div v-if="review.is_featured" class="absolute top-4 right-4 z-10">
                 <UBadge color="primary" variant="soft" size="sm">
@@ -202,7 +202,7 @@
 
                 <div v-if="review.user_profile.technical_skills" class="mt-4 flex flex-wrap gap-1">
                   <UBadge v-for="skill in review.user_profile.technical_skills.split(',').slice(0, 3)" :key="skill"
-                    color="neutral" variant="soft" size="sm" class="dark:bg-gray-700 dark:text-gray-300">
+                    color="neutral" variant="soft" size="sm" class="">
                     {{ skill.trim() }}
                   </UBadge>
                   <span v-if="review.user_profile.technical_skills.split(',').length > 3" 

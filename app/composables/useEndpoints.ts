@@ -80,8 +80,12 @@ export const useEndpoints = () => {
             list: `${apiBase}/api/galleries/`,
             slug: (slug: string) => `${apiBase}/api/galleries/${slug}/`,
             event: `${apiBase}/api/galleries/search-by-event/`,
+            byEvent: `${apiBase}/api/galleries/by-event/`,
             featured: `${apiBase}/api/galleries/featured/`,
             unliked: `${apiBase}/api/galleries/unlinked/`,
+            byProject: `${apiBase}/api/galleries/by_project/`,
+            byScene: `${apiBase}/api/galleries/by_scene/`, // If available
+            home: `${apiBase}/api/galleries/home/`,
         },
         payments: {
             membership_initiate: `${apiBase}/api/membership-payments/initiate/`,

@@ -42,8 +42,8 @@
             </p>
 
             <NuxtLink
-              v-if="item.event_slug || item.project_slug"
-              :to="galleryLink"
+              v-if="create_gallery_slug_link(item)"
+              :to="create_gallery_slug_link(item)"
               class="inline-flex items-center gap-1 mt-2 text-xs text-primary-300 hover:text-primary-200 w-fit pointer-events-auto"
               @click.stop="closeModal"
             >
