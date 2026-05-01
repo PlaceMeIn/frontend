@@ -36,12 +36,6 @@ const items = computed<NavigationMenuItem[]>(() => [
     icon: screen.isMobile.value ? "i-heroicons-calendar-solid" : undefined,
   },
   {
-    label: "Leadership",
-    to: "/leadership",
-    active: route.path.startsWith("/leadership"),
-    icon: screen.isMobile.value ? "i-heroicons-users-solid" : undefined,
-  },
-  {
     label: "Resources",
     to: "/resources",
     active: route.path.startsWith("/resources"),
@@ -95,7 +89,12 @@ const items = computed<NavigationMenuItem[]>(() => [
         to: "/suggestions",
         icon: "i-lucide-message-square",
       },
-      {},
+      {
+        label: "Leadership",
+        description : "",
+        to: "/leadership",
+        icon:  "i-heroicons-users-solid" ,
+      },
     ],
   },
 ]);
@@ -105,11 +104,7 @@ const items = computed<NavigationMenuItem[]>(() => [
 <!-- mode="slideover" -->
 
 <template>
-  <UHeader
-    mode="slideover"
-    title="MUT Tech Club"
-    class="z-9999 border-b border-gray-200 dark:border-gray-800"
-  >
+  <UHeader mode="slideover" title="MUT Tech Club" class="z-9999 border-b border-gray-200 dark:border-gray-800">
     <template #title>
       <AppLogo :size="3" class="h-6 w-auto" />
     </template>
@@ -125,13 +120,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     <!-- Drawer body for mobile menu -->
     <template #body>
       <div class="flex flex-col space-y-2 p-4">
-        <UNavigationMenu
-          :items="items"
-          variant="link"
-          color="neutral"
-          orientation="vertical"
-          class="-mx-2.5"
-        />
+        <UNavigationMenu :items="items" variant="link" color="neutral" orientation="vertical" class="-mx-2.5" />
         <ColorModeButton class="mt-2" />
         <JoinMutButton :showName="true" :isHeaderOpen="true" />
       </div>

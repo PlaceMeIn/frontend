@@ -1,430 +1,426 @@
 <template>
-  <div>
-    <div class="min-h-screen p-6 md:p-8">
-      <div class="max-w-7xl mx-auto space-y-6">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold tracking-tight">Profile</h1>
-            <p class="text-sm text-muted-foreground">
-              Manage your account information
-            </p>
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
+
+    <!-- Loading skeleton -->
+    <div v-if="pending" class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div class="mb-8 flex items-center justify-between">
+        <div class="space-y-2">
+          <div class="h-7 w-32 animate-pulse rounded-lg bg-gray-200 dark:bg-neutral-800" />
+          <div class="h-4 w-48 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-900" />
+        </div>
+        <div class="flex gap-2">
+          <div class="h-9 w-28 animate-pulse rounded-xl bg-gray-200 dark:bg-neutral-800" />
+          <div class="h-9 w-28 animate-pulse rounded-xl bg-gray-200 dark:bg-neutral-800" />
+        </div>
+      </div>
+      <div class="grid gap-6 lg:grid-cols-3">
+        <div class="space-y-4">
+          <div class="h-64 animate-pulse rounded-2xl bg-gray-200 dark:bg-neutral-800" />
+          <div class="h-40 animate-pulse rounded-2xl bg-gray-200 dark:bg-neutral-800" />
+        </div>
+        <div class="space-y-4 lg:col-span-2">
+          <div class="h-32 animate-pulse rounded-2xl bg-gray-200 dark:bg-neutral-800" />
+          <div class="h-48 animate-pulse rounded-2xl bg-gray-200 dark:bg-neutral-800" />
+          <div class="h-48 animate-pulse rounded-2xl bg-gray-200 dark:bg-neutral-800" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div v-else-if="error" class="flex min-h-screen flex-col items-center justify-center gap-4">
+      <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
+        <UIcon name="i-lucide-alert-circle" class="h-8 w-8 text-red-500" />
+      </div>
+      <div class="text-center">
+        <h3 class="font-semibold text-gray-900 dark:text-white">Failed to load profile</h3>
+        <p class="mt-1 text-sm text-gray-400">{{ error }}</p>
+      </div>
+      <UButton variant="soft" color="primary" icon="i-lucide-refresh-cw" @click="loadProfile">
+        Try again
+      </UButton>
+    </div>
+
+    <!-- Profile content -->
+    <div v-else-if="profileData" class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+
+      <!-- Header with Share Button -->
+      <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary-600 dark:bg-primary-900/20 dark:text-primary-400 mb-2">
+            <UIcon name="i-lucide-user-round" class="h-3.5 w-3.5" />
+            Member Profile
           </div>
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ profileData.full_name }}</h1>
+          <p class="mt-0.5 text-sm text-gray-400">{{ profileData.course }} • Year {{ profileData.year_of_study }}</p>
+        </div>
+        <div class="flex gap-2">
+          <!-- Share Button -->
+          <UTooltip text="Share profile" :delay-duration="200">
+            <UButton
+              color="neutral"
+              variant="soft"
+              icon="i-lucide-share-2"
+              class="rounded-xl"
+              @click="shareProfile"
+            >
+              Share
+            </UButton>
+          </UTooltip>
+          
           <UButton
-            variant="outline"
-            icon="i-lucide-settings"
+            color="primary"
+            variant="soft"
+            icon="i-lucide-pencil"
+            class="rounded-xl"
             @click="isEditModalOpen = true"
           >
             Edit Profile
           </UButton>
         </div>
+      </div>
 
-        <div v-if="pending" class="flex justify-center py-12">
-          <UIcon name="i-lucide-loader-2" class="animate-spin text-2xl" />
-        </div>
+      <div class="grid gap-6 lg:grid-cols-3">
 
-        <div v-else-if="error" class="text-center py-12">
-          <div class="text-red-500 mb-2">
-            <UIcon name="i-lucide-alert-circle" class="text-3xl mx-auto" />
-            <p class="mt-2">Failed to load profile data</p>
-          </div>
-          <UButton variant="ghost" size="sm" @click="refresh">
-            Try again
-          </UButton>
-        </div>
+        <!-- ── Sidebar ── -->
+        <div class="space-y-4 lg:col-span-1">
 
-        <div v-else class="grid lg:grid-cols-3 gap-6">
-          <!-- Sidebar -->
-          <div class="lg:col-span-1 space-y-6">
-            <UCard>
-              <div class="text-center space-y-4">
+          <!-- Profile card -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <!-- Cover -->
+            <div class="relative h-24 bg-gradient-to-br from-primary-600 via-primary-500 to-cyan-400">
+              <div class="absolute inset-0 opacity-20 z-1"
+                style="background-image: radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px); background-size: 25px 25px, 18px 18px;" />
+            </div>
+
+            <div class="px-5 pb-5 z-30">
+              <div class="-mt-10 mb-4 flex items-end justify-between">
                 <UAvatar
-                  :src="userAvatar"
-                  :alt="user?.full_name"
+                  :src="profileData.user?.profile_picture || undefined"
+                  :alt="profileData.full_name || 'User'"
                   size="3xl"
-                  class="mx-auto ring-4 ring-primary/10"
+                  class="ring-4 ring-white shadow-lg dark:ring-neutral-900 z-30"
                 />
-
-                <div>
-                  <h2 class="text-xl font-semibold">
-                    {{ user?.full_name || "Not provided" }}
-                  </h2>
-                  <p class="text-sm text-muted-foreground">
-                    {{ user?.email || "Not provided" }}
-                  </p>
-                </div>
-
-                <div class="flex flex-wrap gap-2 justify-center">
-                  <UBadge
-                    v-if="user?.user?.is_verified || user?.is_verified"
-                    color="success"
-                    variant="soft"
-                  >
-                    <UIcon name="i-lucide-badge-check" class="mr-1" />
-                    Verified
+                <div class="flex flex-wrap justify-end gap-1.5 pb-1 z-30">
+                  <UBadge v-if="profileData.user?.is_verified" color="success" variant="solid" size="sm" class="rounded-full">
+                    <UIcon name="i-lucide-badge-check" class="mr-1 h-3 w-3" />Verified
                   </UBadge>
-                  <UBadge
-                    v-if="user?.is_verified_member"
-                    color="primary"
-                    variant="soft"
-                  >
-                    <UIcon name="i-lucide-users" class="mr-1" />
-                    Member
+                  <UBadge v-if="profileData.is_verified_member" color="primary" variant="solid" size="sm" class="rounded-full">
+                    <UIcon name="i-lucide-users" class="mr-1 h-3 w-3" />Member
                   </UBadge>
-                  <UBadge
-                    v-if="user?.user?.is_active || user?.is_active"
-                    color="success"
-                    variant="soft"
-                  >
-                    <UIcon name="i-lucide-circle" class="mr-1 size-2" />
-                    Active
-                  </UBadge>
-                </div>
-
-                <div
-                  class="grid grid-cols-2 gap-3 pt-4 border-t dark:border-gray-800"
-                >
-                  <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-900">
-                    <p class="text-xs text-muted-foreground">Member Since</p>
-                    <p class="mt-1 text-sm font-medium">
-                      {{ formatDate(user?.created_at) }}
-                    </p>
-                  </div>
-                  <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-900">
-                    <p class="text-xs text-muted-foreground">Account Joined</p>
-                    <p class="mt-1 text-sm font-medium">
-                      {{
-                        formatDate(user?.user?.date_joined || user?.date_joined)
-                      }}
-                    </p>
-                  </div>
                 </div>
               </div>
-            </UCard>
 
-            <UCard>
-              <h3 class="font-semibold mb-4 flex items-center gap-2">
-                <UIcon name="i-lucide-phone" class="size-4" />
-                Contact Information
-              </h3>
-              <div class="space-y-3">
-                <div>
-                  <p class="text-xs text-muted-foreground">Phone Number</p>
-                  <p class="text-sm">
-                    {{ user?.phone_number || "Not provided" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">Email</p>
-                  <p class="text-sm">
-                    {{ user?.email || user?.user?.email || "Not provided" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">GitHub</p>
-                  <p v-if="user?.github_link" class="text-sm">
-                    <ULink
-                      :to="user.github_link"
-                      target="_blank"
-                      class="text-primary"
-                    >
-                      {{ formatUrl(user.github_link) }}
-                    </ULink>
-                  </p>
-                  <p v-else class="text-sm text-muted-foreground">
-                    Not provided
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">Portfolio</p>
-                  <p v-if="user?.portfolio_website" class="text-sm">
-                    <ULink
-                      :to="user.portfolio_website"
-                      target="_blank"
-                      class="text-primary"
-                    >
-                      {{ formatUrl(user.portfolio_website) }}
-                    </ULink>
-                  </p>
-                  <p v-else class="text-sm text-muted-foreground">
-                    Not provided
-                  </p>
+              <div class="space-y-1 mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  {{ profileData.full_name }}
+                </h2>
+                <p class="text-sm text-gray-400">{{ profileData.email }}</p>
+                <div class="flex items-center gap-1.5 pt-0.5">
+                  <span :class="['h-2 w-2 rounded-full', profileData.user?.is_active ? 'bg-emerald-400 animate-pulse' : 'bg-gray-300']" />
+                  <span class="text-xs text-gray-400">{{ profileData.user?.is_active ? 'Active account' : 'Inactive' }}</span>
                 </div>
               </div>
-            </UCard>
+
+              <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 dark:border-neutral-800">
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-800">
+                  <p class="text-[10px] uppercase tracking-widest text-gray-400">Member Since</p>
+                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{ formatDate(profileData.created_at) }}</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-800">
+                  <p class="text-[10px] uppercase tracking-widest text-gray-400">Joined</p>
+                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{ formatDate(profileData.user?.date_joined) }}</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Main Content -->
-          <div class="lg:col-span-2 space-y-6">
-            <UCard>
-              <h3 class="font-semibold mb-4 flex items-center gap-2">
-                <UIcon name="i-lucide-graduation-cap" class="size-4" />
-                Academic Information
-              </h3>
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-muted-foreground">Course</p>
-                  <p class="text-sm">
-                    {{ user?.course || "Not specified" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">Year of Study</p>
-                  <p class="text-sm">
-                    {{ user?.year_of_study || "Not specified" }}
-                  </p>
-                </div>
+          <!-- Contact card -->
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20">
+                <UIcon name="i-lucide-contact" class="h-3.5 w-3.5 text-primary-500" />
               </div>
-            </UCard>
-
-            <UCard>
-              <h3 class="font-semibold mb-4 flex items-center gap-2">
-                <UIcon name="i-lucide-code-2" class="size-4" />
-                Skills & Interests
-              </h3>
-              <div class="space-y-4">
-                <div>
-                  <p class="text-xs text-muted-foreground mb-2">
-                    Technical Skills
-                  </p>
-                  <div class="flex flex-wrap gap-2">
-                    <template v-if="user?.technical_skills">
-                      <UBadge
-                        v-for="skill in parseSkills(user.technical_skills)"
-                        :key="skill"
-                        variant="soft"
-                      >
-                        {{ skill }}
-                      </UBadge>
-                    </template>
-                    <p v-else class="text-sm text-muted-foreground">
-                      No skills added yet
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground mb-2">
-                    Areas of Interest
-                  </p>
-                  <div class="flex flex-wrap gap-2">
-                    <template v-if="user?.areas_of_interest">
-                      <UBadge
-                        v-for="interest in parseSkills(user.areas_of_interest)"
-                        :key="interest"
-                        variant="soft"
-                      >
-                        {{ interest }}
-                      </UBadge>
-                    </template>
-                    <p v-else class="text-sm text-muted-foreground">
-                      No interests added yet
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </UCard>
-
-            <UCard>
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold flex items-center gap-2">
-                  <UIcon name="i-lucide-chart-column" class="size-4" />
-                  Activity Overview
-                </h3>
-                <UBadge size="xs" variant="soft">
-                  Updated {{ formatRelativeTime(user?.updated_at) }}
-                </UBadge>
-              </div>
-
-              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <div
-                  v-for="item in activityItems"
-                  :key="item.label"
-                  class="rounded-xl border bg-gray-50 p-4 dark:border-gray-800 dark:bg-neutral-900"
-                >
-                  <div class="flex items-center gap-2">
-                    <UIcon :name="item.icon" class="size-4 text-primary" />
-                    <p class="text-xs text-muted-foreground">
-                      {{ item.label }}
-                    </p>
-                  </div>
-                  <p class="mt-2 text-2xl font-semibold">
-                    {{ item.count }}
-                  </p>
-                </div>
-              </div>
-            </UCard>
-
-            <UCard>
-              <h3 class="font-semibold mb-4 flex items-center gap-2">
-                <UIcon name="i-lucide-user-round-search" class="size-4" />
-                Account Snapshot
-              </h3>
-
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <p class="text-xs text-muted-foreground">Profile ID</p>
-                  <p class="text-sm break-all">
-                    {{ user?.id || "Not provided" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">User ID</p>
-                  <p class="text-sm break-all">
-                    {{ user?.user?.id || "Not provided" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">Email Verified</p>
-                  <p class="text-sm">
-                    {{
-                      user?.user?.is_verified || user?.is_verified
-                        ? "Yes"
-                        : "No"
-                    }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-muted-foreground">Google ID</p>
-                  <p class="text-sm break-all">
-                    {{ user?.user?.google_id || "Not connected" }}
-                  </p>
-                </div>
-              </div>
-            </UCard>
-
-            <!-- Support Tickets -->
-            <UCard v-if="user?.support_tickets?.length">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold flex items-center gap-2">
-                  <UIcon name="i-lucide-ticket" class="size-4" />
-                  Support Tickets
-                </h3>
-                <UBadge size="xs" variant="soft">
-                  {{ user.support_tickets.length }} total
-                </UBadge>
-              </div>
-              <div class="space-y-3">
-                <div
-                  v-for="ticket in user.support_tickets"
-                  :key="ticket.id"
-                  class="p-3 rounded-lg border dark:border-gray-800"
-                >
-                  <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                      <p class="font-medium text-sm">
-                        {{ ticket.title }}
-                      </p>
-                      <p class="text-xs text-muted-foreground">
-                        {{ ticket.category }}
-                      </p>
-                    </div>
-                    <UBadge
-                      :color="getStatusColor(ticket.status)"
-                      variant="soft"
-                      size="sm"
-                    >
-                      {{ ticket.status }}
-                    </UBadge>
-                  </div>
-                  <p class="text-xs text-muted-foreground mt-2">
-                    {{ formatRelativeTime(ticket.created_at) }}
-                  </p>
-                  <p
-                    v-if="ticket.admin_response"
-                    class="mt-2 rounded-md bg-primary/5 p-2 text-xs text-muted-foreground dark:bg-primary/10"
+              Contact
+            </h3>
+            <div class="space-y-3">
+              <div v-for="item in contactItems" :key="item.label" class="flex items-start gap-3">
+                <UIcon :name="item.icon" class="mt-0.5 h-4 w-4 shrink-0 text-gray-300 dark:text-gray-600" />
+                <div class="min-w-0 flex-1">
+                  <p class="text-[10px] uppercase tracking-widest text-gray-400">{{ item.label }}</p>
+                  <component
+                    :is="item.href ? 'a' : 'p'"
+                    :href="item.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :class="['mt-0.5 truncate text-xs', item.href ? 'text-primary-500 hover:underline' : 'text-gray-600 dark:text-gray-300']"
                   >
-                    {{ ticket.admin_response }}
-                  </p>
+                    {{ item.value }}
+                  </component>
                 </div>
               </div>
-            </UCard>
+            </div>
+          </div>
+        </div>
 
-            <!-- Suggestions -->
-            <UCard v-if="user?.suggestions?.length">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold flex items-center gap-2">
-                  <UIcon name="i-lucide-lightbulb" class="size-4" />
-                  Your Suggestions
-                </h3>
-                <UBadge size="xs" variant="soft">
-                  {{ user.suggestions.length }} total
-                </UBadge>
-              </div>
-              <div class="space-y-3">
-                <div
-                  v-for="suggestion in user.suggestions"
-                  :key="suggestion.id"
-                  class="p-3 rounded-lg border dark:border-gray-800"
-                >
-                  <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                      <p class="font-medium text-sm">
-                        {{ suggestion.title }}
-                      </p>
-                      <p class="text-xs text-muted-foreground">
-                        {{ suggestion.category }}
-                      </p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                      <div class="flex items-center gap-1 text-xs">
-                        <UIcon name="i-lucide-thumbs-up" class="size-3" />
-                        {{ suggestion.votes_up }}
-                      </div>
-                      <div class="flex items-center gap-1 text-xs">
-                        <UIcon name="i-lucide-thumbs-down" class="size-3" />
-                        {{ suggestion.votes_down }}
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    v-if="suggestion.admin_feedback"
-                    class="mt-2 p-2 rounded bg-primary/5 dark:bg-primary/10"
-                  >
-                    <p class="text-xs font-medium">Admin Feedback:</p>
-                    <p class="text-xs text-muted-foreground">
-                      {{ suggestion.admin_feedback }}
-                    </p>
-                  </div>
-                  <div class="mt-2 flex items-center justify-between">
-                    <UBadge
-                      :color="getSuggestionStatusColor(suggestion.status)"
-                      variant="soft"
-                      size="sm"
-                    >
-                      {{ suggestion.status }}
-                    </UBadge>
-                    <p class="text-xs text-muted-foreground">
-                      {{ formatRelativeTime(suggestion.created_at) }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </UCard>
+        <!-- ── Main Content ── -->
+        <div class="space-y-4 lg:col-span-2">
 
-            <!-- Empty State -->
-            <UCard
-              v-if="
-                !user?.support_tickets?.length && !user?.suggestions?.length
-              "
-            >
-              <div class="text-center py-8">
-                <UIcon
-                  name="i-lucide-inbox"
-                  class="text-4xl text-muted-foreground mb-3"
-                />
-                <p class="text-sm text-muted-foreground">No activity yet</p>
-                <p class="text-xs text-muted-foreground">
-                  Your support tickets and suggestions will appear here
+          <!-- Academic info -->
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-900/20">
+                <UIcon name="i-lucide-graduation-cap" class="h-3.5 w-3.5 text-violet-500" />
+              </div>
+              Academic Information
+            </h3>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
+                <p class="text-[10px] uppercase tracking-widest text-gray-400">Course</p>
+                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">{{ profileData.course || 'Not specified' }}</p>
+              </div>
+              <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
+                <p class="text-[10px] uppercase tracking-widest text-gray-400">Year of Study</p>
+                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">
+                  {{ profileData.year_of_study ? `Year ${profileData.year_of_study}` : 'Not specified' }}
                 </p>
               </div>
-            </UCard>
+            </div>
           </div>
+
+          <!-- Skills & Interests -->
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+              <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-cyan-50 dark:bg-cyan-900/20">
+                <UIcon name="i-lucide-code-2" class="h-3.5 w-3.5 text-cyan-500" />
+              </div>
+              Skills & Interests
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <p class="mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Technical Skills</p>
+                <div class="flex flex-wrap gap-2">
+                  <UBadge
+                    v-if="parseSkills(profileData.technical_skills).length"
+                    v-for="skill in parseSkills(profileData.technical_skills)"
+                    :key="skill"
+                    color="primary"
+                    variant="soft"
+                    size="sm"
+                    class="rounded-full"
+                  >{{ skill }}</UBadge>
+                  <p v-else class="text-xs text-gray-400">No skills added yet</p>
+                </div>
+              </div>
+              <div class="border-t border-gray-100 pt-4 dark:border-neutral-800">
+                <p class="mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Areas of Interest</p>
+                <div class="flex flex-wrap gap-2">
+                  <UBadge
+                    v-if="parseSkills(profileData.areas_of_interest).length"
+                    v-for="interest in parseSkills(profileData.areas_of_interest)"
+                    :key="interest"
+                    color="neutral"
+                    variant="soft"
+                    size="sm"
+                    class="rounded-full"
+                  >{{ interest }}</UBadge>
+                  <p v-else class="text-xs text-gray-400">No interests added yet</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Overview -->
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
+                  <UIcon name="i-lucide-activity" class="h-3.5 w-3.5 text-emerald-500" />
+                </div>
+                Activity Overview
+              </h3>
+              <span class="text-[10px] text-gray-400">Updated {{ formatRelativeTime(profileData.updated_at) }}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div
+                v-for="item in activityItems"
+                :key="item.label"
+                class="group rounded-xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-primary-100 hover:bg-primary-50/40 dark:border-neutral-800 dark:bg-neutral-800/50 dark:hover:border-primary-900/50 dark:hover:bg-primary-900/10"
+              >
+                <div class="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-neutral-700 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
+                  <UIcon :name="item.icon" class="h-4 w-4 text-gray-400 group-hover:text-primary-500 transition-colors" />
+                </div>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ item.count }}</p>
+                <p class="mt-0.5 text-[10px] text-gray-400">{{ item.label }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Event Attendances -->
+          <div v-if="profileData.event_attendances?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <UIcon name="i-lucide-calendar" class="h-3.5 w-3.5 text-blue-500" />
+                </div>
+                Event Attendances
+              </h3>
+              <UBadge color="neutral" variant="soft" size="xs" class="rounded-full">
+                {{ profileData.event_attendances.length }} events
+              </UBadge>
+            </div>
+            <div class="space-y-3">
+              <div
+                v-for="event in profileData.event_attendances.slice(0, 5)"
+                :key="event.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <NuxtLink :to="`/events/${event.event_slug}`" class="font-medium text-sm text-gray-900 hover:text-primary-500 dark:text-white transition-colors">
+                      {{ event.event_title }}
+                    </NuxtLink>
+                    <p class="mt-0.5 text-xs text-gray-400">{{ formatDate(event.event_date) }}</p>
+                  </div>
+                  <UBadge :color="getEventStatusColor(event.status)" variant="soft" size="sm" class="shrink-0 rounded-full">
+                    {{ event.status }}
+                    <span v-if="event.checked_in" class="ml-1">✓</span>
+                  </UBadge>
+                </div>
+                <p class="mt-2 text-[10px] text-gray-400">Registered: {{ formatDate(event.registration_date) }}</p>
+              </div>
+              <UButton v-if="profileData.event_attendances.length > 5" color="neutral" variant="soft" size="sm" class="w-full" @click="showAllEvents = !showAllEvents">
+                {{ showAllEvents ? 'Show less' : `View all ${profileData.event_attendances.length} events` }}
+              </UButton>
+            </div>
+          </div>
+
+          <!-- Support Tickets -->
+          <div v-if="profileData.support_tickets?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                  <UIcon name="i-lucide-ticket" class="h-3.5 w-3.5 text-amber-500" />
+                </div>
+                Support Tickets
+              </h3>
+              <UBadge color="neutral" variant="soft" size="xs" class="rounded-full">
+                {{ profileData.support_tickets.length }} total
+              </UBadge>
+            </div>
+            <div class="space-y-3">
+              <div
+                v-for="ticket in profileData.support_tickets.slice(0, 3)"
+                :key="ticket.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <p class="font-medium text-sm text-gray-900 dark:text-white">{{ ticket.message || 'No title' }}</p>
+                    <p class="mt-0.5 text-[10px] text-gray-400">Priority: {{ ticket.priority }}</p>
+                  </div>
+                  <UBadge :color="getStatusColor(ticket.status)" variant="soft" size="sm" class="shrink-0 rounded-full">
+                    {{ ticket.status }}
+                  </UBadge>
+                </div>
+                <p class="mt-2 text-[10px] text-gray-400">{{ formatRelativeTime(ticket.created_at) }}</p>
+                <div v-if="ticket.admin_response" class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 text-xs text-gray-600 dark:border-primary-900/30 dark:bg-primary-900/10 dark:text-gray-400">
+                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Response</p>
+                  {{ ticket.admin_response }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestions -->
+          <div v-if="profileData.suggestions?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
+                  <UIcon name="i-lucide-lightbulb" class="h-3.5 w-3.5 text-yellow-500" />
+                </div>
+                Your Suggestions
+              </h3>
+              <UBadge color="neutral" variant="soft" size="xs" class="rounded-full">
+                {{ profileData.suggestions.length }} total
+              </UBadge>
+            </div>
+            <div class="space-y-3">
+              <div
+                v-for="suggestion in profileData.suggestions.slice(0, 3)"
+                :key="suggestion.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0 flex-1">
+                    <p class="font-medium text-sm text-gray-900 dark:text-white">{{ suggestion.title || 'No title' }}</p>
+                  </div>
+                  <div class="flex shrink-0 items-center gap-3">
+                    <div class="flex items-center gap-1 text-xs text-emerald-500">
+                      <UIcon name="i-lucide-thumbs-up" class="h-3.5 w-3.5" />
+                      {{ suggestion.votes_up }}
+                    </div>
+                    <div class="flex items-center gap-1 text-xs text-red-400">
+                      <UIcon name="i-lucide-thumbs-down" class="h-3.5 w-3.5" />
+                      {{ suggestion.votes_down }}
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3 flex items-center justify-between gap-2">
+                  <UBadge :color="getSuggestionStatusColor(suggestion.status)" variant="soft" size="sm" class="rounded-full">
+                    {{ suggestion.status }}
+                  </UBadge>
+                  <p class="text-[10px] text-gray-400">{{ formatRelativeTime(suggestion.created_at) }}</p>
+                </div>
+                <div v-if="suggestion.admin_feedback" class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 dark:border-primary-900/30 dark:bg-primary-900/10">
+                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Feedback</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">{{ suggestion.admin_feedback }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty activity state -->
+          <div
+            v-if="!profileData.event_attendances?.length && !profileData.support_tickets?.length && !profileData.suggestions?.length"
+            class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center dark:border-neutral-800 dark:bg-neutral-900"
+          >
+            <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 dark:bg-neutral-800">
+              <UIcon name="i-lucide-inbox" class="h-6 w-6 text-gray-300 dark:text-gray-600" />
+            </div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">No activity yet</p>
+            <p class="mt-1 text-xs text-gray-400">Your events, support tickets, and suggestions will appear here</p>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- Empty / not authenticated -->
+    <div v-else class="flex min-h-screen flex-col items-center justify-center gap-3">
+      <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 dark:bg-neutral-800">
+        <UIcon name="i-lucide-user-x" class="h-8 w-8 text-gray-300" />
+      </div>
+      <p class="text-sm text-gray-400">No profile data available</p>
+    </div>
+
+    <!-- Share Toast Notification -->
+    <UToast v-model:open="showShareToast" :timeout="3000">
+      <template #default>
+        <div class="flex items-center gap-3">
+          <UIcon name="i-lucide-check-circle" class="h-5 w-5 text-green-500" />
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">Link copied!</p>
+            <p class="text-xs text-gray-500">Profile link copied to clipboard</p>
+          </div>
+        </div>
+      </template>
+    </UToast>
+
+    <!-- Edit Modal -->
     <UModal v-model:open="isEditModalOpen" title="Edit Profile">
       <template #body>
         <UpdateProfile
-          :profile="user"
+          :profile="profileData"
           @updated="handleProfileUpdated"
           @cancel="isEditModalOpen = false"
         />
@@ -434,259 +430,248 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({ layout: "default" });
+definePageMeta({ layout: 'default' })
+
+const route = useRoute()
+const router = useRouter()
+
+// Types based on actual API response
+type EventAttendance = {
+  id: string
+  event_id: string
+  event_title: string
+  event_slug: string
+  event_date: string
+  status: string
+  registration_date: string
+  checked_in: boolean
+}
 
 type SupportTicket = {
-  id: string;
-  title: string;
-  category: string;
-  status: string;
-  created_at: string;
-  admin_response?: string | null;
-  resolved?: boolean;
-};
+  id: string
+  priority: string
+  status: string
+  created_at: string
+  message: string
+  admin_response: string | null
+  resolved: boolean
+}
 
 type Suggestion = {
-  id: string;
-  title: string;
-  category: string;
-  status: string;
-  admin_feedback?: string | null;
-  votes_up: number;
-  votes_down: number;
-  created_at: string;
-};
-
-type NestedUser = {
-  id?: string;
-  email?: string | null;
-  full_name?: string | null;
-  is_active?: boolean;
-  is_verified?: boolean;
-  date_joined?: string | null;
-  profile_picture?: string | null;
-  is_superuser?: boolean;
-  google_id?: string | null;
-};
+  id: string
+  title?: string
+  status: string
+  votes_up: number
+  votes_down: number
+  created_at: string
+  admin_feedback: string | null
+}
 
 type ProfileData = {
-  id?: string;
-  user?: NestedUser;
-  full_name?: string | null;
-  email?: string | null;
-  phone_number?: string | null;
-  course?: string | null;
-  year_of_study?: string | null;
-  technical_skills?: string | null;
-  areas_of_interest?: string | null;
-  github_link?: string | null;
-  portfolio_website?: string | null;
-  is_verified_member?: boolean;
-  is_verified?: boolean;
-  is_active?: boolean;
-  created_at?: string | null;
-  updated_at?: string | null;
-  date_joined?: string | null;
-  profile_picture?: string | null;
-  saved_projects?: unknown[];
-  created_projects?: unknown[];
-  event_attendances?: unknown[];
-  reviews?: unknown[];
-  takeaways?: unknown[];
-  likes?: unknown[];
-  support_tickets?: SupportTicket[];
-  suggestions?: Suggestion[];
-};
+  id: string
+  user: {
+    id: string
+    email: string
+    full_name: string
+    is_active: boolean
+    is_verified: boolean
+    date_joined: string
+    profile_picture: string | null
+    is_superuser: boolean
+    google_id: string | null
+  }
+  full_name: string
+  email: string
+  phone_number: string
+  course: string
+  year_of_study: string
+  technical_skills: string
+  areas_of_interest: string
+  github_link: string
+  portfolio_website: string | null
+  is_verified_member: boolean
+  created_at: string
+  updated_at: string
+  saved_projects: any[]
+  created_projects: any[]
+  event_attendances: EventAttendance[]
+  reviews: any[]
+  takeaways: any[]
+  likes: any[]
+  support_tickets: SupportTicket[]
+  suggestions: Suggestion[]
+}
 
 type ApiResponse = {
-  success?: boolean;
-  data?: ProfileData | { user?: ProfileData };
-  user?: ProfileData;
-};
+  success: boolean
+  data: ProfileData
+}
 
-const endpoints = useEndpoints();
-const { get } = useApi();
-const auth = useAuthStore();
+const endpoints = useEndpoints()
+const { get } = useApi()
+const auth = useAuthStore()
 
-const user = ref<ProfileData | null>(null);
-const pending = ref(false);
-const error = ref<string | null>(null);
-const isEditModalOpen = ref(false);
-
-const isProfileData = (value: unknown): value is ProfileData => {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  return [
-    "phone_number",
-    "course",
-    "technical_skills",
-    "created_at",
-    "updated_at",
-    "support_tickets",
-    "suggestions",
-  ].some((key) => key in (value as Record<string, unknown>));
-};
-
-const normalizeProfile = (
-  payload: ApiResponse | ProfileData | null | undefined,
-): ProfileData | null => {
-  if (!payload) {
-    return null;
-  }
-
-  const response = payload as ApiResponse;
-  const directData = response.data;
-  const nestedData =
-    response.data &&
-    typeof response.data === "object" &&
-    "user" in response.data
-      ? (response.data as { user?: ProfileData }).user
-      : undefined;
-
-  if (isProfileData(directData)) {
-    return directData;
-  }
-
-  if (isProfileData(nestedData)) {
-    return nestedData;
-  }
-
-  if (isProfileData(response.user)) {
-    return response.user;
-  }
-
-  return isProfileData(payload) ? payload : null;
-};
+const profileData = ref<ProfileData | null>(null)
+const pending = ref(false)
+const error = ref<string | null>(null)
+const isEditModalOpen = ref(false)
+const showShareToast = ref(false)
+const showAllEvents = ref(false)
 
 const loadProfile = async () => {
-  if (!auth.token) return;
-
-  pending.value = true;
-  error.value = null;
-
-  try {
-    const res = await get<ApiResponse>(endpoints.user.profile, {}, true);
-    user.value = normalizeProfile(res);
-  } catch (err) {
-    error.value = "Failed to fetch profile";
-    console.error("Profile load error:", err);
-  } finally {
-    pending.value = false;
+  if (!auth.token) {
+    error.value = 'Please login to view your profile'
+    return
   }
-};
+  
+  pending.value = true
+  error.value = null
+  
+  try {
+    const res = await get<ApiResponse>(`${endpoints.user.profile}`, {}, true)
+    
+    if (res?.success && res?.data) {
+      profileData.value = res.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err: any) {
+    error.value = err?.message || 'Failed to fetch profile'
+    console.error('Profile load error:', err)
+  } finally {
+    pending.value = false
+  }
+}
 
-const refresh = () => loadProfile();
+// Share profile function
+const shareProfile = async () => {
+  const profileId = profileData.value?.id
+  if (!profileId) return
+  
+  const shareUrl = `${window.location.origin}/account/${profileId}`
+  
+  try {
+    await navigator.clipboard.writeText(shareUrl)
+    showShareToast.value = true
+  } catch (err) {
+    console.error('Failed to copy:', err)
+    // Fallback
+    const textarea = document.createElement('textarea')
+    textarea.value = shareUrl
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+    showShareToast.value = true
+  }
+}
+
+// Only fetch after component is mounted
+onMounted(() => {
+  loadProfile()
+})
+
+const refresh = () => loadProfile()
 
 const handleProfileUpdated = async () => {
-  isEditModalOpen.value = false;
-  await refresh();
-};
+  isEditModalOpen.value = false
+  await refresh()
+}
 
-const userAvatar = computed(
-  () =>
-    user.value?.profile_picture ||
-    user.value?.user?.profile_picture ||
-    undefined,
-);
+const contactItems = computed(() => [
+  {
+    label: 'Phone',
+    icon: 'i-lucide-phone',
+    value: profileData.value?.phone_number || 'Not provided',
+    href: profileData.value?.phone_number ? `tel:${profileData.value.phone_number}` : undefined,
+  },
+  {
+    label: 'Email',
+    icon: 'i-lucide-mail',
+    value: profileData.value?.email || 'Not provided',
+    href: profileData.value?.email ? `mailto:${profileData.value.email}` : undefined,
+  },
+  {
+    label: 'GitHub',
+    icon: 'i-lucide-github',
+    value: profileData.value?.github_link ? formatUrl(profileData.value.github_link) : 'Not provided',
+    href: profileData.value?.github_link || undefined,
+  },
+  {
+    label: 'Portfolio',
+    icon: 'i-lucide-globe',
+    value: profileData.value?.portfolio_website ? formatUrl(profileData.value.portfolio_website) : 'Not provided',
+    href: profileData.value?.portfolio_website || undefined,
+  },
+])
 
 const activityItems = computed(() => [
-  {
-    label: "Saved Projects",
-    icon: "i-lucide-bookmark",
-    count: user.value?.saved_projects?.length || 0,
-  },
-  {
-    label: "Created Projects",
-    icon: "i-lucide-folder-git-2",
-    count: user.value?.created_projects?.length || 0,
-  },
-  {
-    label: "Event Attendances",
-    icon: "i-lucide-calendar-check-2",
-    count: user.value?.event_attendances?.length || 0,
-  },
-  {
-    label: "Reviews",
-    icon: "i-lucide-message-square-quote",
-    count: user.value?.reviews?.length || 0,
-  },
-  {
-    label: "Takeaways",
-    icon: "i-lucide-notebook-pen",
-    count: user.value?.takeaways?.length || 0,
-  },
-  {
-    label: "Likes",
-    icon: "i-lucide-heart",
-    count: user.value?.likes?.length || 0,
-  },
-]);
+  { label: 'Saved Projects', icon: 'i-lucide-bookmark', count: profileData.value?.saved_projects?.length || 0 },
+  { label: 'Created Projects', icon: 'i-lucide-folder-git-2', count: profileData.value?.created_projects?.length || 0 },
+  { label: 'Events', icon: 'i-lucide-calendar-check-2', count: profileData.value?.event_attendances?.length || 0 },
+  { label: 'Reviews', icon: 'i-lucide-message-square-quote', count: profileData.value?.reviews?.length || 0 },
+  { label: 'Takeaways', icon: 'i-lucide-notebook-pen', count: profileData.value?.takeaways?.length || 0 },
+  { label: 'Likes', icon: 'i-lucide-heart', count: profileData.value?.likes?.length || 0 },
+])
 
-const formatDate = (date?: string) => {
-  if (!date) return "Recently";
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+const formatDate = (date?: string | null) => {
+  if (!date) return 'Recently'
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
 
-const formatRelativeTime = (date?: string) => {
-  if (!date) return "";
-  const now = new Date();
-  const past = new Date(date);
-  const diffMs = now.getTime() - past.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+const formatRelativeTime = (date?: string | null) => {
+  if (!date) return ''
+  const now = new Date()
+  const past = new Date(date)
+  const diffMs = now.getTime() - past.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-  return formatDate(date);
-};
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  if (diffDays < 7) return `${diffDays}d ago`
+  return formatDate(date)
+}
 
-const formatUrl = (url: string) => {
-  return url.replace(/(https?:\/\/)/, "").replace(/\/$/, "");
-};
+const formatUrl = (url: string) =>
+  url.replace(/(https?:\/\/)/, '').replace(/\/$/, '')
 
-const parseSkills = (skills?: string) => {
-  if (!skills) return [];
-  return skills
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-};
+const parseSkills = (skills?: string | null) => {
+  if (!skills) return []
+  return skills.split(',').map(s => s.trim()).filter(Boolean)
+}
 
 const getStatusColor = (status?: string) => {
   const colors: Record<string, string> = {
-    Open: "warning",
-    "In Progress": "info",
-    Resolved: "success",
-    Closed: "secondary",
-  };
-  return colors[status || ""] || "default";
-};
+    Pending: 'warning',
+    'In Progress': 'info',
+    Resolved: 'success',
+    Closed: 'neutral',
+  }
+  return colors[status || ''] || 'neutral'
+}
+
+const getEventStatusColor = (status?: string) => {
+  const colors: Record<string, string> = {
+    registered: 'warning',
+    confirmed: 'success',
+    checked_in: 'success',
+    cancelled: 'error',
+    no_show: 'neutral',
+  }
+  return colors[status || ''] || 'neutral'
+}
 
 const getSuggestionStatusColor = (status?: string) => {
   const colors: Record<string, string> = {
-    "Under Review": "warning",
-    Approved: "success",
-    Implemented: "primary",
-    Declined: "error",
-  };
-  return colors[status || ""] || "default";
-};
-
-watch(
-  () => auth.token,
-  (token) => {
-    if (token) loadProfile();
-    else user.value = null;
-  },
-  { immediate: true },
-);
+    'Pending Review': 'warning',
+    'Under Review': 'info',
+    Accepted: 'success',
+    Implemented: 'primary',
+    Declined: 'error',
+  }
+  return colors[status || ''] || 'neutral'
+}
 </script>
