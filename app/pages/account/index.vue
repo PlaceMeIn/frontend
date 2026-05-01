@@ -46,7 +46,8 @@
       <!-- Header with Share Button -->
       <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div class="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary-600 dark:bg-primary-900/20 dark:text-primary-400 mb-2">
+          <div
+            class="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary-600 dark:bg-primary-900/20 dark:text-primary-400 mb-2">
             <UIcon name="i-lucide-user-round" class="h-3.5 w-3.5" />
             Member Profile
           </div>
@@ -56,24 +57,13 @@
         <div class="flex gap-2">
           <!-- Share Button -->
           <UTooltip text="Share profile" :delay-duration="200">
-            <UButton
-              color="neutral"
-              variant="soft"
-              icon="i-lucide-share-2"
-              class="rounded-xl"
-              @click="shareProfile"
-            >
+            <UButton color="neutral" variant="soft" icon="i-lucide-share-2" class="rounded-xl" @click="shareProfile">
               Share
             </UButton>
           </UTooltip>
-          
-          <UButton
-            color="primary"
-            variant="soft"
-            icon="i-lucide-pencil"
-            class="rounded-xl"
-            @click="isEditModalOpen = true"
-          >
+
+          <UButton color="primary" variant="soft" icon="i-lucide-pencil" class="rounded-xl"
+            @click="isEditModalOpen = true">
             Edit Profile
           </UButton>
         </div>
@@ -85,7 +75,8 @@
         <div class="space-y-4 lg:col-span-1">
 
           <!-- Profile card -->
-          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div
+            class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <!-- Cover -->
             <div class="relative h-24 bg-gradient-to-br from-primary-600 via-primary-500 to-cyan-400">
               <div class="absolute inset-0 opacity-20 z-1"
@@ -94,17 +85,15 @@
 
             <div class="px-5 pb-5 z-30">
               <div class="-mt-10 mb-4 flex items-end justify-between">
-                <UAvatar
-                  :src="profileData.user?.profile_picture || undefined"
-                  :alt="profileData.full_name || 'User'"
-                  size="3xl"
-                  class="ring-4 ring-white shadow-lg dark:ring-neutral-900 z-30"
-                />
+                <UAvatar :src="profileData.user?.profile_picture || undefined" :alt="profileData.full_name || 'User'"
+                  size="3xl" class="ring-4 ring-white shadow-lg dark:ring-neutral-900 z-30" />
                 <div class="flex flex-wrap justify-end gap-1.5 pb-1 z-30">
-                  <UBadge v-if="profileData.user?.is_verified" color="success" variant="solid" size="sm" class="rounded-full">
+                  <UBadge v-if="profileData.user?.is_verified" color="success" variant="solid" size="sm"
+                    class="rounded-full">
                     <UIcon name="i-lucide-badge-check" class="mr-1 h-3 w-3" />Verified
                   </UBadge>
-                  <UBadge v-if="profileData.is_verified_member" color="primary" variant="solid" size="sm" class="rounded-full">
+                  <UBadge v-if="profileData.is_verified_member" color="primary" variant="solid" size="sm"
+                    class="rounded-full">
                     <UIcon name="i-lucide-users" class="mr-1 h-3 w-3" />Member
                   </UBadge>
                 </div>
@@ -116,26 +105,31 @@
                 </h2>
                 <p class="text-sm text-gray-400">{{ profileData.email }}</p>
                 <div class="flex items-center gap-1.5 pt-0.5">
-                  <span :class="['h-2 w-2 rounded-full', profileData.user?.is_active ? 'bg-emerald-400 animate-pulse' : 'bg-gray-300']" />
-                  <span class="text-xs text-gray-400">{{ profileData.user?.is_active ? 'Active account' : 'Inactive' }}</span>
+                  <span
+                    :class="['h-2 w-2 rounded-full', profileData.user?.is_active ? 'bg-emerald-400 animate-pulse' : 'bg-gray-300']" />
+                  <span class="text-xs text-gray-400">{{ profileData.user?.is_active ? 'Active account' : 'Inactive'
+                    }}</span>
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4 dark:border-neutral-800">
                 <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-800">
                   <p class="text-[10px] uppercase tracking-widest text-gray-400">Member Since</p>
-                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{ formatDate(profileData.created_at) }}</p>
+                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{
+                    formatDate(profileData.created_at) }}</p>
                 </div>
                 <div class="rounded-xl bg-gray-50 p-3 dark:bg-neutral-800">
                   <p class="text-[10px] uppercase tracking-widest text-gray-400">Joined</p>
-                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{ formatDate(profileData.user?.date_joined) }}</p>
+                  <p class="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">{{
+                    formatDate(profileData.user?.date_joined) }}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Contact card -->
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
               <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20">
                 <UIcon name="i-lucide-contact" class="h-3.5 w-3.5 text-primary-500" />
@@ -147,13 +141,8 @@
                 <UIcon :name="item.icon" class="mt-0.5 h-4 w-4 shrink-0 text-gray-300 dark:text-gray-600" />
                 <div class="min-w-0 flex-1">
                   <p class="text-[10px] uppercase tracking-widest text-gray-400">{{ item.label }}</p>
-                  <component
-                    :is="item.href ? 'a' : 'p'"
-                    :href="item.href"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :class="['mt-0.5 truncate text-xs', item.href ? 'text-primary-500 hover:underline' : 'text-gray-600 dark:text-gray-300']"
-                  >
+                  <component :is="item.href ? 'a' : 'p'" :href="item.href" target="_blank" rel="noopener noreferrer"
+                    :class="['mt-0.5 truncate text-xs', item.href ? 'text-primary-500 hover:underline' : 'text-gray-600 dark:text-gray-300']">
                     {{ item.value }}
                   </component>
                 </div>
@@ -166,7 +155,8 @@
         <div class="space-y-4 lg:col-span-2">
 
           <!-- Academic info -->
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
               <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-900/20">
                 <UIcon name="i-lucide-graduation-cap" class="h-3.5 w-3.5 text-violet-500" />
@@ -174,11 +164,13 @@
               Academic Information
             </h3>
             <div class="grid gap-3 sm:grid-cols-2">
-              <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
+              <div
+                class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
                 <p class="text-[10px] uppercase tracking-widest text-gray-400">Course</p>
-                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">{{ profileData.course || 'Not specified' }}</p>
+                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">{{ profileData.course || 'Notspecified' }}</p>
               </div>
-              <div class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
+              <div
+                class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
                 <p class="text-[10px] uppercase tracking-widest text-gray-400">Year of Study</p>
                 <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">
                   {{ profileData.year_of_study ? `Year ${profileData.year_of_study}` : 'Not specified' }}
@@ -188,7 +180,8 @@
           </div>
 
           <!-- Skills & Interests -->
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
               <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-cyan-50 dark:bg-cyan-900/20">
                 <UIcon name="i-lucide-code-2" class="h-3.5 w-3.5 text-cyan-500" />
@@ -199,30 +192,18 @@
               <div>
                 <p class="mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Technical Skills</p>
                 <div class="flex flex-wrap gap-2">
-                  <UBadge
-                    v-if="parseSkills(profileData.technical_skills).length"
-                    v-for="skill in parseSkills(profileData.technical_skills)"
-                    :key="skill"
-                    color="primary"
-                    variant="soft"
-                    size="sm"
-                    class="rounded-full"
-                  >{{ skill }}</UBadge>
+                  <UBadge v-if="parseSkills(profileData.technical_skills).length"
+                    v-for="skill in parseSkills(profileData.technical_skills)" :key="skill" color="primary"
+                    variant="soft" size="sm" class="rounded-full">{{ skill }}</UBadge>
                   <p v-else class="text-xs text-gray-400">No skills added yet</p>
                 </div>
               </div>
               <div class="border-t border-gray-100 pt-4 dark:border-neutral-800">
                 <p class="mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Areas of Interest</p>
                 <div class="flex flex-wrap gap-2">
-                  <UBadge
-                    v-if="parseSkills(profileData.areas_of_interest).length"
-                    v-for="interest in parseSkills(profileData.areas_of_interest)"
-                    :key="interest"
-                    color="neutral"
-                    variant="soft"
-                    size="sm"
-                    class="rounded-full"
-                  >{{ interest }}</UBadge>
+                  <UBadge v-if="parseSkills(profileData.areas_of_interest).length"
+                    v-for="interest in parseSkills(profileData.areas_of_interest)" :key="interest" color="neutral"
+                    variant="soft" size="sm" class="rounded-full">{{ interest }}</UBadge>
                   <p v-else class="text-xs text-gray-400">No interests added yet</p>
                 </div>
               </div>
@@ -230,7 +211,8 @@
           </div>
 
           <!-- Activity Overview -->
-          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
                 <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
@@ -241,13 +223,12 @@
               <span class="text-[10px] text-gray-400">Updated {{ formatRelativeTime(profileData.updated_at) }}</span>
             </div>
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div
-                v-for="item in activityItems"
-                :key="item.label"
-                class="group rounded-xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-primary-100 hover:bg-primary-50/40 dark:border-neutral-800 dark:bg-neutral-800/50 dark:hover:border-primary-900/50 dark:hover:bg-primary-900/10"
-              >
-                <div class="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-neutral-700 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
-                  <UIcon :name="item.icon" class="h-4 w-4 text-gray-400 group-hover:text-primary-500 transition-colors" />
+              <div v-for="item in activityItems" :key="item.label"
+                class="group rounded-xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-primary-100 hover:bg-primary-50/40 dark:border-neutral-800 dark:bg-neutral-800/50 dark:hover:border-primary-900/50 dark:hover:bg-primary-900/10">
+                <div
+                  class="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm dark:bg-neutral-700 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 transition-colors">
+                  <UIcon :name="item.icon"
+                    class="h-4 w-4 text-gray-400 group-hover:text-primary-500 transition-colors" />
                 </div>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ item.count }}</p>
                 <p class="mt-0.5 text-[10px] text-gray-400">{{ item.label }}</p>
@@ -256,7 +237,8 @@
           </div>
 
           <!-- Event Attendances -->
-          <div v-if="profileData.event_attendances?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div v-if="profileData.event_attendances?.length"
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
                 <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20">
@@ -269,33 +251,34 @@
               </UBadge>
             </div>
             <div class="space-y-3">
-              <div
-                v-for="event in profileData.event_attendances.slice(0, 5)"
-                :key="event.id"
-                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
-              >
+              <div v-for="event in profileData.event_attendances.slice(0, 5)" :key="event.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800">
                 <div class="flex items-start justify-between gap-3">
                   <div class="min-w-0 flex-1">
-                    <NuxtLink :to="`/events/${event.event_slug}`" class="font-medium text-sm text-gray-900 hover:text-primary-500 dark:text-white transition-colors">
+                    <NuxtLink :to="`/events/${event.event_slug}`"
+                      class="font-medium text-sm text-gray-900 hover:text-primary-500 dark:text-white transition-colors">
                       {{ event.event_title }}
                     </NuxtLink>
                     <p class="mt-0.5 text-xs text-gray-400">{{ formatDate(event.event_date) }}</p>
                   </div>
-                  <UBadge :color="getEventStatusColor(event.status)" variant="soft" size="sm" class="shrink-0 rounded-full">
+                  <UBadge :color="getEventStatusColor(event.status)" variant="soft" size="sm"
+                    class="shrink-0 rounded-full">
                     {{ event.status }}
                     <span v-if="event.checked_in" class="ml-1">✓</span>
                   </UBadge>
                 </div>
                 <p class="mt-2 text-[10px] text-gray-400">Registered: {{ formatDate(event.registration_date) }}</p>
               </div>
-              <UButton v-if="profileData.event_attendances.length > 5" color="neutral" variant="soft" size="sm" class="w-full" @click="showAllEvents = !showAllEvents">
+              <UButton v-if="profileData.event_attendances.length > 5" color="neutral" variant="soft" size="sm"
+                class="w-full" @click="showAllEvents = !showAllEvents">
                 {{ showAllEvents ? 'Show less' : `View all ${profileData.event_attendances.length} events` }}
               </UButton>
             </div>
           </div>
 
           <!-- Support Tickets -->
-          <div v-if="profileData.support_tickets?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div v-if="profileData.support_tickets?.length"
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
                 <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-900/20">
@@ -308,11 +291,8 @@
               </UBadge>
             </div>
             <div class="space-y-3">
-              <div
-                v-for="ticket in profileData.support_tickets.slice(0, 3)"
-                :key="ticket.id"
-                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
-              >
+              <div v-for="ticket in profileData.support_tickets.slice(0, 3)" :key="ticket.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800">
                 <div class="flex items-start justify-between gap-3">
                   <div class="min-w-0 flex-1">
                     <p class="font-medium text-sm text-gray-900 dark:text-white">{{ ticket.message || 'No title' }}</p>
@@ -323,8 +303,10 @@
                   </UBadge>
                 </div>
                 <p class="mt-2 text-[10px] text-gray-400">{{ formatRelativeTime(ticket.created_at) }}</p>
-                <div v-if="ticket.admin_response" class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 text-xs text-gray-600 dark:border-primary-900/30 dark:bg-primary-900/10 dark:text-gray-400">
-                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Response</p>
+                <div v-if="ticket.admin_response"
+                  class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 text-xs text-gray-600 dark:border-primary-900/30 dark:bg-primary-900/10 dark:text-gray-400">
+                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Response
+                  </p>
                   {{ ticket.admin_response }}
                 </div>
               </div>
@@ -332,7 +314,8 @@
           </div>
 
           <!-- Suggestions -->
-          <div v-if="profileData.suggestions?.length" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          <div v-if="profileData.suggestions?.length"
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
                 <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
@@ -345,14 +328,12 @@
               </UBadge>
             </div>
             <div class="space-y-3">
-              <div
-                v-for="suggestion in profileData.suggestions.slice(0, 3)"
-                :key="suggestion.id"
-                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800"
-              >
+              <div v-for="suggestion in profileData.suggestions.slice(0, 3)" :key="suggestion.id"
+                class="rounded-xl border border-gray-100 p-4 dark:border-neutral-800">
                 <div class="flex items-start justify-between gap-3">
                   <div class="min-w-0 flex-1">
-                    <p class="font-medium text-sm text-gray-900 dark:text-white">{{ suggestion.title || 'No title' }}</p>
+                    <p class="font-medium text-sm text-gray-900 dark:text-white">{{ suggestion.title || 'No title' }}
+                    </p>
                   </div>
                   <div class="flex shrink-0 items-center gap-3">
                     <div class="flex items-center gap-1 text-xs text-emerald-500">
@@ -366,13 +347,16 @@
                   </div>
                 </div>
                 <div class="mt-3 flex items-center justify-between gap-2">
-                  <UBadge :color="getSuggestionStatusColor(suggestion.status)" variant="soft" size="sm" class="rounded-full">
+                  <UBadge :color="getSuggestionStatusColor(suggestion.status)" variant="soft" size="sm"
+                    class="rounded-full">
                     {{ suggestion.status }}
                   </UBadge>
                   <p class="text-[10px] text-gray-400">{{ formatRelativeTime(suggestion.created_at) }}</p>
                 </div>
-                <div v-if="suggestion.admin_feedback" class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 dark:border-primary-900/30 dark:bg-primary-900/10">
-                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Feedback</p>
+                <div v-if="suggestion.admin_feedback"
+                  class="mt-3 rounded-lg border border-primary-100 bg-primary-50/50 p-3 dark:border-primary-900/30 dark:bg-primary-900/10">
+                  <p class="mb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500">Admin Feedback
+                  </p>
                   <p class="text-xs text-gray-600 dark:text-gray-400">{{ suggestion.admin_feedback }}</p>
                 </div>
               </div>
@@ -382,9 +366,9 @@
           <!-- Empty activity state -->
           <div
             v-if="!profileData.event_attendances?.length && !profileData.support_tickets?.length && !profileData.suggestions?.length"
-            class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center dark:border-neutral-800 dark:bg-neutral-900"
-          >
-            <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 dark:bg-neutral-800">
+            class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center dark:border-neutral-800 dark:bg-neutral-900">
+            <div
+              class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 dark:bg-neutral-800">
               <UIcon name="i-lucide-inbox" class="h-6 w-6 text-gray-300 dark:text-gray-600" />
             </div>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">No activity yet</p>
@@ -419,11 +403,7 @@
     <!-- Edit Modal -->
     <UModal v-model:open="isEditModalOpen" title="Edit Profile">
       <template #body>
-        <UpdateProfile
-          :profile="profileData"
-          @updated="handleProfileUpdated"
-          @cancel="isEditModalOpen = false"
-        />
+        <UpdateProfile :profile="profileData" @updated="handleProfileUpdated" @cancel="isEditModalOpen = false" />
       </template>
     </UModal>
   </div>
@@ -523,13 +503,13 @@ const loadProfile = async () => {
     error.value = 'Please login to view your profile'
     return
   }
-  
+
   pending.value = true
   error.value = null
-  
+
   try {
     const res = await get<ApiResponse>(`${endpoints.user.profile}`, {}, true)
-    
+
     if (res?.success && res?.data) {
       profileData.value = res.data
     } else {
@@ -545,9 +525,9 @@ const loadProfile = async () => {
 
 
 useSeoPage({
-  title: `${profileData.value?.full_name|| 'User' } - Profile | ${useAppConfig().site.title}`,
+  title: `${profileData.value?.full_name || 'User'} - Profile | ${useAppConfig().site.title}`,
   description: `View the profile of ${profileData.value?.full_name || '---'}, a member of our community.`,
-  image:profileData.value?.profile_picture || profileData.value?.user?.profile_picture || undefined,
+  image: profileData.value?.profile_picture || profileData.value?.user?.profile_picture || undefined,
 })
 
 
@@ -555,9 +535,9 @@ useSeoPage({
 const shareProfile = async () => {
   const profileId = profileData.value?.id
   if (!profileId) return
-  
+
   const shareUrl = `${window.location.origin}/account/${profileId}`
-  
+
   try {
     await navigator.clipboard.writeText(shareUrl)
     showShareToast.value = true
@@ -574,8 +554,17 @@ const shareProfile = async () => {
   }
 }
 
-// Only fetch after component is mounted
+const toast = useToast()
+const authStore = useAuthStore()
 onMounted(() => {
+  if (!authStore.isAuthenticated) {
+    authStore.setLastAttemptedRouteToCurrent()
+    toast.add({
+      description: "Please login to view your profile.",
+      color: "neutral",
+    })
+    return navigateTo('/auth/login')
+  }
   loadProfile()
 })
 

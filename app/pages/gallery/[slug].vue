@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen ">
-    <NavigationBreadCrumb />
+  <div class="min-h-screen p-2 max-w- 7xl">
+    <NavigationBreadCrumb class="w-full" />
 
     <!-- Loading State - Client Only to prevent hydration mismatch -->
     <ClientOnly>

@@ -157,12 +157,14 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 
+
 const route = useRoute()
 const toast = useToast()
 
 const slug = computed(() => String(route.params.slug || ""))
 
 const endpoints = useEndpoints()
+const authStore = useAuthStore()
 const { get } = useApi()
 
 // State
@@ -175,6 +177,18 @@ const error = ref(null)
 onMounted(async () => {
   try {
     pending.value = true
+
+
+    if (!authStore.isAuthenticated) {
+      // Store the intended destination before redirecting to login
+      authStore.setLastAttemptedRouteToCurrent()
+      toast.add({
+        description: "Please login to register for the event.",
+        color: "neutral",
+      })
+      return navigateTo('/auth/login')
+    }
+
 
     // Fetch event details
     const eventResponse: any = await get(
@@ -199,6 +213,9 @@ onMounted(async () => {
       description: ` Register for ${data.value.title} held on ${formatDate(data.value.date)}  in ${data.value?.location || 'the venue'}.  \n -> ${data.value?.description}`,
       image: data.value?.image || data.value?.image_url,
     });
+
+
+
   } catch (err: any) {
     error.value = err
   } finally {
@@ -261,7 +278,8 @@ useSeoPage({
     ? ` Register for ${slug.value} |  Register Events`
     : "Event Details",
   description: ` Register for ${slug.value}... |  Register Events`,
-  image: data.value?.image || data.value?.image_url,});
+  image: data.value?.image || data.value?.image_url,
+});
 </script>
 
 <style scoped>
