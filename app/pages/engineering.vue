@@ -202,6 +202,11 @@
                 <div class="flex items-center gap-1.5 pt-1">
                   <span :class="['h-1.5 w-1.5 rounded-full', dev.is_active ? 'bg-emerald-400' : 'bg-gray-300']" />
                   <span class="text-[10px] text-gray-400">{{ dev.is_active ? 'Active' : 'Inactive' }}</span>
+                
+                </div>
+
+                <div class="text-[10px] text-gray-400 dark:text-gray-500">
+                  {{ formatTimeAgo(dev?.created_at) }}
                 </div>
               </div>
             </div>

@@ -108,7 +108,7 @@
                   <span
                     :class="['h-2 w-2 rounded-full', profileData.user?.is_active ? 'bg-emerald-400 animate-pulse' : 'bg-gray-300']" />
                   <span class="text-xs text-gray-400">{{ profileData.user?.is_active ? 'Active account' : 'Inactive'
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
 
@@ -167,7 +167,8 @@
               <div
                 class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
                 <p class="text-[10px] uppercase tracking-widest text-gray-400">Course</p>
-                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">{{ profileData.course || 'Notspecified' }}</p>
+                <p class="mt-1 text-sm font-medium text-gray-800 dark:text-gray-100">{{ profileData.course ||
+                  'Notspecified' }}</p>
               </div>
               <div
                 class="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/60">
@@ -387,18 +388,7 @@
       <p class="text-sm text-gray-400">No profile data available</p>
     </div>
 
-    <!-- Share Toast Notification -->
-    <UToast v-model:open="showShareToast" :timeout="3000">
-      <template #default>
-        <div class="flex items-center gap-3">
-          <UIcon name="i-lucide-check-circle" class="h-5 w-5 text-green-500" />
-          <div>
-            <p class="text-sm font-medium text-gray-900 dark:text-white">Link copied!</p>
-            <p class="text-xs text-gray-500">Profile link copied to clipboard</p>
-          </div>
-        </div>
-      </template>
-    </UToast>
+
 
     <!-- Edit Modal -->
     <UModal v-model:open="isEditModalOpen" title="Edit Profile">
@@ -410,6 +400,8 @@
 </template>
 
 <script lang="ts" setup>
+import { url } from 'valibot'
+
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
@@ -541,6 +533,13 @@ const shareProfile = async () => {
   try {
     await navigator.clipboard.writeText(shareUrl)
     showShareToast.value = true
+    shareContent(
+      {
+        url: shareUrl,
+        title: `Check out ${profileData.value?.full_name}'s profile on ${useAppConfig().site.title}`,
+        text: `View the profile of ${profileData.value?.full_name || '---'}, a member of our community.`,
+        fallbackToClipboard: true,
+      })
   } catch (err) {
     console.error('Failed to copy:', err)
     // Fallback
