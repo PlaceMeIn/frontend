@@ -173,7 +173,7 @@
 
         <!-- End of Gallery Message -->
         <div v-if="!hasMore && galleryItems.length > 0 && !pending" class="mt-8 text-center">
-          <p class="text-sm text-gray-400">You've reached the end of the gallery ✨</p>
+          <p class="text-sm text-gray-400">You've reached the end of the gallery</p>
         </div>
       </div>
 
