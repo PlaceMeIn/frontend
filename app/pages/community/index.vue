@@ -686,7 +686,7 @@ const { data, pending, error, refresh } = await useAsyncData<CommunityResponse>(
       true
     ),
   {
-    watch: [debouncedSearch, limit, offset, yearFilter, verifiedFilter, courseFilter]
+    watch: [debouncedSearch, limit, offset, yearFilter, verifiedFilter, staffFilter]
   }
 )
 

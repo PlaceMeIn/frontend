@@ -3,32 +3,19 @@
     <OnThisPage :sections="sections" />
 
     <!-- HERO SECTION -->
-    <section
-      id="hero"
+    <section id="hero"
       class="relative w-full h-[460px] md:h-[620px] flex items-center justify-center bg-gradient-to-tr from-primary-900/10 via-primary-500/10 to-primary-400/20 overflow-hidden scroll-mt-20"
-      aria-label="Join hero section"
-    >
+      aria-label="Join hero section">
       <!-- Animated background elements -->
       <div class="absolute inset-0 overflow-hidden">
-        <div
-          class="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl"
-        ></div>
-        <div
-          class="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-700/20 rounded-full blur-3xl"
-        ></div>
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-700/20 rounded-full blur-3xl"></div>
       </div>
 
-      <div
-        class="flex flex-col items-center text-center px-4 md:px-0 relative z-10"
-        data-aos="zoom-out"
-        data-aos-duration="900"
-      >
-        <UBadge
-          icon="i-lucide-star"
-          variant="outline"
-          class="mb-4 animate-pulse"
-          label="Apply to Join Kenya's Premier Tech Club"
-        />
+      <div class="flex flex-col items-center text-center px-4 md:px-0 relative z-10" data-aos="zoom-out"
+        data-aos-duration="900">
+        <UBadge icon="i-lucide-star" variant="outline" class="mb-4 animate-pulse"
+          label="Apply to Join Kenya's Premier Tech Club" />
         <h1 class="text-4xl md:text-6xl font-bold tracking-tight">
           Join MUT Tech Club
         </h1>
@@ -39,35 +26,22 @@
 
         <!-- Stats Cards -->
         <div class="flex flex-wrap gap-5 mt-6 justify-center">
-          <div
-            v-for="(stat, index) in stats"
-            :key="index"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl backdrop-blur-lg bg-white/20 dark:bg-gray-800/30 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-          >
+          <div v-for="(stat, index) in stats" :key="index"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl backdrop-blur-lg bg-white/20 dark:bg-gray-800/30 shadow-lg transition-all hover:scale-105 hover:shadow-xl">
             <UIcon :name="stat.icon" :class="stat.iconClass" class="text-2xl" />
             <span class="font-semibold text-base">{{ stat.label }}</span>
           </div>
         </div>
-        <UPageCard
-          to="/auth/login"
-          spotlight
-          class="mt-12 group transition-all duration-300 hover:scale-[1.02]"
-        >
+        <UPageCard to="/auth/login" spotlight class="mt-12 group transition-all duration-300 hover:scale-[1.02]">
           <div class="flex items-center justify-between p-4">
             <div class="flex items-center gap-3">
-              <UIcon
-                name="i-lucide-arrow-right"
-                class="w-5 h-5 text-primary-500 transition-transform duration-300 group-hover:translate-x-1"
-              />
-              <span
-                class="text-base font-medium text-gray-700 dark:text-gray-200"
-              >
+              <UIcon name="i-lucide-arrow-right"
+                class="w-5 h-5 text-primary-500 transition-transform duration-300 group-hover:translate-x-1" />
+              <span class="text-base font-medium text-gray-700 dark:text-gray-200">
                 Have an account?
               </span>
             </div>
-            <span
-              class="text-lg font-semibold text-primary-600 dark:text-primary-400"
-            >
+            <span class="text-lg font-semibold text-primary-600 dark:text-primary-400">
               Login
             </span>
           </div>
@@ -77,11 +51,8 @@
 
     <!-- MEMBERSHIP BENEFITS & APPLICATION FORM -->
 
-    <section
-      id="application"
-      class="max-w-7xl mx-auto px-6 py-16 lg:flex lg:gap-12 relative scroll-mt-20"
-      aria-label="Membership benefits and application form"
-    >
+    <section id="application" class="max-w-7xl mx-auto px-6 py-16 lg:flex lg:gap-12 relative scroll-mt-20"
+      aria-label="Membership benefits and application form">
       <!-- Benefits Section (Sticky) -->
       <div id="benefits-f" class="lg:w-1/3 lg:sticky lg:top-20 self-start">
         <div class="mb-8" data-aos="fade-up">
@@ -93,37 +64,20 @@
           </p>
         </div>
 
-        <div
-          class="flex flex-col gap-3"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <div
-            v-for="(ftr, i) in membership_benefits"
-            :key="i"
-            class="flex items-start gap-3 p-3 rounded-lg bg-white/10 dark:bg-gray-800/20 backdrop-blur-lg hover:bg-white/20 transition-colors duration-300"
-          >
-            <UIcon
-              name="i-lucide-check-circle"
-              class="text-green-500 text-xl mt-1 shrink-0"
-            />
+        <div class="flex flex-col gap-3" data-aos="fade-up" data-aos-delay="100">
+          <div v-for="(ftr, i) in membership_benefits" :key="i"
+            class="flex items-start gap-3 p-3 rounded-lg bg-white/10 dark:bg-gray-800/20 backdrop-blur-lg hover:bg-white/20 transition-colors duration-300">
+            <UIcon name="i-lucide-check-circle" class="text-green-500 text-xl mt-1 shrink-0" />
             <span class="text-base">{{ ftr }}</span>
           </div>
         </div>
 
-        <div
-          class="mt-12 flex justify-center"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
+        <div class="mt-12 flex justify-center" data-aos="fade-up" data-aos-delay="200">
           <UCard
-            class="text-center w-full bg-gradient-to-br from-primary-500/80 to-primary-900/20 border-2 border-primary-500/30"
-          >
+            class="text-center w-full bg-gradient-to-br from-primary-500/80 to-primary-900/20 border-2 border-primary-500/30">
             <p class="text-muted text-sm">Application Status</p>
             <h3 class="text-2xl font-bold mt-2">Open for 2026</h3>
-            <p
-              class="text-sm mt-1 text-primary font-medium flex items-center justify-center gap-1"
-            >
+            <p class="text-sm mt-1 text-primary font-medium flex items-center justify-center gap-1">
               <UIcon name="i-lucide-clock" class="text-sm" />
               Limited spots available
             </p>
@@ -150,76 +104,35 @@
                 </div>
 
                 <UCard data-aos="fade-up" data-aos-delay="100">
-                  <form
-                    @submit.prevent="validateAndSubmit"
-                    class="flex flex-col gap-6"
-                  >
+                  <form @submit.prevent="validateAndSubmit" class="flex flex-col gap-6">
                     <!-- Personal Information -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2"
-                    >
+                    <div class="flex items-center gap-2 border-b border-primary pb-2">
                       <UIcon name="i-lucide-user" class="text-primary" />
                       <h3 class="text-lg font-semibold">
                         Personal Information
                       </h3>
                     </div>
 
-                    <UFormField
-                      label="Full Name"
-                      required
-                      :error="errors.fullName"
-                    >
-                      <UInput
-                        v-model="form.fullName"
-                        icon="i-lucide-user"
-                        placeholder="John Doe"
-                        class="w-full"
-                        :class="{
-                          'border-red-500 focus:border-red-500':
-                            errors.fullName,
-                        }"
-                        @blur="validateField('fullName')"
-                        @update:model-value="clearFieldError('fullName')"
-                      />
+                    <UFormField label="Full Name" required :error="errors.fullName">
+                      <UInput v-model="form.fullName" icon="i-lucide-user" placeholder="John Doe" class="w-full" :class="{
+                        'border-red-500 focus:border-red-500':
+                          errors.fullName,
+                      }" @blur="validateField('fullName')" @update:model-value="clearFieldError('fullName')" />
                     </UFormField>
 
                     <div class="flex flex-col md:flex-row gap-3">
-                      <UFormField
-                        label="Email Address"
-                        required
-                        :error="errors.email"
-                        class="flex-1"
-                      >
-                        <UInput
-                          v-model="form.email"
-                          type="email"
-                          icon="i-lucide-mail"
-                          placeholder="you@example.com"
-                          class="w-full"
-                          :class="{
+                      <UFormField label="Email Address" required :error="errors.email" class="flex-1">
+                        <UInput v-model="form.email" type="email" icon="i-lucide-mail" placeholder="you@example.com"
+                          class="w-full" :class="{
                             'border-red-500 focus:border-red-500': errors.email,
-                          }"
-                          @blur="validateField('email')"
-                          @update:model-value="clearFieldError('email')"
-                        />
+                          }" @blur="validateField('email')" @update:model-value="clearFieldError('email')" />
                       </UFormField>
 
-                      <UFormField
-                        label="WhatsApp / Phone (optional)"
-                        :error="errors.phone"
-                        class="flex-1"
-                      >
-                        <UInput
-                          v-model="form.phone"
-                          icon="i-lucide-phone"
-                          placeholder="+254 700 000 000"
-                          class="w-full"
+                      <UFormField label="WhatsApp / Phone (optional)" :error="errors.phone" class="flex-1">
+                        <UInput v-model="form.phone" icon="i-lucide-phone" placeholder="+254 700 000 000" class="w-full"
                           :class="{
                             'border-red-500 focus:border-red-500': errors.phone,
-                          }"
-                          @blur="validateField('phone')"
-                          @update:model-value="clearFieldError('phone')"
-                        />
+                          }" @blur="validateField('phone')" @update:model-value="clearFieldError('phone')" />
                         <p class="text-xs text-muted mt-1">
                           Include country code
                         </p>
@@ -227,62 +140,30 @@
                     </div>
 
                     <!-- Academic Information -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2 mt-4"
-                    >
-                      <UIcon
-                        name="i-lucide-graduation-cap"
-                        class="text-primary"
-                      />
+                    <div class="flex items-center gap-2 border-b border-primary pb-2 mt-4">
+                      <UIcon name="i-lucide-graduation-cap" class="text-primary" />
                       <h3 class="text-lg font-semibold">
                         Academic Information
                       </h3>
                     </div>
 
                     <div class="flex flex-col md:flex-row gap-3">
-                      <UFormField
-                        label="Course/Program"
-                        required
-                        :error="errors.program"
-                        class="flex-1"
-                      >
-                        <USelectMenu
-                          v-model="form.program"
-                          :items="programs"
-                          create-item
-                          value-key="value"
-                          label-key="label"
-                          @create="onProgramCreate"
-                          icon="i-lucide-graduation-cap"
-                          placeholder="Select program"
-                          class="w-full"
-                          :class="{ 'border-red-500': errors.program }"
-                          @update:model-value="clearFieldError('program')"
-                        />
+                      <UFormField label="Course/Program" required :error="errors.program" class="flex-1">
+                        <USelectMenu v-model="form.program" :items="programs" create-item value-key="value"
+                          label-key="label" @create="onProgramCreate" icon="i-lucide-graduation-cap"
+                          placeholder="Select program" class="w-full" :class="{ 'border-red-500': errors.program }"
+                          @update:model-value="clearFieldError('program')" />
                       </UFormField>
 
-                      <UFormField
-                        label="Year of Study"
-                        required
-                        :error="errors.year"
-                        class="flex-1"
-                      >
-                        <USelect
-                          v-model="form.year"
-                          :items="years"
-                          icon="i-lucide-graduation-cap"
-                          placeholder="Select year"
-                          class="w-full"
-                          :class="{ 'border-red-500': errors.year }"
-                          @update:model-value="clearFieldError('year')"
-                        />
+                      <UFormField label="Year of Study" required :error="errors.year" class="flex-1">
+                        <USelect v-model="form.year" :items="years" icon="i-lucide-graduation-cap"
+                          placeholder="Select year" class="w-full" :class="{ 'border-red-500': errors.year }"
+                          @update:model-value="clearFieldError('year')" />
                       </UFormField>
                     </div>
 
                     <!-- Technical Skills -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2 mt-4"
-                    >
+                    <div class="flex items-center gap-2 border-b border-primary pb-2 mt-4">
                       <UIcon name="i-lucide-code" class="text-primary" />
                       <h3 class="text-lg font-semibold">
                         Technical Skills
@@ -291,40 +172,21 @@
                     </div>
 
                     <div class="flex flex-wrap gap-2">
-                      <UButton
-                        v-for="skill in allTechSkills"
-                        :key="skill"
-                        size="sm"
-                        :variant="
-                          form.techSkills?.includes(skill) ? 'solid' : 'outline'
-                        "
-                        :color="
-                          form.techSkills?.includes(skill)
+                      <UButton v-for="skill in allTechSkills" :key="skill" size="sm" :variant="form.techSkills?.includes(skill) ? 'solid' : 'outline'
+                        " :color="form.techSkills?.includes(skill)
                             ? 'primary'
                             : 'neutral'
-                        "
-                        @click="toggleSkill(skill)"
-                        class="transition-all duration-200"
-                      >
-                        <UIcon
-                          v-if="form.techSkills?.includes(skill)"
-                          name="i-lucide-check"
-                          class="mr-1"
-                        />
+                          " @click="toggleSkill(skill)" class="transition-all duration-200">
+                        <UIcon v-if="form.techSkills?.includes(skill)" name="i-lucide-check" class="mr-1" />
                         {{ skill }}
                       </UButton>
                     </div>
-                    <p
-                      v-if="errors.techSkills"
-                      class="text-danger text-sm mt-1"
-                    >
+                    <p v-if="errors.techSkills" class="text-danger text-sm mt-1">
                       {{ errors.techSkills }}
                     </p>
 
                     <!-- Areas of Interest -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2 mt-4"
-                    >
+                    <div class="flex items-center gap-2 border-b border-primary pb-2 mt-4">
                       <UIcon name="i-lucide-heart" class="text-primary" />
                       <h3 class="text-lg font-semibold">
                         Areas of Interest
@@ -333,28 +195,14 @@
                     </div>
 
                     <div class="flex flex-wrap gap-2">
-                      <UButton
-                        v-for="interest in allInterests"
-                        :key="interest"
-                        size="sm"
-                        :variant="
-                          form.interests?.includes(interest)
-                            ? 'solid'
-                            : 'outline'
-                        "
-                        :color="
-                          form.interests?.includes(interest)
+                      <UButton v-for="interest in allInterests" :key="interest" size="sm" :variant="form.interests?.includes(interest)
+                          ? 'solid'
+                          : 'outline'
+                        " :color="form.interests?.includes(interest)
                             ? 'primary'
                             : 'neutral'
-                        "
-                        @click="toggleInterest(interest)"
-                        class="transition-all duration-200"
-                      >
-                        <UIcon
-                          v-if="form.interests?.includes(interest)"
-                          name="i-lucide-check"
-                          class="mr-1"
-                        />
+                          " @click="toggleInterest(interest)" class="transition-all duration-200">
+                        <UIcon v-if="form.interests?.includes(interest)" name="i-lucide-check" class="mr-1" />
                         {{ interest }}
                       </UButton>
                     </div>
@@ -363,100 +211,61 @@
                     </p>
 
                     <!-- Portfolio & Links -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2 mt-4"
-                    >
+                    <div class="flex items-center gap-2 border-b border-primary pb-2 mt-4">
                       <UIcon name="i-lucide-link" class="text-primary" />
                       <h3 class="text-lg font-semibold">Portfolio & Links</h3>
                     </div>
 
-                    <UFormField
-                      label="GitHub Profile (Optional)"
-                      :error="errors.github"
-                    >
-                      <UInput
-                        v-model="form.github"
-                        icon="i-lucide-github"
-                        placeholder="https://github.com/username"
-                        class="w-full"
-                        :class="{
+                    <UFormField label="GitHub Profile (Optional)" :error="errors.github">
+                      <UInput v-model="form.github" icon="i-lucide-github" placeholder="https://github.com/username"
+                        class="w-full" :class="{
                           'border-red-500 focus:border-red-500': errors.github,
-                        }"
-                        @blur="validateField('github')"
-                        @update:model-value="clearFieldError('github')"
-                      />
+                        }" @blur="validateField('github')" @update:model-value="clearFieldError('github')" />
                     </UFormField>
 
-                    <UFormField
-                      label="Portfolio Website (Optional)"
-                      :error="errors.portfolio"
-                    >
-                      <UInput
-                        v-model="form.portfolio"
-                        icon="i-lucide-globe"
-                        placeholder="https://example.com"
-                        class="w-full"
-                        :class="{
+                    <UFormField label="Portfolio Website (Optional)" :error="errors.portfolio">
+                      <UInput v-model="form.portfolio" icon="i-lucide-globe" placeholder="https://example.com"
+                        class="w-full" :class="{
                           'border-red-500 focus:border-red-500':
                             errors.portfolio,
-                        }"
-                        @blur="validateField('portfolio')"
-                        @update:model-value="clearFieldError('portfolio')"
-                      />
+                        }" @blur="validateField('portfolio')" @update:model-value="clearFieldError('portfolio')" />
                     </UFormField>
 
                     <!-- Personal Statement -->
-                    <div
-                      class="flex items-center gap-2 border-b border-primary pb-2 mt-4"
-                    >
-                      <UIcon
-                        name="i-lucide-message-square"
-                        class="text-primary"
-                      />
+                    <div class="flex items-center gap-2 border-b border-primary pb-2 mt-4">
+                      <UIcon name="i-lucide-message-square" class="text-primary" />
                       <h3 class="text-lg font-semibold">
                         Tell Us About Yourself
                       </h3>
                     </div>
 
-                    <UFormField
-                      label="Why do you want to join MUT Tech Club?"
-                      required
-                      :error="errors.message"
-                    >
-                      <UTextarea
-                        v-model="form.message"
-                        icon="i-lucide-message-square"
-                        placeholder="Share your passion, goals, and what you hope to achieve..."
-                        autoresize
-                        class="w-full"
-                        :class="{
+                    <UFormField label="Why do you want to join MUT Tech Club?" required :error="errors.message">
+                      <UTextarea v-model="form.message" icon="i-lucide-message-square"
+                        placeholder="Share your passion, goals, and what you hope to achieve..." autoresize
+                        class="w-full" :class="{
                           'border-red-500 focus:border-red-500': errors.message,
-                        }"
-                        :rows="5"
-                        @blur="validateField('message')"
-                        @update:model-value="clearFieldError('message')"
-                      />
+                        }" :rows="5" @blur="validateField('message')"
+                        @update:model-value="clearFieldError('message')" />
                       <p class="text-xs text-muted mt-1">
-                        Minimum 50 characters
+                        Minimum 20 characters
                       </p>
                     </UFormField>
 
+                    <UFormField required label="Accept to terms and policies of Mut Tech Club" >
+                      <UCheckbox v-model="form.accept_terms">
+                        <template #label>
+                          Accept <NuxtLink to="/terms" class="text-primary hover:underline">Terms & policies</NuxtLink>
+                        </template>
+                      </UCheckbox>
+                    </UFormField>
+
                     <!-- Submit Button -->
-                    <UButton
-                      type="submit"
-                      :icon="
-                        stateStore.isSubmitting
-                          ? 'i-lucide-loader-circle'
-                          : 'i-lucide-send'
-                      "
-                      size="lg"
-                      class="justify-center mt-4"
-                      :loading="stateStore.isSubmitting"
-                      :disabled="
-                        stateStore.isSubmitting ||
+                    <UButton type="submit" :icon="stateStore.isSubmitting
+                        ? 'i-lucide-loader-circle'
+                        : 'i-lucide-send'
+                      " size="lg" class="justify-center mt-4" :loading="stateStore.isSubmitting" :disabled="stateStore.isSubmitting ||
                         Object.keys(errors).length > 0
-                      "
-                    >
+                        ">
                       {{
                         stateStore.isSubmitting
                           ? "Submitting Application..."
@@ -465,18 +274,11 @@
                     </UButton>
 
                     <!-- Success Message -->
-                    <Transition
-                      enter-active-class="transition duration-300 ease-out"
-                      enter-from-class="transform scale-95 opacity-0"
-                      enter-to-class="transform scale-100 opacity-100"
+                    <Transition enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
                       leave-active-class="transition duration-200 ease-in"
-                      leave-from-class="transform scale-100 opacity-100"
-                      leave-to-class="transform scale-95 opacity-0"
-                    >
-                      <p
-                        v-if="stateStore.submitSuccess"
-                        class="text-success mt-2 flex items-center gap-2"
-                      >
+                      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+                      <p v-if="stateStore.submitSuccess" class="text-success mt-2 flex items-center gap-2">
                         <UIcon name="i-lucide-check-circle" class="text-xl" />
                         Application submitted successfully! We'll review it and
                         get back to you within 3-5 business days.
@@ -484,18 +286,11 @@
                     </Transition>
 
                     <!-- Error Message -->
-                    <Transition
-                      enter-active-class="transition duration-300 ease-out"
-                      enter-from-class="transform scale-95 opacity-0"
-                      enter-to-class="transform scale-100 opacity-100"
+                    <Transition enter-active-class="transition duration-300 ease-out"
+                      enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
                       leave-active-class="transition duration-200 ease-in"
-                      leave-from-class="transform scale-100 opacity-100"
-                      leave-to-class="transform scale-95 opacity-0"
-                    >
-                      <p
-                        v-if="stateStore.submitError"
-                        class="text-danger mt-2 flex items-center gap-2"
-                      >
+                      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+                      <p v-if="stateStore.submitError" class="text-danger mt-2 flex items-center gap-2">
                         <UIcon name="i-lucide-alert-circle" class="text-xl" />
                         {{ stateStore.submitError }}
                       </p>
@@ -506,19 +301,12 @@
             </template>
 
             <template #verify>
-              <VerifyEmail
-                :email="form?.email || ''"
-                @success="activeStep = 2"
-              />
+              <VerifyEmail :email="form?.email || ''" @success="activeStep = 2" />
             </template>
 
             <template #pay>
-              <PaymentCard
-                :amount="configInfo.membership_fee || default_pay_amount"
-                :email="form?.email"
-                :phone="form?.phone || null"
-                reference="JOIN-MUTECH"
-              />
+              <PaymentCard :amount="configInfo.membership_fee || default_pay_amount" :email="form?.email"
+                :phone="form?.phone || null" reference="JOIN-MUTECH" />
             </template>
           </UStepper>
         </template>
@@ -526,11 +314,7 @@
     </section>
 
     <!-- WHAT HAPPENS NEXT SECTION -->
-    <section
-      id="next-steps"
-      class="bg-muted/20 py-20 scroll-mt-20"
-      aria-label="Application next steps"
-    >
+    <section id="next-steps" class="bg-muted/20 py-20 scroll-mt-20" aria-label="Application next steps">
       <div class="max-w-6xl mx-auto px-6">
         <div class="text-center mb-12" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
@@ -542,19 +326,11 @@
           </p>
         </div>
 
-        <div
-          class="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <UCard
-            v-for="(step, index) in reviewSteps"
-            :key="index"
-            class="text-center p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-          >
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" data-aos="fade-up" data-aos-delay="100">
+          <UCard v-for="(step, index) in reviewSteps" :key="index"
+            class="text-center p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div
-              class="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg"
-            >
+              class="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
               {{ index + 1 }}
             </div>
             <h3 class="font-semibold text-lg">{{ step.title }}</h3>
@@ -580,15 +356,10 @@
 
       <template #footer="{ close }">
         <div class="flex justify-end gap-3">
-          <UButton
-            label="Reset Form"
-            color="neutral"
-            variant="outline"
-            @click="
-              resetForm();
-              close();
-            "
-          />
+          <UButton label="Reset Form" color="neutral" variant="outline" @click="
+            resetForm();
+          close();
+          " />
           <UButton label="Try Again" color="primary" @click="close()" />
         </div>
       </template>
@@ -614,12 +385,7 @@
 
       <template #footer="{ close }">
         <div class="flex justify-end">
-          <UButton
-            label="Next"
-            color="success"
-            variant="subtle"
-            @click="close()"
-          />
+          <UButton label="Next" color="success" variant="subtle" @click="close()" />
         </div>
       </template>
     </UModal>
@@ -643,8 +409,8 @@ const { get } = useApi();
 const joinData = ref({});
 const loading = ref(false);
 const error = ref(null);
-const {status:loadingStatus,data:configInfo,error:loadingError} = await useAsyncData("support-info", () => get(endpoints.main.config_info));
-const default_pay_amount =  ref(configInfo.value?.membership_fee || '--'); 
+const { status: loadingStatus, data: configInfo, error: loadingError } = await useAsyncData("support-info", () => get(endpoints.main.config_info));
+const default_pay_amount = ref(configInfo.value?.membership_fee || '--');
 
 async function fetchJoinData() {
   loading.value = true;
