@@ -8,7 +8,7 @@ export default defineAppConfig({
     icon: "",
     url: "",
     sourceLink: "https://github.com/PlaceMeIn",
-    apiBase: "https://hugh-wichita-par-wealth.trycloudflare.com",
+    apiBase: "https://hear-exclude-determining-candidates.trycloudflare.com",
     // apiBase:"http://192.168.100.7:8080",
 
     contact: {
