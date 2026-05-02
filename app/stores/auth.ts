@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 let refreshTimer: ReturnType<typeof setInterval> | null = null
 let refreshRequest: Promise<boolean> | null = null
+let initRequest: Promise<boolean> | null = null
 let crossTabListenerInitialized = false
 
 interface VerificationStep {
@@ -43,12 +44,14 @@ export const useAuthStore = defineStore('auth', {
     redirectStack: [] as RedirectStackItem[],
     verificationStack: [] as VerificationStep[],
     refreshing: false,
+    initialized: false,
     loading: false,
     error: null as any
   }),
 
   getters: {
     isAuthenticated: state => !!state.user && !!state.token,
+    isLoggedIn: state => !!state.user && !!state.token,
     isEmailVerified: s => !!s.user?.is_email_verified,
     isPhoneVerified: s => !!s.user?.is_phone_verified,
     currentUser: state => state.user,
@@ -107,6 +110,10 @@ export const useAuthStore = defineStore('auth', {
       this.user = user
       if (token) this.token = token
       if (refreshToken) this.refreshToken = refreshToken
+
+      if (this.refreshToken) {
+        this.startAutoRefresh()
+      }
     },
 
     clearUser() {
@@ -422,6 +429,8 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async handleGoogleLogin(): Promise<void> {
+      if (!process.client) return
+
       const url = await useApi().get(useEndpoints().auth.loginWithGoogle)
       this.setLastAttemptedRouteToCurrent()
 
@@ -444,7 +453,75 @@ export const useAuthStore = defineStore('auth', {
 
       if (!popup) {
         window.location.href = url?.auth_url
+        return
       }
+
+      let completed = false
+
+      const finishPopupLogin = async (payload: any) => {
+        if (completed) return
+        completed = true
+
+        clearInterval(pollInterval)
+        window.removeEventListener('message', messageHandler)
+
+        this.setUser(
+          payload.user,
+          payload.access,
+          payload.refresh
+        )
+
+        await this.getUSer(false)
+
+        if (popup && !popup.closed) {
+          popup.close()
+        }
+
+        const router = useRouter()
+        const redirect = this.popRedirect()
+        await router.push(redirect?.path || '/account')
+      }
+
+      // Listen for message from popup or check if popup is closed
+      const pollInterval = setInterval(() => {
+        try {
+          // Check if popup is closed
+          if (popup.closed) {
+            clearInterval(pollInterval)
+            
+            // Give it a moment for the redirect to work
+            setTimeout(() => {
+              // If user is authenticated after popup closed, redirect
+              if (!completed && this.isAuthenticated && this.user) {
+                const router = useRouter()
+                const redirect = this.popRedirect()
+                router.push(redirect?.path || '/account')
+              }
+            }, 500)
+            
+            return
+          }
+        } catch (e) {
+          // Ignore cross-origin errors when checking popup state
+        }
+      }, 500)
+
+      // Also listen for postMessage from popup (if backend sends it)
+      const messageHandler = (event: MessageEvent) => {
+        if (event.origin !== window.location.origin) return
+
+        if (event.data?.type === 'google-login-success' && event.data?.user) {
+          void finishPopupLogin(event.data)
+        }
+      }
+      
+      window.addEventListener('message', messageHandler)
+      
+      // Cleanup after 10 minutes (max timeout)
+      setTimeout(() => {
+        clearInterval(pollInterval)
+        window.removeEventListener('message', messageHandler)
+      }, 10 * 60 * 1000)
     },
 
     startAutoRefresh() {
@@ -469,38 +546,74 @@ export const useAuthStore = defineStore('auth', {
     },
 
     initCrossTabListener() {
+      if (!process.client) return
       if (crossTabListenerInitialized) return
 
       crossTabListenerInitialized = true
+      const store = this as any
+
       window.addEventListener('storage', (event: StorageEvent) => {
         if (event.key === 'auth') {
           if (event.newValue) {
             try {
               const data = JSON.parse(event.newValue)
-              this.user = data.user || null
-              this.token = data.token || null
-              this.refreshToken = data.refreshToken || null
+              store.user = data.user || null
+              store.token = data.token || null
+              store.refreshToken = data.refreshToken || null
 
-              if (this.token && this.refreshToken) {
-                this.startAutoRefresh()
+              if (store.token && store.refreshToken) {
+                store.startAutoRefresh()
               } else {
-                this.stopAutoRefresh()
+                store.stopAutoRefresh()
               }
             } catch (e) {
               console.error('Failed to parse user store:', e)
             }
           } else {
-            // this.clearUser()
+            // Logout detected in another tab
+            store.stopAutoRefresh()
+            store.user = null
+            store.token = null
+            store.refreshToken = null
+            store.redirectStack = []
+            store.verificationStack = []
+            
+            // Redirect to login page
+            const router = useRouter()
+            if (!router.currentRoute.value.path.startsWith('/login') && !router.currentRoute.value.path.startsWith('/auth')) {
+              router.push('/auth/login')
+            }
           }
         }
       })
     },
-    async init() {
+    async ensureReady(): Promise<boolean> {
+      if (this.initialized) return this.isAuthenticated
+
+      if (initRequest) {
+        return initRequest
+      }
+
+      initRequest = this.init()
+        .finally(() => {
+          initRequest = null
+        })
+
+      return initRequest
+    },
+    async init(): Promise<boolean> {
       this.initCrossTabListener()
+
+      if (this.token && this.user) {
+        this.startAutoRefresh()
+        this.initialized = true
+        return true
+      }
 
       if (!this.refreshToken) {
         this.stopAutoRefresh()
-        return
+        this.initialized = true
+        return this.isAuthenticated
       }
 
       const success = await this.refresh_Token()
@@ -509,15 +622,19 @@ export const useAuthStore = defineStore('auth', {
         this.startAutoRefresh()
       }
 
+      this.initialized = true
+
       const route = useRoute()
 
       if (!this.user && !route.fullPath.startsWith('/admin')) {
         // useGoogleOneTap()
       }
+
+      return this.isAuthenticated
     }
   },
   persist: {
-    storage: piniaPluginPersistedstate.localStorage(),
+    pick: ['token', 'refreshToken', 'user', 'redirectStack', 'verificationStack'],
     serializer: {
       serialize: JSON.stringify,
       deserialize: JSON.parse

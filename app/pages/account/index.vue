@@ -400,12 +400,9 @@
 </template>
 
 <script lang="ts" setup>
-import { url } from 'valibot'
-
-definePageMeta({ layout: 'default' })
-
-const route = useRoute()
-const router = useRouter()
+definePageMeta({
+  layout: 'default',
+})
 
 // Types based on actual API response
 type EventAttendance = {
@@ -484,17 +481,30 @@ const { get } = useApi()
 const auth = useAuthStore()
 
 const profileData = ref<ProfileData | null>(null)
-const pending = ref(false)
+const pending = ref(true)
 const error = ref<string | null>(null)
 const isEditModalOpen = ref(false)
 const showShareToast = ref(false)
 const showAllEvents = ref(false)
 
 const loadProfile = async () => {
-  if (!auth.token) {
+  pending.value = true
+
+  await auth.ensureReady()
+  if (!auth.isAuthenticated) {
     error.value = 'Please login to view your profile'
-    return
+
+    auth.setLastAttemptedRouteToCurrent()
+    toast.add({
+      description: 'Please login to view your profile.',
+      color: 'neutral',
+    })
+    pending.value = false
+
+    return navigateTo('/auth/login')
   }
+
+
 
   pending.value = true
   error.value = null
@@ -554,18 +564,8 @@ const shareProfile = async () => {
 }
 
 const toast = useToast()
-const authStore = useAuthStore()
-
-onMounted(() => {
-  if (!authStore.isAuthenticated) {
-    authStore.setLastAttemptedRouteToCurrent()
-    toast.add({
-      description: "Please login to view your profile.",
-      color: "neutral",
-    })
-    return navigateTo('/auth/login')
-  }
-  loadProfile()
+onMounted(async () => {
+  await loadProfile()
 })
 
 const refresh = () => loadProfile()
