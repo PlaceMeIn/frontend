@@ -555,6 +555,7 @@ const shareProfile = async () => {
 
 const toast = useToast()
 const authStore = useAuthStore()
+
 onMounted(() => {
   if (!authStore.isAuthenticated) {
     authStore.setLastAttemptedRouteToCurrent()
