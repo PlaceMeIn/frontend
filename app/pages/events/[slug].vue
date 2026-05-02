@@ -377,7 +377,7 @@
           <UAccordion :items="accordionitems" type="multiple">
             <template #content="{ item }">
               <p class="pb-3.5 text-sm text-muted">
-                This is the {{ item.label }} panel.
+                {{ item.label }} panel.
               </p>
               <section id="takeaways">
                 <div v-if="item.key === 'takeaways'">
@@ -393,7 +393,9 @@
               </section>
 
               <section id="gallery">
-                <div v-if="item.key === 'gallery'"></div>
+                <div v-if="item.key === 'gallery'">
+                  
+                </div>
               </section>
             </template>
           </UAccordion>
