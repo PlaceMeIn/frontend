@@ -70,6 +70,28 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     isLoading.value = false;
   }
 }
+
+
+const wasAuthenticated = ref(authStore.isAuthenticated);
+
+watch(authStore.isAuthenticated, (isNowAuthenticated) => {
+  // Check for transition: false -> true
+  if (!wasAuthenticated.value && isNowAuthenticated) {
+    const redirect = authStore.popRedirect();
+    const targetPath = 
+      !redirect?.path || 
+      redirect.path.includes('/login') || 
+      redirect.path.includes('/auth')
+        ? '/account' 
+        : redirect.path;
+
+    setTimeout(() => {
+      useRouter().replace(targetPath);
+    }, 900);
+  }
+  
+  wasAuthenticated.value = isNowAuthenticated;
+}, { immediate: true }); 
 </script>
 
 <template>
