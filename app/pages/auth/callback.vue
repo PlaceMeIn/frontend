@@ -20,6 +20,12 @@ const decodeAuthPayload = (payload: string) => {
   return JSON.parse(atob(padded))
 }
 
+
+//  auth.setUser(
+//       decoded.user,
+//       decoded?.token?.access,
+//       decoded?.token?.refresh
+//     )
 onMounted(async () => {
   try {
     if (!route.query.data) {
@@ -32,12 +38,14 @@ onMounted(async () => {
       throw new Error('Invalid authentication response')
     }
 
+    console.log(decoded)
+
     // Hydrate the store immediately so parent window has auth state
     // before we send the postMessage / close the popup.
     auth.setUser(
       decoded.user,
-      decoded?.token?.access,
-      decoded?.token?.refresh
+      decoded?.tokens?.access,
+      decoded?.tokens?.refresh
     )
 
     // Fetch full profile — this updates `auth.user` with server-fresh data

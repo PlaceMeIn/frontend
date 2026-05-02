@@ -107,6 +107,8 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setUser(user: User, token?: string, refreshToken?: string) {
+
+      console.log(user,token,refreshToken)
       this.user = user
       if (token) this.token = token
       if (refreshToken) this.refreshToken = refreshToken
@@ -457,71 +459,96 @@ export const useAuthStore = defineStore('auth', {
       }
 
       let completed = false
+      let pollInterval: NodeJS.Timeout | null = null
+      let timeoutId: NodeJS.Timeout | null = null
+
+      const cleanup = () => {
+        if (pollInterval) clearInterval(pollInterval)
+        if (timeoutId) clearTimeout(timeoutId)
+        window.removeEventListener('message', messageHandler)
+      }
 
       const finishPopupLogin = async (payload: any) => {
         if (completed) return
         completed = true
 
-        clearInterval(pollInterval)
-        window.removeEventListener('message', messageHandler)
+        cleanup()
 
+        console.log("received payload", payload)
+
+        // CRITICAL: Set user data FIRST
         this.setUser(
           payload.user,
           payload.access,
           payload.refresh
         )
 
-        await this.getUSer(false)
+        // Wait for storage to persist (important for cross-tab sync)
+        await nextTick()
 
+        // Close popup BEFORE redirecting
         if (popup && !popup.closed) {
           popup.close()
         }
 
-        const router = useRouter()
-        const redirect = this.popRedirect()
-        await router.push(redirect?.path || '/account')
+        // Small delay to ensure popup closes and store is updated
+        setTimeout(async () => {
+          const router = useRouter()
+          const redirect = this.popRedirect()
+          const targetPath = !redirect?.path ||
+            redirect.path.includes('/login') ||
+            redirect.path.includes('/auth')
+            ? '/account'
+            : redirect.path
+
+          await router.push(targetPath)
+        }, 100)
       }
 
-      // Listen for message from popup or check if popup is closed
-      const pollInterval = setInterval(() => {
+      // Listen for message from popup
+      const messageHandler = (event: MessageEvent) => {
+        console.log("EVENT DATA",event)
+        // if (event.origin !== window.location.origin) return
+
+        if (event.data?.type === 'google-login-success') {
+          void finishPopupLogin(event.data)
+        } else if (event.data?.type === 'google-login-error') {
+          cleanup()
+          if (popup && !popup.closed) popup.close()
+          useToast().add({
+            title: 'Login Failed',
+            description: 'Google login was unsuccessful. Please try again.',
+            color: 'error'
+          })
+        }
+      }
+
+      window.addEventListener('message', messageHandler)
+
+      // Poll to check if popup was closed without completing login
+      pollInterval = setInterval(() => {
         try {
-          // Check if popup is closed
-          if (popup.closed) {
-            clearInterval(pollInterval)
-            
-            // Give it a moment for the redirect to work
-            setTimeout(() => {
-              // If user is authenticated after popup closed, redirect
-              if (!completed && this.isAuthenticated && this.user) {
-                const router = useRouter()
-                const redirect = this.popRedirect()
-                router.push(redirect?.path || '/account')
-              }
-            }, 500)
-            
-            return
+          if (popup.closed && !completed) {
+            cleanup()
+            // Don't auto-redirect if user just closed the popup intentionally
+            if (this.isAuthenticated) {
+              const router = useRouter()
+              const redirect = this.popRedirect()
+              router.push(redirect?.path || '/account')
+            }
           }
         } catch (e) {
-          // Ignore cross-origin errors when checking popup state
+          // Ignore cross-origin errors
         }
       }, 500)
 
-      // Also listen for postMessage from popup (if backend sends it)
-      const messageHandler = (event: MessageEvent) => {
-        if (event.origin !== window.location.origin) return
-
-        if (event.data?.type === 'google-login-success' && event.data?.user) {
-          void finishPopupLogin(event.data)
+      // Cleanup after 5 minutes
+      timeoutId = setTimeout(() => {
+        if (!completed) {
+          cleanup()
+          if (popup && !popup.closed) popup.close()
         }
-      }
-      
-      window.addEventListener('message', messageHandler)
-      
-      // Cleanup after 10 minutes (max timeout)
-      setTimeout(() => {
-        clearInterval(pollInterval)
-        window.removeEventListener('message', messageHandler)
-      }, 10 * 60 * 1000)
+      }, 5 * 60 * 1000)
     },
 
     startAutoRefresh() {
@@ -577,7 +604,7 @@ export const useAuthStore = defineStore('auth', {
             store.refreshToken = null
             store.redirectStack = []
             store.verificationStack = []
-            
+
             // Redirect to login page
             const router = useRouter()
             if (!router.currentRoute.value.path.startsWith('/login') && !router.currentRoute.value.path.startsWith('/auth')) {
