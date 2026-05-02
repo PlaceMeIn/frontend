@@ -635,9 +635,19 @@ export const useAuthStore = defineStore('auth', {
   },
   persist: {
     pick: ['token', 'refreshToken', 'user', 'redirectStack', 'verificationStack'],
+    storage: piniaPluginPersistedstate.localStorage(),
+
     serializer: {
       serialize: JSON.stringify,
       deserialize: JSON.parse
     }
   }
 })
+
+//  persist: {
+//     storage: piniaPluginPersistedstate.localStorage(),
+//     serializer: {
+//       serialize: JSON.stringify,
+//       deserialize: JSON.parse
+//     }
+//   }
