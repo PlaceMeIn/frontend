@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     apiSecret: process.env.API_SECRET,
 
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://techclub.mut.ac.ke',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://mutech-club.vercel.app',
       siteName: 'MUT Tech Club',
       siteDescription: 'Official tech community of Murang\'a University of Technology – developers, innovation, projects, and student tech community in Kenya.',
       socialImage: '/og/default-og.png',
@@ -134,7 +134,7 @@ export default defineNuxtConfig({
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:alt', content: 'MUT Tech Club - Connecting student developers in Kenya' },
-        { property: 'og:url', content: 'https://techclub.mut.ac.ke' },
+        { property: 'og:url', content: 'https://mutech-club.vercel.app/' },
         { property: 'og:locale', content: 'en_KE' },
 
         // Twitter Card
@@ -145,7 +145,7 @@ export default defineNuxtConfig({
         { name: 'twitter:image', content: '/og/default-og.png' },
 
         // Theme & Appearance
-        { name: 'theme-color', content: '#0f172a' },
+        // { name: 'theme-color', content: '#0f172a' },
         { name: 'color-scheme', content: 'dark light' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
@@ -161,7 +161,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
-        { rel: 'canonical', href: 'https://techclub.mut.ac.ke' },
+        { rel: 'canonical', href: 'https://mutech-club.vercel.app' },
         { rel: 'sitemap', type: 'application/xml', title: 'Sitemap', href: '/sitemap.xml' }
       ],
       script: [
@@ -172,8 +172,8 @@ export default defineNuxtConfig({
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'MUT Tech Club',
-            url: 'https://techclub.mut.ac.ke',
-            logo: 'https://techclub.mut.ac.ke/logo.png',
+            url: 'https://mutech-club.vercel.app',
+            logo: 'https://mutech-club.vercel.app/logo.png',
             sameAs: [
               'https://github.com/mut-tech-club',
               'https://twitter.com/muttechclub',
@@ -262,7 +262,7 @@ export default defineNuxtConfig({
       '/api/**': {
         cors: true,
         headers: {
-          'Access-Control-Allow-Origin': 'https://techclub.mut.ac.ke',
+          'Access-Control-Allow-Origin': 'https://mutech-club.vercel.app',
           'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization'
         }
@@ -298,11 +298,11 @@ export default defineNuxtConfig({
       name: 'MUT Tech Club',
       short_name: 'MUT Tech',
       description: 'Official tech community of Murang\'a University of Technology',
-      theme_color: '#0f172a',
-      background_color: '#0f172a',
+      // theme_color: '#0f172a',
+      // background_color: '#0f172a',
       display: 'standalone',
       scope: '/',
-      start_url: '/',
+      start_url: '/account',
       orientation: 'portrait',
       categories: ['education', 'technology', 'community'],
       icons: [
