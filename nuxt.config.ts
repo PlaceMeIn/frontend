@@ -11,36 +11,38 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-og-image',
     'motion-v/nuxt',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@vite-pwa/nuxt'
   ],
+
   build: {
-    transpile: ['vue-countup-v3'],
+    transpile: ['vue-countup-v3']
   },
+
   runtimeConfig: {
     apiSecret: process.env.API_SECRET,
 
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://techclub.mut.ac.ke',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://mutech-club.vercel.app',
+      siteName: 'MUT Tech Club',
+      siteDescription:
+        'Official Murang’a University of Technology Tech Club – developers, innovation, projects, and student tech community in Kenya.',
+
+      socialImage: '/og/default-og.png',
+
       allowedOrigins: [
         'https://techclub.mut.ac.ke',
         'https://mut-tech-club.vercel.app',
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://app.tera-in.top',
-
-      ],
-
-
+        'https://app.tera-in.top'
+      ]
     }
   },
+
   vite: {
     server: {
-      allowedHosts: [
-        'app.tera-in.top',
-        'localhost',
-        'mutech-club.vercel.app',
-        '*.trycloudflare.com'
-      ]
+      allowedHosts: ['app.tera-in.top', 'localhost', '*.trycloudflare.com']
     }
   },
 
@@ -51,32 +53,7 @@ export default defineNuxtConfig({
     storageKey: 'mut-techclub-color-mode'
   },
 
-  piniaPluginPersistedstate: {
-    storage: 'cookies',
-    cookieOptions: {
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 30
-    }
-  },
-
-  devtools: {
-    enabled: process.env.NODE_ENV !== 'production'
-  },
-
   css: ['~/assets/css/main.css'],
-
-  components: {
-    global: true,
-    dirs: [
-      { path: '~/components', pathPrefix: false },
-      { path: '~/components/defaults', pathPrefix: false },
-      { path: '~/components/landing', pathPrefix: false },
-      { path: '~/components/standalone', pathPrefix: false },
-      { path: '~/components/cool', pathPrefix: false },
-      { path: '~/components/auth', pathPrefix: false }
-    ]
-  },
 
   image: {
     domains: [
@@ -85,43 +62,52 @@ export default defineNuxtConfig({
       'avatars.githubusercontent.com',
       'images.unsplash.com'
     ],
-    remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "**"
-      },
-      {
-        protocol: "https",
-        hostname: "**"
-      }
-    ]
+    providers: ['ipx', 'cloudinary'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280
+    }
   },
 
   app: {
     head: {
+      titleTemplate: '%s | MUT Tech Club',
       title: 'MUT Tech Club',
+
       meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+
+        // SEO Core
         {
           name: 'description',
           content:
-            'MUT Tech Club – A community of developers, innovators and tech enthusiasts at Murang’a University of Technology.'
+            'Official tech community of Murang’a University of Technology – projects, events, innovation, student developers in Kenya.'
         },
         {
           name: 'keywords',
           content:
-            'MUT Tech Club, Murang’a University of Technology, tech community Kenya, student developers Kenya, programming club Kenya, open source Kenya, web development club, tech students MUT, software engineering community Kenya'
+            'MUT Tech Club, Murang’a University of Technology, Kenya developers, student tech community, programming Kenya, software engineering students, open source Kenya, tech events MUT, web development Kenya, AI student projects Kenya'
         },
-        {
-          name: 'theme-color',
-          content: '#0f172a'
-        }
+
+        // Robots
+        { name: 'robots', content: 'index, follow, max-image-preview:large' },
+
+        // Open Graph
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'MUT Tech Club' },
+        { property: 'og:image', content: '/og/default-og.jpeg' },
+
+        // Twitter
+        { name: 'twitter:card', content: 'summary_large_image' }
       ],
+
       link: [
-        {
-          rel: 'icon',
-          type: 'image/png',
-          href: '/favicon.png'
-        }
+        { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
+        { rel: 'canonical', href: 'https://mutech-club.vercel.app' }
       ]
     }
   },
@@ -130,27 +116,69 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
 
     prerender: {
+      crawlLinks: true,
+
       routes: [
         '/',
         '/about',
         '/events',
         '/resources',
         '/projects',
-        '/join'
-      ],
-      crawlLinks: true,
-      failOnError: false
+        '/community',
+        '/contact',
+        '/engineering',
+        '/gallery',
+        '/join',
+
+        // IMPORTANT: dynamic SEO entry points
+        '/account',
+        '/gallery/featured'
+      ]
     },
 
     routeRules: {
       '/': { prerender: true },
 
-      '/api/**': {
-        cors: true,
+      // Gallery is public + SEO friendly
+      '/gallery/**': {
+        swr: 60,
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE'
+          'Cache-Control': 'public, max-age=3600'
         }
+      },
+
+      '/account': {
+        ssr: true,
+        index: false
+      },
+
+      '/account/**': {
+        ssr: true,
+        index: true,
+        headers: {
+          'Cache-Control': 'public, max-age=3600'
+        }
+      },
+      '/event/**': {
+        ssr: true,
+        swr: 60,
+        headers: { 'Cache-Control': 'public, max-age=3600' }
+      },
+
+      '/projects/**': {
+        ssr: true,
+        swr: 60,
+        headers: { 'Cache-Control': 'public, max-age=3600' }
+      },
+
+      '/resources/**': {
+        ssr: true,
+        swr: 60,
+        headers: { 'Cache-Control': 'public, max-age=3600' }
+      },
+
+      '/api/**': {
+        cors: true
       }
     }
   },
@@ -165,12 +193,21 @@ export default defineNuxtConfig({
     }
   },
 
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'MUT Tech Club',
+      short_name: 'MUT Tech',
+      // theme_color: '#0f172a',
+      start_url: '/account',
+      display: 'standalone',
+      icons: [
+        {
+          src: '/favicon.ico',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
     }
   }
 })

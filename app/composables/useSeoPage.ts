@@ -1,46 +1,55 @@
-import { useAppConfig } from '#app'
+import { useRuntimeConfig } from '#app'
 
 export interface SeoPageOptions {
   title: string
   description: string
   image?: string
-  twitterCard?: string
+  type?: string
 }
 
-/**
- * Composable to set SEO meta tags for a page.
- * Automatically uses logo from appConfig if no image is provided.
- */
 export const useSeoPage = (options: SeoPageOptions) => {
-  const config = useAppConfig()
-  const router = useRouter()
-  
+  const config = useRuntimeConfig()
+  const route = useRoute()
+  const url = useRequestURL()
+
+  const siteUrl = config.public.siteUrl
+
   const {
     title,
     description,
-    image = config.site.image,
-    twitterCard = 'summary_large_image'
+    image = config.public.socialImage || '/favicon.ico',
+    type = 'website'
   } = options
 
-  const siteUrl = config.site.url || 'https://tera-in.top'
-  const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`
+  const imageUrl = image.startsWith('http')
+    ? image
+    : `${siteUrl}${image}`
+
+  const canonicalUrl = `${siteUrl}${route.path}`
 
   useSeoMeta({
     title,
     description,
+
     ogTitle: title,
     ogDescription: description,
     ogImage: imageUrl,
-    ogImageSecureUrl: imageUrl,
-    ogUrl: `${siteUrl}${router.currentRoute.value.path}`,
-    twitterCard,
+    ogUrl: canonicalUrl,
+    ogType: type,
+
+    twitterCard: 'summary_large_image',
     twitterTitle: title,
     twitterDescription: description,
     twitterImage: imageUrl
   })
 
-  // Also update the page title in the template
   useHead({
-    title
+    title,
+    link: [
+      {
+        rel: 'canonical',
+        href: canonicalUrl
+      }
+    ]
   })
 }

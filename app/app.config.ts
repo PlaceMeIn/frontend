@@ -4,13 +4,13 @@ export default defineAppConfig({
     motto: "Innovation Meets Talent",
     title: "Mut Tech Club - Murang'a University",
     description: "",
-    image: "",
-    icon: "",
-    url: "",
+    image: "/og/default-og.jpeg",
+    icon: "/favicon.ico",
+    url: "https://mutech-club.vercel.app",
     sourceLink: "https://github.com/PlaceMeIn",
     apiBase: "https://001kenji.tera-in.top",
     // apiBase:"http://192.168.100.7:8080",
-    
+
     contact: {
       emails: {
         support: "support.tech@mut.ac.ke",
