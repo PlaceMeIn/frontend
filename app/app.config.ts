@@ -8,9 +8,9 @@ export default defineAppConfig({
     icon: "",
     url: "",
     sourceLink: "https://github.com/PlaceMeIn",
-    apiBase: "https://hear-exclude-determining-candidates.trycloudflare.com",
+    apiBase: "https://001kenji.tera-in.top",
     // apiBase:"http://192.168.100.7:8080",
-
+    
     contact: {
       emails: {
         support: "support.tech@mut.ac.ke",
