@@ -24,7 +24,6 @@
     "date-fns": "^4.1.0",
     "motion-v": "^1.10.3",
     "nuxt": "^4.3.1",
-    "nuxt-og-image": "^5.1.13",
     "pinia-plugin-persistedstate": "^4.7.1",
     "tailwindcss": "^4.1.18",
     "valibot": "^1.2.0",
@@ -34,6 +33,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.1",
     "@nuxtjs/color-mode": "^4.0.0",
+    "@nuxtjs/sitemap": "^8.0.15",
     "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.0.0",
     "nuxt-countup": "^0.1.2",
