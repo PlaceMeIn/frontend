@@ -34,6 +34,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.1",
     "@nuxtjs/color-mode": "^4.0.0",
+    "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.0.0",
     "nuxt-countup": "^0.1.2",
     "typescript": "^5.9.3",
