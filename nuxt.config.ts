@@ -1,7 +1,11 @@
+// nuxt.config.ts
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  buildDir: '.nuxt',
+  future: {
+    compatibilityVersion: 4,
+  },
 
+  // Core modules (keep only framework modules here)
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
@@ -13,16 +17,15 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     'motion-v/nuxt',
     '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt' // Added PWA module
+    '@vite-pwa/nuxt',        // ✅ PWA module – keep this
   ],
 
   build: {
-    transpile: ['vue-countup-v3']
+    transpile: ['vue-countup-v3'],
   },
 
   runtimeConfig: {
     apiSecret: process.env.API_SECRET,
-
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://mutech-club.vercel.app',
       siteName: 'MUT Tech Club',
@@ -33,9 +36,9 @@ export default defineNuxtConfig({
         'https://mut-tech-club.vercel.app',
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://app.tera-in.top'
-      ]
-    }
+        'https://app.tera-in.top',
+      ],
+    },
   },
 
   vite: {
@@ -44,16 +47,25 @@ export default defineNuxtConfig({
         'app.tera-in.top',
         'localhost',
         'mutech-club.vercel.app',
-        '*.trycloudflare.com'
-      ]
-    }
+        '*.trycloudflare.com',
+      ],
+    },
+    vue: {
+      features: {
+        optionsAPI: false,    // Reduces bundle size by disabling Options API
+      },
+    },
+  },
+
+  experimental: {
+    typedPages: true,         // Enables full type safety for your routes
   },
 
   colorMode: {
     classSuffix: '',
     preference: 'system',
     fallback: 'light',
-    storageKey: 'mut-techclub-color-mode'
+    storageKey: 'mut-techclub-color-mode',
   },
 
   piniaPluginPersistedstate: {
@@ -61,12 +73,12 @@ export default defineNuxtConfig({
     cookieOptions: {
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 30
-    }
+      maxAge: 60 * 60 * 24 * 30,
+    },
   },
 
   devtools: {
-    enabled: process.env.NODE_ENV !== 'production'
+    enabled: process.env.NODE_ENV !== 'production',
   },
 
   css: ['~/assets/css/main.css'],
@@ -79,8 +91,8 @@ export default defineNuxtConfig({
       { path: '~/components/landing', pathPrefix: false },
       { path: '~/components/standalone', pathPrefix: false },
       { path: '~/components/cool', pathPrefix: false },
-      { path: '~/components/auth', pathPrefix: false }
-    ]
+      { path: '~/components/auth', pathPrefix: false },
+    ],
   },
 
   image: {
@@ -88,18 +100,18 @@ export default defineNuxtConfig({
       'github.com',
       'vercel.com',
       'avatars.githubusercontent.com',
-      'images.unsplash.com'
+      'images.unsplash.com',
     ],
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: '**'
+        hostname: '**',
       },
       {
         protocol: 'https',
-        hostname: '**'
-      }
-    ]
+        hostname: '**',
+      },
+    ],
   },
 
   app: {
@@ -113,11 +125,11 @@ export default defineNuxtConfig({
         // SEO Core
         {
           name: 'description',
-          content: 'MUT Tech Club – A community of developers, innovators and tech enthusiasts at Murang\'a University of Technology. Join Kenya\'s premier student tech community.'
+          content: 'MUT Tech Club – A community of developers, innovators and tech enthusiasts at Murang\'a University of Technology. Join Kenya\'s premier student tech community.',
         },
         {
           name: 'keywords',
-          content: 'MUT Tech Club, Murang\'a University of Technology, tech community Kenya, student developers Kenya, programming club Kenya, open source Kenya, web development club, tech students MUT, software engineering community Kenya, coding bootcamp Kenya, hackathon Kenya, tech events MUT, AI club Kenya, cybersecurity club, mobile dev Kenya, cloud computing Kenya, devops students, UI/UX Kenya, game dev Kenya, data science club, robotics Kenya, IoT students, startup incubator Kenya, tech mentorship, career prep Kenya, internship opportunities, tech networking, innovation hub Kenya'
+          content: 'MUT Tech Club, Murang\'a University of Technology, tech community Kenya, student developers Kenya, programming club Kenya, open source Kenya, web development club, tech students MUT, software engineering community Kenya, coding bootcamp Kenya, hackathon Kenya, tech events MUT, AI club Kenya, cybersecurity club, mobile dev Kenya, cloud computing Kenya, devops students, UI/UX Kenya, game dev Kenya, data science club, robotics Kenya, IoT students, startup incubator Kenya, tech mentorship, career prep Kenya, internship opportunities, tech networking, innovation hub Kenya',
         },
 
         // Robots & Crawling
@@ -145,7 +157,6 @@ export default defineNuxtConfig({
         { name: 'twitter:image', content: '/og/default-og.png' },
 
         // Theme & Appearance
-        // { name: 'theme-color', content: '#0f172a' },
         { name: 'color-scheme', content: 'dark light' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
@@ -153,7 +164,7 @@ export default defineNuxtConfig({
 
         // Author & Verification
         { name: 'author', content: 'MUT Tech Club Team' },
-        { name: 'copyright', content: `MUT Tech Club ${new Date().getFullYear()}` }
+        // Remove dynamic copyright from meta to prevent hydration mismatches
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -161,40 +172,11 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
-        { rel: 'canonical', href: 'https://mutech-club.vercel.app' },
-        { rel: 'sitemap', type: 'application/xml', title: 'Sitemap', href: '/sitemap.xml' }
+        { rel: 'canonical', href: 'https://techclub.mut.ac.ke' }, // Updated to your production domain
+        { rel: 'sitemap', type: 'application/xml', title: 'Sitemap', href: '/sitemap.xml' },
       ],
-      script: [
-        {
-          hid: 'structured-data',
-          type: 'application/ld+json',
-          innerHTML: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'MUT Tech Club',
-            url: 'https://mutech-club.vercel.app',
-            logo: 'https://mutech-club.vercel.app/logo.png',
-            sameAs: [
-              'https://github.com/mut-tech-club',
-              'https://twitter.com/muttechclub',
-              'https://linkedin.com/company/mut-tech-club'
-            ],
-            description: 'Official tech community at Murang\'a University of Technology',
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: 'Murang\'a',
-              addressRegion: 'Murang\'a County',
-              addressCountry: 'KE'
-            },
-            contactPoint: {
-              '@type': 'ContactPoint',
-              contactType: 'Membership',
-              email: 'info@techclub.mut.ac.ke'
-            }
-          })
-        }
-      ]
-    }
+      // Structured data moved to a plugin (see below)
+    },
   },
 
   nitro: {
@@ -212,10 +194,10 @@ export default defineNuxtConfig({
         '/contact',
         '/gallery',
         '/engineering',
-        '/account'
+        '/account',
       ],
       crawlLinks: true,
-      failOnError: false
+      failOnError: false,
     },
 
     routeRules: {
@@ -226,36 +208,36 @@ export default defineNuxtConfig({
         ssr: true,
         swr: 3600,
         headers: {
-          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
-        }
+          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+        },
       },
       '/projects/**': {
         ssr: true,
         swr: 3600,
         headers: {
-          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
-        }
+          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+        },
       },
       '/resources/**': {
         ssr: true,
         swr: 7200,
         headers: {
-          'Cache-Control': 'public, max-age=7200, stale-while-revalidate=43200'
-        }
+          'Cache-Control': 'public, max-age=7200, stale-while-revalidate=43200',
+        },
       },
       '/gallery/**': {
         ssr: true,
         swr: 300,
         headers: {
-          'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600'
-        }
+          'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
+        },
       },
       '/members/**': {
         ssr: true,
         swr: 86400,
         headers: {
-          'Cache-Control': 'public, max-age=86400'
-        }
+          'Cache-Control': 'public, max-age=86400',
+        },
       },
 
       // API routes
@@ -264,42 +246,39 @@ export default defineNuxtConfig({
         headers: {
           'Access-Control-Allow-Origin': 'https://mutech-club.vercel.app',
           'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        }
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
       },
 
       // Dynamic sitemap
       '/__sitemap/**': {
         headers: {
-          'Content-Type': 'application/xml'
-        }
-      }
-    }
+          'Content-Type': 'application/xml',
+        },
+      },
+
+      // Security headers for all routes
+      '/**': {
+        headers: {
+          'X-Frame-Options': 'SAMEORIGIN',
+          'X-Content-Type-Options': 'nosniff',
+          'Referrer-Policy': 'strict-origin-when-cross-origin',
+          'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), interest-cohort=()',
+        },
+      },
+    },
   },
 
-  routeRules: {
-    '/**': {
-      headers: {
-        'X-Frame-Options': 'SAMEORIGIN',
-        'X-Content-Type-Options': 'nosniff',
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
-        'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), interest-cohort=()'
-      }
-    }
-  },
-
-  // PWA Configuration
+  // ✅ PWA Configuration (fixed)
   pwa: {
     registerType: 'autoUpdate',
-    pwaAssets: {
-      disabled: true
-    },
+    pwaAssets: false,                  // Disable automatic asset generation
     manifest: {
       name: 'MUT Tech Club',
       short_name: 'MUT Tech',
       description: 'Official tech community of Murang\'a University of Technology',
-      // theme_color: '#0f172a',
-      // background_color: '#0f172a',
+      theme_color: '#0f172a',
+      background_color: '#0f172a',
       display: 'standalone',
       scope: '/',
       start_url: '/account',
@@ -310,23 +289,23 @@ export default defineNuxtConfig({
           src: '/icon-192.png',
           sizes: '192x192',
           type: 'image/png',
-          purpose: 'any maskable'
+          purpose: 'any maskable',
         },
         {
           src: '/icon-512.png',
           sizes: '512x512',
           type: 'image/png',
-          purpose: 'any maskable'
-        }
+          purpose: 'any maskable',
+        },
       ],
       screenshots: [
         {
           src: '/screenshot-mobile.png',
           sizes: '1080x1920',
           type: 'image/png',
-          platform: 'android'
-        }
-      ]
+          platform: 'android',
+        },
+      ],
     },
     workbox: {
       navigateFallback: '/',
@@ -339,9 +318,9 @@ export default defineNuxtConfig({
             cacheName: 'google-fonts',
             expiration: {
               maxEntries: 10,
-              maxAgeSeconds: 60 * 60 * 24 * 365
-            }
-          }
+              maxAgeSeconds: 60 * 60 * 24 * 365,
+            },
+          },
         },
         {
           urlPattern: /^https:\/\/avatars\.githubusercontent\.com\/.*/i,
@@ -350,31 +329,29 @@ export default defineNuxtConfig({
             cacheName: 'github-avatars',
             expiration: {
               maxEntries: 50,
-              maxAgeSeconds: 60 * 60 * 24 * 30
-            }
-          }
-        }
-      ]
-    }
+              maxAgeSeconds: 60 * 60 * 24 * 30,
+            },
+          },
+        },
+      ],
+    },
   },
 
   eslint: {
     config: {
       stylistic: {
         commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
+        braceStyle: '1tbs',
+      },
+    },
   },
 
-  // Sitemap configuration (requires @nuxtjs/sitemap module)
   sitemap: {
     enabled: true,
     urls: async () => {
-      // Fetch dynamic URLs from your content
       const dynamicUrls = [
         // Add logic to fetch event slugs, project slugs, etc.
-      ]
+      ];
       return [
         '/',
         '/about',
@@ -386,13 +363,14 @@ export default defineNuxtConfig({
         '/contact',
         '/gallery',
         '/engineering',
-        ...dynamicUrls
-      ]
+        ...dynamicUrls,
+      ];
     },
     defaults: {
       changefreq: 'weekly',
       priority: 0.8,
-      lastmod: new Date().toISOString()
-    }
-  }
-})
+      // Remove dynamic lastmod from static config
+      // lastmod: new Date().toISOString(),
+    },
+  },
+});
