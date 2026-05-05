@@ -25,6 +25,7 @@
     "date-fns": "^4.1.0",
     "motion-v": "^1.10.3",
     "nuxt": "^4.3.1",
+    "nuxt-og-image": "^6.5.0",
     "pinia-plugin-persistedstate": "^4.7.1",
     "tailwindcss": "^4.1.18",
     "valibot": "^1.2.0",

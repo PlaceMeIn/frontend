@@ -38,8 +38,7 @@ export default defineNuxtConfig({
       allowedHosts: [
         'app.tera-in.top',
         'localhost',
-        'mutech-club.vercel.app',
-        '*.trycloudflare.com'
+        'mutech-club.vercel.app'
       ]
     }
   },
