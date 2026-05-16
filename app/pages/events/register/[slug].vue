@@ -179,15 +179,15 @@ onMounted(async () => {
     pending.value = true
 
 
-    if (!authStore.isAuthenticated) {
-      // Store the intended destination before redirecting to login
-      authStore.setLastAttemptedRouteToCurrent()
-      toast.add({
-        description: "Please login to register for the event.",
-        color: "neutral",
-      })
-      return navigateTo('/auth/login')
-    }
+    // if (!authStore.isAuthenticated) {
+    //   // Store the intended destination before redirecting to login
+    //   authStore.setLastAttemptedRouteToCurrent()
+    //   toast.add({
+    //     description: "Please login to register for the event.",
+    //     color: "neutral",
+    //   })
+    //   return navigateTo('/auth/login')
+    // }
 
 
     // Fetch event details

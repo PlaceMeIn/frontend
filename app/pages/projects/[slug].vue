@@ -645,7 +645,7 @@
             <HighlightFeaturedProject
               :limit="10"
               :title="'Related projects'"
-              :related="projectData?.category"
+              :related="projectData?.category || 'technology'"
               :h-scroll=true
             />
           </div>

@@ -417,17 +417,17 @@ useSeoMeta({
         aria-label="Featured Project"
         data-aos="fade-up"
       >
-        <HightlightFeaturedProject :limit="6" />
+        <HightlightFeaturedProject :limit="6" :related="'technology'" />
       </section>
 
-      <section
+      <section 
         id="upcoming-event"
         class="scroll-mt-20"
         aria-label="Upcoming Event"
         data-aos="fade-up"
         data-aos-delay="100"
       >
-        <HighlightUpcomingEvent :limit="6" />
+        <HighlightUpcomingEvent :limit="6"  :related="'technology'" />
       </section>
 
       <section
